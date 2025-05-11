@@ -1,7 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.utils.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static ar.edu.unlam.tpi.nexwork_api.utils.TestUtils.APPLICANT_ID;
+import static ar.edu.unlam.tpi.nexwork_api.utils.TestUtils.BUDGET_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +29,7 @@ class BudgetsServiceImplTest {
         var mockBudgets = List.of(TestUtils.buildBudgetsResponse());
         when(budgetsClient.getBudgets(APPLICANT_ID)).thenReturn(mockBudgets);
 
-        List<BudgetResponse> result = budgetsService.getBudgets(APPLICANT_ID);
+        var result = budgetsService.getBudgets(APPLICANT_ID);
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -40,7 +40,7 @@ class BudgetsServiceImplTest {
     void getBudgetsReturnsEmptyListWhenNoBudgetsExist() {
         when(budgetsClient.getBudgets(APPLICANT_ID)).thenReturn(List.of());
 
-        List<BudgetResponse> result = budgetsService.getBudgets(APPLICANT_ID);
+        var result = budgetsService.getBudgets(APPLICANT_ID);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -53,5 +53,43 @@ class BudgetsServiceImplTest {
 
         assertThrows(RuntimeException.class, () -> budgetsService.getBudgets(APPLICANT_ID));
         verify(budgetsClient).getBudgets(APPLICANT_ID);
+    }
+
+    @Test
+    void getBudgetReturnsBudgetDetailWhenBudgetExists() {
+        var mockBudgetDetail = TestUtils.buildBudgetResponseDetail();
+        when(budgetsClient.getBudgetDetail(BUDGET_ID)).thenReturn(mockBudgetDetail);
+
+        var result = budgetsService.getBudget(BUDGET_ID);
+
+        assertNotNull(result);
+        assertEquals(mockBudgetDetail, result);
+        verify(budgetsClient).getBudgetDetail(BUDGET_ID);
+    }
+
+    @Test
+    void getBudgetThrowsExceptionWhenClientFails() {
+        when(budgetsClient.getBudgetDetail(BUDGET_ID)).thenThrow(new RuntimeException("Client error"));
+
+        assertThrows(RuntimeException.class, () -> budgetsService.getBudget(BUDGET_ID));
+        verify(budgetsClient).getBudgetDetail(BUDGET_ID);
+    }
+
+    @Test
+    void createBudgetCallsClientSuccessfully() {
+        var budgetRequest = TestUtils.buildBudgetRequest();
+
+        budgetsService.createBudget(budgetRequest);
+
+        verify(budgetsClient).createBudget(budgetRequest);
+    }
+
+    @Test
+    void createBudgetThrowsExceptionWhenClientFails() {
+        var budgetRequest = TestUtils.buildBudgetRequest();
+        doThrow(new RuntimeException("Client error")).when(budgetsClient).createBudget(budgetRequest);
+
+        assertThrows(RuntimeException.class, () -> budgetsService.createBudget(budgetRequest));
+        verify(budgetsClient).createBudget(budgetRequest);
     }
 }

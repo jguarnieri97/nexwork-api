@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
+import ar.edu.unlam.tpi.nexwork_api.dto.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.ErrorResponse;
@@ -41,13 +42,14 @@ public class BudgetsClientImpl implements BudgetsClient {
                 .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(BudgetsClientImpl::handle5xxError))
-                .bodyToMono(new ParameterizedTypeReference<List<BudgetResponse>>() {})
+                .bodyToMono(new ParameterizedTypeReference<List<BudgetResponse>>() {
+                })
                 .block();
     }
 
     @Override
     public BudgetResponseDetail getBudgetDetail(Long id) {
-        return  webClient.get()
+        return webClient.get()
                 .uri(host + "budget/" + id)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .retrieve()
@@ -58,6 +60,23 @@ public class BudgetsClientImpl implements BudgetsClient {
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(BudgetsClientImpl::handle5xxError))
                 .bodyToMono(BudgetResponseDetail.class)
+                .block();
+    }
+
+    @Override
+    public void createBudget(BudgetRequest budgetRequest) {
+        webClient.post()
+                .uri(host + "budget")
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .body(Mono.just(budgetRequest), BudgetRequest.class)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(BudgetsClientImpl::handle4xxError))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(BudgetsClientImpl::handle5xxError))
+                .bodyToMono(Void.class)
                 .block();
     }
 

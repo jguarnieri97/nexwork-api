@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
+import ar.edu.unlam.tpi.nexwork_api.dto.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
@@ -20,7 +21,6 @@ public class BudgetsServiceImpl implements BudgetsService {
 
     @Override
     public List<BudgetResponse> getBudgets(Long applicantId) {
-
         log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);
 
         var budgets = budgetsClient.getBudgets(applicantId);
@@ -32,7 +32,6 @@ public class BudgetsServiceImpl implements BudgetsService {
 
     @Override
     public BudgetResponseDetail getBudget(Long id) {
-
         log.info("Obteniendo presupuesto con id: {}", id);
 
         var budget = budgetsClient.getBudgetDetail(id);
@@ -40,5 +39,14 @@ public class BudgetsServiceImpl implements BudgetsService {
         log.info("Presupuesto obtenido: {}", Converter.convertToString(budget));
 
         return budget;
+    }
+
+    @Override
+    public void createBudget(BudgetRequest budgetRequest) {
+        log.info("Request recibido: {}", Converter.convertToString(budgetRequest));
+
+        budgetsClient.createBudget(budgetRequest);
+
+        log.info("Presupuesto creado con éxito");
     }
 }
