@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import lombok.RequiredArgsConstructor;
@@ -36,18 +37,38 @@ public class BudgetsClientImpl implements BudgetsClient {
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(error -> {
-                                    log.error("Error del cliente externo Budgets API: {}", error);
-                                    return Mono.error(new BudgetsClientException(error));
-                                } ))
+                                .flatMap(BudgetsClientImpl::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(error -> {
-                                    log.error("Error del servidor externo Budgets API: {}", error);
-                                    return Mono.error(new BudgetsClientException(error));
-                                } ))
+                                .flatMap(BudgetsClientImpl::handle5xxError))
                 .bodyToMono(new ParameterizedTypeReference<List<BudgetResponse>>() {})
                 .block();
+    }
+
+    @Override
+    public BudgetResponseDetail getBudgetDetail(Long id) {
+        return  webClient.get()
+                .uri(host + "budget/" + id)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(BudgetsClientImpl::handle4xxError))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(BudgetsClientImpl::handle5xxError))
+                .bodyToMono(BudgetResponseDetail.class)
+                .block();
+    }
+
+    private static Mono<Throwable> handle4xxError(ErrorResponse error) {
+        log.error("Error del cliente externo Budgets API: {}", error);
+        return Mono.error(new BudgetsClientException(error));
+    }
+
+    private static Mono<Throwable> handle5xxError(ErrorResponse error) {
+        log.error("Error del servidor externo Budgets API: {}", error);
+        return Mono.error(new BudgetsClientException(error));
     }
 
 }

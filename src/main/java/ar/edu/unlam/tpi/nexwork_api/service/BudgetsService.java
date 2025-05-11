@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
 
 import java.util.List;
 
@@ -17,5 +18,13 @@ public interface BudgetsService {
      * @return la lista de presupuestos
      */
     List<BudgetResponse> getBudgets(Long applicantId);
+
+    /**
+     * Método para obtener el detalle de un presupuesto por su id
+     *
+     * @param id: id del presupuesto
+     * @return el presupuesto detallado
+     */
+    BudgetResponseDetail getBudget(Long id);
 
 }
