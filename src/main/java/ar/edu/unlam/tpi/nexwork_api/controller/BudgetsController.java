@@ -35,7 +35,7 @@ public interface BudgetsController {
      */
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<BudgetResponseDetail> getBudgetDetail(@PathVariable Long id);
+    GenericResponse<BudgetResponseDetail> getBudgetDetail(@PathVariable String id);
 
     /**
      * Recurso para crear un nuevo presupuesto

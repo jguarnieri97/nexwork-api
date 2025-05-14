@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class BudgetResponse {
 
-    private Long id;
+    private String id;
     private Long applicantId;
     private String date;
 

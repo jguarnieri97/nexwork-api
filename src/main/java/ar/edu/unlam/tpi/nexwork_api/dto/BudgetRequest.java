@@ -15,5 +15,6 @@ public class BudgetRequest {
     private String workResume;
     private String workDetail;
     private List<String> files;
+    private List<Integer> suppliers;
 
 }

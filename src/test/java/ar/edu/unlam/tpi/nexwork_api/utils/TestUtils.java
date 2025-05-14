@@ -9,7 +9,7 @@ import java.util.List;
 public class TestUtils {
 
 
-    public static final long BUDGET_ID = 1L;
+    public static final String BUDGET_ID = "ABC";
     public static final long APPLICANT_ID = 1L;
     public static final String DATE = "2023-10-01";
 

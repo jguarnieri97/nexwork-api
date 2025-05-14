@@ -29,7 +29,7 @@ public class BudgetsControllerImpl implements BudgetsController {
     }
 
     @Override
-    public GenericResponse<BudgetResponseDetail> getBudgetDetail(Long id) {
+    public GenericResponse<BudgetResponseDetail> getBudgetDetail(String id) {
         var budget = budgetsService.getBudget(id);
         return new GenericResponse<>(
                 Constants.STATUS_OK,

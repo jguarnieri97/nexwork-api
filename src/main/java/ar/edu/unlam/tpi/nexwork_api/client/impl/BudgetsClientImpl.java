@@ -48,7 +48,7 @@ public class BudgetsClientImpl implements BudgetsClient {
     }
 
     @Override
-    public BudgetResponseDetail getBudgetDetail(Long id) {
+    public BudgetResponseDetail getBudgetDetail(String id) {
         return webClient.get()
                 .uri(host + "budget/" + id)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)

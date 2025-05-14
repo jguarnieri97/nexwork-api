@@ -31,7 +31,7 @@ public class BudgetsServiceImpl implements BudgetsService {
     }
 
     @Override
-    public BudgetResponseDetail getBudget(Long id) {
+    public BudgetResponseDetail getBudget(String id) {
         log.info("Obteniendo presupuesto con id: {}", id);
 
         var budget = budgetsClient.getBudgetDetail(id);

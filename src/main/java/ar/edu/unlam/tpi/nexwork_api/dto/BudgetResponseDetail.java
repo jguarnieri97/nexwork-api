@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class BudgetResponseDetail {
 
-    private Long id;
+    private String id;
     private Long applicantId;
     private String createdAt;
     private List<String> files;

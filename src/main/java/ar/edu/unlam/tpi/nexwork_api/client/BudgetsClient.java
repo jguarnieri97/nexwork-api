@@ -27,7 +27,7 @@ public interface BudgetsClient {
      * @param id id del presupuesto
      * @return el presupuesto detallado
      */
-    BudgetResponseDetail getBudgetDetail(Long id);
+    BudgetResponseDetail getBudgetDetail(String id);
 
     /**
      * Método para crear un nuevo presupuesto
