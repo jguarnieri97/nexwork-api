@@ -27,32 +27,32 @@ class BudgetsServiceImplTest {
     @Test
     void getBudgetsReturnsListWhenBudgetsExist() {
         var mockBudgets = List.of(TestUtils.buildBudgetsResponse());
-        when(budgetsClient.getBudgets(APPLICANT_ID)).thenReturn(mockBudgets);
+        when(budgetsClient.getApplicantBudgets(APPLICANT_ID)).thenReturn(mockBudgets);
 
-        var result = budgetsService.getBudgets(APPLICANT_ID);
+        var result = budgetsService.getBudgets(APPLICANT_ID, null);
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        verify(budgetsClient).getBudgets(APPLICANT_ID);
+        verify(budgetsClient).getApplicantBudgets(APPLICANT_ID);
     }
 
     @Test
     void getBudgetsReturnsEmptyListWhenNoBudgetsExist() {
-        when(budgetsClient.getBudgets(APPLICANT_ID)).thenReturn(List.of());
+        when(budgetsClient.getApplicantBudgets(APPLICANT_ID)).thenReturn(List.of());
 
-        var result = budgetsService.getBudgets(APPLICANT_ID);
+        var result = budgetsService.getBudgets(APPLICANT_ID, null);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(budgetsClient).getBudgets(APPLICANT_ID);
+        verify(budgetsClient).getApplicantBudgets(APPLICANT_ID);
     }
 
     @Test
     void getBudgetsThrowsExceptionWhenClientFails() {
-        when(budgetsClient.getBudgets(APPLICANT_ID)).thenThrow(new RuntimeException("Client error"));
+        when(budgetsClient.getApplicantBudgets(APPLICANT_ID)).thenThrow(new RuntimeException("Client error"));
 
-        assertThrows(RuntimeException.class, () -> budgetsService.getBudgets(APPLICANT_ID));
-        verify(budgetsClient).getBudgets(APPLICANT_ID);
+        assertThrows(RuntimeException.class, () -> budgetsService.getBudgets(APPLICANT_ID, null));
+        verify(budgetsClient).getApplicantBudgets(APPLICANT_ID);
     }
 
     @Test
