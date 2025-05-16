@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.service;
 
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
 
@@ -17,4 +18,13 @@ public interface WorkContractService {
      * @return lista de contratos
      */
     List<WorkContractResponse> getContracts(WorkContractRequest request);
+
+    /**
+     * Crear un nuevo contrato laboral
+     *
+     * @param request datos del contrato a crear
+     * @return datos del contrato creado
+     */
+    WorkContractResponse createContract(WorkContractCreateRequest request);
+
 }

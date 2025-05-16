@@ -1,9 +1,11 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
+import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,4 +29,15 @@ public class WorkContractServiceImpl implements WorkContractService {
 
         return contracts;
     }
+
+    @Override
+public WorkContractResponse createContract(WorkContractCreateRequest request) {
+    log.info("Creando nuevo contrato de trabajo: {}", Converter.convertToString(request));
+
+    var response = workContractClient.createContract(request);
+
+    log.info("Contrato creado con ID: {}", response.getId());
+
+    return response;
+}
 }
