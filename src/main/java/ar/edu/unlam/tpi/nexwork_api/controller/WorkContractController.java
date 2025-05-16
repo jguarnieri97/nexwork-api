@@ -18,7 +18,7 @@ public interface WorkContractController {
     /**
      * Recurso para obtener los contratos laborales según el tipo de cuenta
      *
-     * @param request datos del tipo de cuenta, id y límite
+    * @param request datos del tipo de cuenta, id y límite de contratos
      * @return lista de contratos laborales
      */
     @PostMapping

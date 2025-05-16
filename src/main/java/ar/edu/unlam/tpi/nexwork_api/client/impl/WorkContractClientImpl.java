@@ -14,6 +14,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -33,42 +35,50 @@ public class WorkContractClientImpl implements WorkContractClient {
     @Override
     public List<WorkContractResponse> getContracts(WorkContractRequest request) {
         String accountType = request.getAccountType().toLowerCase();
-        String url = host + "accounts/" + accountType + "/" + request.getId();
+        String url = UriComponentsBuilder.fromUriString(host + "accounts/" + accountType + "/" + request.getId())
+        .queryParam("limit", request.getLimit())
+        .build()
+        .toUriString();
 
-        return webClient.get()
+        var response = webClient.get()
                 .uri(url)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
-                        response -> response.bodyToMono(ErrorResponse.class)
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(WorkContractClientImpl::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
-                        response -> response.bodyToMono(ErrorResponse.class)
+                        serverResponse -> serverResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(WorkContractClientImpl::handle5xxError))
                 .bodyToMono(new ParameterizedTypeReference<GenericResponse<List<WorkContractResponse>>>() {
                 })
-                .block()
-                .getData();
+                .block();
+
+                assert response != null;
+                return response.getData();
+               
     }
 
     @Override
     public WorkContractResponse createContract(WorkContractCreateRequest request) {
         String url = host + "work-contract";
     
-        return webClient.post()
+        var response = webClient.post()
                 .uri(url)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
-                        response -> response.bodyToMono(ErrorResponse.class)
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(WorkContractClientImpl::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
-                        response -> response.bodyToMono(ErrorResponse.class)
+                        serverResponse -> serverResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(WorkContractClientImpl::handle5xxError))
                 .bodyToMono(new ParameterizedTypeReference<GenericResponse<WorkContractResponse>>() {})
-                .block()
-                .getData();
+                .block();
+                  
+                assert response != null;
+                return response.getData();
     }
     
 
