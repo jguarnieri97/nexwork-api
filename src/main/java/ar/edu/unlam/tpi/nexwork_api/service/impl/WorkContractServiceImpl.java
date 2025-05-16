@@ -51,4 +51,14 @@ public void finalizeContract(Long id, WorkContractFinalizeRequest request) {
     log.info("Contrato finalizado exitosamente");
 }
 
+@Override
+public WorkContractResponse getContractById(Long id) {
+    log.info("Buscando contrato con id {}", id);
+    var response = workContractClient.getContractById(id);
+
+    log.info("Contrato encontrado con id {}", id);
+
+    return response;
+}
+
 }

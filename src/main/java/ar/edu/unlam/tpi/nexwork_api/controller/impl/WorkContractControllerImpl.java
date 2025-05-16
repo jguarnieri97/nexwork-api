@@ -49,5 +49,14 @@ public GenericResponse<Void> finalizeContract(Long id, WorkContractFinalizeReque
     );
 }
 
+    @Override
+    public GenericResponse<WorkContractResponse> getContractById(Long id) {
+        var contract = workContractService.getContractById(id);
+        return new GenericResponse<>(
+                Constants.STATUS_OK,
+                Constants.SUCCESS_MESSAGE,
+                contract
+            );
+        }
 
 }

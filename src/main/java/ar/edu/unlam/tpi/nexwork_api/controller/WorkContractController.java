@@ -50,4 +50,13 @@ public interface WorkContractController {
         @PathVariable Long id,
         @RequestBody WorkContractFinalizeRequest request);
 
+    /**
+     * Recurso para obtener un contrato laboral por su ID
+     *
+     * @param id id del contrato a obtener
+     * @return datos del contrato obtenido
+     */
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    GenericResponse<WorkContractResponse> getContractById(@PathVariable Long id);
 }

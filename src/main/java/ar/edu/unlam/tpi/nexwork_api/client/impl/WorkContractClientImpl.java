@@ -103,6 +103,28 @@ public class WorkContractClientImpl implements WorkContractClient {
             .block();
 }
 
+    @Override
+    public WorkContractResponse getContractById(Long id) {
+        String url = host + "work-contract/" + id;
+
+        var response = webClient.get()
+                .uri(url)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(WorkContractClientImpl::handle4xxError))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        serverResponse -> serverResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(WorkContractClientImpl::handle5xxError))
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<WorkContractResponse>>() {})
+                .block();
+
+                assert response != null;
+                return response.getData();
+    }
+
+
 
     private static Mono<Throwable> handle4xxError(ErrorResponse error) {
         log.error("Error del cliente externo Contracts API (4xx): {}", error);

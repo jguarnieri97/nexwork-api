@@ -36,4 +36,11 @@ public interface WorkContractService {
      */
     void finalizeContract(Long id, WorkContractFinalizeRequest request);
 
+    /**
+     * Obtener un contrato laboral por su ID
+     *
+     * @param id id del contrato a obtener
+     * @return datos del contrato obtenido
+     */
+    WorkContractResponse getContractById(Long id);
 }
