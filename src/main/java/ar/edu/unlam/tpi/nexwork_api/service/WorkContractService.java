@@ -1,0 +1,20 @@
+package ar.edu.unlam.tpi.nexwork_api.service;
+
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
+
+import java.util.List;
+
+/**
+ * Servicio para operaciones relacionadas con contratos laborales
+ */
+public interface WorkContractService {
+
+    /**
+     * Obtener contratos según tipo de cuenta
+     *
+     * @param request datos del tipo de cuenta e ID
+     * @return lista de contratos
+     */
+    List<WorkContractResponse> getContracts(WorkContractRequest request);
+}

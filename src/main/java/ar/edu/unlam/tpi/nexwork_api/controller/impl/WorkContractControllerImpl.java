@@ -1,0 +1,29 @@
+package ar.edu.unlam.tpi.nexwork_api.controller.impl;
+
+import ar.edu.unlam.tpi.nexwork_api.controller.WorkContractController;
+import ar.edu.unlam.tpi.nexwork_api.dto.GenericResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
+import ar.edu.unlam.tpi.nexwork_api.utils.Constants;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+public class WorkContractControllerImpl implements WorkContractController {
+
+    private final WorkContractService workContractService;
+
+    @Override
+    public GenericResponse<List<WorkContractResponse>> getContracts(WorkContractRequest request) {
+        var contracts = workContractService.getContracts(request);
+        return new GenericResponse<>(
+                Constants.STATUS_OK,
+                Constants.SUCCESS_MESSAGE,
+                contracts
+        );
+    }
+}
