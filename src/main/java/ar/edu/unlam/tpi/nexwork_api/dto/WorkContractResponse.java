@@ -2,9 +2,11 @@ package ar.edu.unlam.tpi.nexwork_api.dto;
 
 import java.util.List;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class WorkContractResponse {
     private Long id;
     private Double price;
@@ -16,5 +18,4 @@ public class WorkContractResponse {
     private Long applicantId;
     private List<Long> workers;
     private List<String> files;
-
 }
