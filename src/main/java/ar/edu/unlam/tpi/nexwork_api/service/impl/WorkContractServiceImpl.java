@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
@@ -40,4 +41,14 @@ public WorkContractResponse createContract(WorkContractCreateRequest request) {
 
     return response;
 }
+
+    @Override
+public void finalizeContract(Long id, WorkContractFinalizeRequest request) {
+    log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
+
+    workContractClient.finalizeContract(id, request);
+
+    log.info("Contrato finalizado exitosamente");
+}
+
 }

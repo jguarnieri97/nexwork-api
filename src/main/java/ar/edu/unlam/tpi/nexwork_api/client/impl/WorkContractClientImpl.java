@@ -4,6 +4,7 @@ import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
@@ -81,6 +82,27 @@ public class WorkContractClientImpl implements WorkContractClient {
                 return response.getData();
     }
     
+    @Override
+    public void finalizeContract(Long id, WorkContractFinalizeRequest request) {
+    String url = host + "work-contract/" + id;
+
+    request.setState("FINALIZED");
+
+    webClient.put()
+            .uri(url)
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .bodyValue(request)
+            .retrieve()
+            .onStatus(HttpStatusCode::is4xxClientError,
+                    response -> response.bodyToMono(ErrorResponse.class)
+                            .flatMap(WorkContractClientImpl::handle4xxError))
+            .onStatus(HttpStatusCode::is5xxServerError,
+                    response -> response.bodyToMono(ErrorResponse.class)
+                            .flatMap(WorkContractClientImpl::handle5xxError))
+            .bodyToMono(Void.class)
+            .block();
+}
+
 
     private static Mono<Throwable> handle4xxError(ErrorResponse error) {
         log.error("Error del cliente externo Contracts API (4xx): {}", error);

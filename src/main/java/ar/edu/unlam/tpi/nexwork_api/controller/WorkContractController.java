@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.controller;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
 import org.springframework.http.HttpStatus;
@@ -34,5 +35,19 @@ public interface WorkContractController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     GenericResponse<WorkContractResponse> createContract(@RequestBody WorkContractCreateRequest request);
+
+    /**
+     * Recurso para finalizar un contrato laboral
+     *
+     * @param id id del contrato a finalizar
+     * @param request datos del contrato a finalizar
+     * @return datos del contrato finalizado
+     */
+
+    @PostMapping("{id}/finalize")
+    @ResponseStatus(HttpStatus.OK)
+    GenericResponse<Void> finalizeContract(
+        @PathVariable Long id,
+        @RequestBody WorkContractFinalizeRequest request);
 
 }
