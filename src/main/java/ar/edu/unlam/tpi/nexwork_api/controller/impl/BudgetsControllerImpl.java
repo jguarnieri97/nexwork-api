@@ -7,6 +7,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Constants;
+import ar.edu.unlam.tpi.nexwork_api.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +20,9 @@ public class BudgetsControllerImpl implements BudgetsController {
     private final BudgetsService budgetsService;
 
     @Override
-    public GenericResponse<List<BudgetResponse>> getBudgets(Long applicantId) {
-        var budgets = budgetsService.getBudgets(applicantId);
+    public GenericResponse<List<BudgetResponse>> getBudgets(Long applicantId, Long supplierId) {
+        Validator.validateBudgetsUserIdNotNull(applicantId, supplierId);
+        var budgets = budgetsService.getBudgets(applicantId, supplierId);
         return new GenericResponse<>(
                 Constants.STATUS_OK,
                 Constants.SUCCESS_MESSAGE,

@@ -1,10 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
-import ar.edu.unlam.tpi.nexwork_api.dto.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +28,9 @@ public class BudgetsClientImpl implements BudgetsClient {
     private String host;
 
     @Override
-    public List<BudgetResponse> getBudgets(Long applicantId) {
-        return webClient.get()
-                .uri(host + "budget/user/" + applicantId)
+    public List<BudgetResponse> getApplicantBudgets(Long applicantId) {
+        var response = webClient.get()
+                .uri(host + "user/applicant/" + applicantId)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
@@ -42,14 +39,35 @@ public class BudgetsClientImpl implements BudgetsClient {
                 .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(BudgetsClientImpl::handle5xxError))
-                .bodyToMono(new ParameterizedTypeReference<List<BudgetResponse>>() {
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<List<BudgetResponse>>>() {
                 })
                 .block();
+        assert response != null;
+        return response.getData();
+    }
+
+    @Override
+    public List<BudgetResponse> getSupplierBudgets(Long supplierId) {
+        var response = webClient.get()
+                .uri(host + "user/supplier/" + supplierId)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(BudgetsClientImpl::handle4xxError))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(BudgetsClientImpl::handle5xxError))
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<List<BudgetResponse>>>() {
+                })
+                .block();
+        assert response != null;
+        return response.getData();
     }
 
     @Override
     public BudgetResponseDetail getBudgetDetail(String id) {
-        return webClient.get()
+        var response = webClient.get()
                 .uri(host + "budget/" + id)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .retrieve()
@@ -59,8 +77,10 @@ public class BudgetsClientImpl implements BudgetsClient {
                 .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(BudgetsClientImpl::handle5xxError))
-                .bodyToMono(BudgetResponseDetail.class)
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<BudgetResponseDetail>>() {})
                 .block();
+        assert response != null;
+        return response.getData();
     }
 
     @Override

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -20,10 +21,16 @@ public class BudgetsServiceImpl implements BudgetsService {
     private final BudgetsClient budgetsClient;
 
     @Override
-    public List<BudgetResponse> getBudgets(Long applicantId) {
-        log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);
+    public List<BudgetResponse> getBudgets(Long applicantId, Long supplierId) {
+        List<BudgetResponse> budgets;
 
-        var budgets = budgetsClient.getBudgets(applicantId);
+        if(Objects.nonNull(applicantId)){
+            log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);
+            budgets = budgetsClient.getApplicantBudgets(applicantId);
+        } else {
+            log.info("Obteniendo presupuestos para el proveedor: {}", supplierId);
+            budgets = budgetsClient.getSupplierBudgets(supplierId);
+        }
 
         log.info("Cantidad de presupuestos obtenidos: {}", budgets.size());
 

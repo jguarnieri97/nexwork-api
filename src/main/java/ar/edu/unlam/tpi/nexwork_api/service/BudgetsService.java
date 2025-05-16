@@ -18,7 +18,7 @@ public interface BudgetsService {
      * @param applicantId: id del solicitante
      * @return la lista de presupuestos
      */
-    List<BudgetResponse> getBudgets(Long applicantId);
+    List<BudgetResponse> getBudgets(Long applicantId, Long supplierId);
 
     /**
      * Método para obtener el detalle de un presupuesto por su id

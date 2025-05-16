@@ -11,6 +11,7 @@ public class TestUtils {
 
     public static final String BUDGET_ID = "ABC";
     public static final long APPLICANT_ID = 1L;
+    public static final long SUPPLIER_ID = 1L;
     public static final String DATE = "2023-10-01";
 
     public static BudgetResponse buildBudgetsResponse() {
