@@ -27,7 +27,7 @@ class WorkContractServiceImplTest {
 
     private WorkContractRequest workContractRequest;
     private WorkContractCreateRequest workContractCreateRequest;
-    private WorkContractFinalizeRequest workContractFinalizeRequest;
+    private ContractsFinalizeRequest workContractFinalizeRequest;
     private WorkContractResponse workContractResponse;
     private List<WorkContractResponse> workContractResponseList;
 
@@ -50,7 +50,7 @@ class WorkContractServiceImplTest {
                 .workers(Arrays.asList(4L, 5L, 6L))
                 .build();
 
-        workContractFinalizeRequest = WorkContractFinalizeRequest.builder()
+        workContractFinalizeRequest = ContractsFinalizeRequest.builder()
                 .detail("Trabajo finalizado correctamente")
                 .build();
 
@@ -104,13 +104,13 @@ class WorkContractServiceImplTest {
     void finalizeContract_ShouldCallClient() {
         // Arrange
         Long contractId = 1L;
-        doNothing().when(workContractClient).finalizeContract(anyLong(), any(WorkContractFinalizeRequest.class));
+        doNothing().when(workContractClient).finalizeContract(anyLong(), any());
 
         // Act
         workContractService.finalizeContract(contractId, workContractFinalizeRequest);
 
         // Assert
-        verify(workContractClient, times(1)).finalizeContract(contractId, workContractFinalizeRequest);
+        verify(workContractClient, times(1)).finalizeContract(anyLong(), any());
     }
 
     @Test

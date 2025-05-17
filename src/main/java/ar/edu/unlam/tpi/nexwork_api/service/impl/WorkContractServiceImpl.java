@@ -1,10 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.*;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +16,7 @@ import java.util.List;
 public class WorkContractServiceImpl implements WorkContractService {
 
     private final WorkContractClient workContractClient;
+    public static final String CONTRACT_FINALIZED = "FINALIZED";
 
     @Override
     public List<WorkContractResponse> getContracts(WorkContractRequest request) {
@@ -43,23 +41,14 @@ public class WorkContractServiceImpl implements WorkContractService {
     }
 
     @Override
-    public void finalizeContract(Long id, WorkContractFinalizeRequest request) {
+    public void finalizeContract(Long id, ContractsFinalizeRequest request) {
         log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
 
-        InternalFinalizeRequest enrichedRequest = new InternalFinalizeRequest(
-                "FINALIZED",
-                request.getDetail(),
-                request.getFiles());
+        var contractsRequest = this.buildFinalizeRequest(request);
 
-        workContractClient.finalizeContract(id, enrichedRequest);
+        workContractClient.finalizeContract(id, contractsRequest);
 
         log.info("Contrato finalizado exitosamente");
-    }
-
-    private record InternalFinalizeRequest(
-            String state,
-            String detail,
-            List<String> files) {
     }
 
     @Override
@@ -70,6 +59,14 @@ public class WorkContractServiceImpl implements WorkContractService {
         log.info("Contrato encontrado con id {}", id);
 
         return response;
+    }
+
+    private ContractsFinalizeRequest buildFinalizeRequest(ContractsFinalizeRequest request) {
+        return ContractsFinalizeRequest.builder()
+                .state(CONTRACT_FINALIZED)
+                .detail(request.getDetail())
+                .files(request.getFiles())
+                .build();
     }
 
 }

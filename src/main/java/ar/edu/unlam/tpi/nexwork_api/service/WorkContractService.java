@@ -1,9 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.service;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.*;
 
 import java.util.List;
 
@@ -34,7 +31,7 @@ public interface WorkContractService {
      * @param id      id del contrato a finalizar
      * @param request datos del contrato a finalizar
      */
-    void finalizeContract(Long id, WorkContractFinalizeRequest request);
+    void finalizeContract(Long id, ContractsFinalizeRequest request);
 
     /**
      * Obtener un contrato laboral por su ID

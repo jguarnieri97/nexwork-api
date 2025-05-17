@@ -1,11 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.controller.WorkContractController;
-import ar.edu.unlam.tpi.nexwork_api.dto.GenericResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.*;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Constants;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +36,7 @@ public GenericResponse<WorkContractResponse> createContract(WorkContractCreateRe
 }
 
     @Override
-public GenericResponse<Void> finalizeContract(Long id, WorkContractFinalizeRequest request) {
+public GenericResponse<Void> finalizeContract(Long id, ContractsFinalizeRequest request) {
     workContractService.finalizeContract(id, request);
     return new GenericResponse<>(
             Constants.STATUS_OK,

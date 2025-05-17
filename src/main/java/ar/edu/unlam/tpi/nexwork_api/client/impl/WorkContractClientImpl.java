@@ -1,11 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.ErrorResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.GenericResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +78,7 @@ public class WorkContractClientImpl implements WorkContractClient {
     }
     
     @Override
-public void finalizeContract(Long id, Object request) {
+public void finalizeContract(Long id, ContractsFinalizeRequest request) {
     String url = host + "work-contract/" + id;
 
     webClient.put()

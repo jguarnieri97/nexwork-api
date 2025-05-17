@@ -1,10 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.controller;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.GenericResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +44,7 @@ public interface WorkContractController {
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<Void> finalizeContract(
         @PathVariable Long id,
-        @RequestBody WorkContractFinalizeRequest request);
+        @RequestBody ContractsFinalizeRequest request);
 
     /**
      * Recurso para obtener un contrato laboral por su ID
