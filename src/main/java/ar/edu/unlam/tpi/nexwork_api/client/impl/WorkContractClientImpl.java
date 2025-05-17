@@ -4,7 +4,6 @@ import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
@@ -83,10 +82,8 @@ public class WorkContractClientImpl implements WorkContractClient {
     }
     
     @Override
-    public void finalizeContract(Long id, WorkContractFinalizeRequest request) {
+public void finalizeContract(Long id, Object request) {
     String url = host + "work-contract/" + id;
-
-    request.setState("FINALIZED");
 
     webClient.put()
             .uri(url)
@@ -102,6 +99,8 @@ public class WorkContractClientImpl implements WorkContractClient {
             .bodyToMono(Void.class)
             .block();
 }
+
+
 
     @Override
     public WorkContractResponse getContractById(Long id) {

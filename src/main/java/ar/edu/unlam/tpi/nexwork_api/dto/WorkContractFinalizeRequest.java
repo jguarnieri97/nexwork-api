@@ -8,8 +8,7 @@ import java.util.List;
 @Data
 @Builder
 public class WorkContractFinalizeRequest {
- 
+
     private String detail;
     private List<String> files;
-    private String state;
 }

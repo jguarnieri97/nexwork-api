@@ -32,33 +32,44 @@ public class WorkContractServiceImpl implements WorkContractService {
     }
 
     @Override
-public WorkContractResponse createContract(WorkContractCreateRequest request) {
-    log.info("Creando nuevo contrato de trabajo: {}", Converter.convertToString(request));
+    public WorkContractResponse createContract(WorkContractCreateRequest request) {
+        log.info("Creando nuevo contrato de trabajo: {}", Converter.convertToString(request));
 
-    var response = workContractClient.createContract(request);
+        var response = workContractClient.createContract(request);
 
-    log.info("Contrato creado con ID: {}", response.getId());
+        log.info("Contrato creado con ID: {}", response.getId());
 
-    return response;
-}
+        return response;
+    }
 
     @Override
-public void finalizeContract(Long id, WorkContractFinalizeRequest request) {
-    log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
+    public void finalizeContract(Long id, WorkContractFinalizeRequest request) {
+        log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
 
-    workContractClient.finalizeContract(id, request);
+        InternalFinalizeRequest enrichedRequest = new InternalFinalizeRequest(
+                "FINALIZED",
+                request.getDetail(),
+                request.getFiles());
 
-    log.info("Contrato finalizado exitosamente");
-}
+        workContractClient.finalizeContract(id, enrichedRequest);
 
-@Override
-public WorkContractResponse getContractById(Long id) {
-    log.info("Buscando contrato con id {}", id);
-    var response = workContractClient.getContractById(id);
+        log.info("Contrato finalizado exitosamente");
+    }
 
-    log.info("Contrato encontrado con id {}", id);
+    private record InternalFinalizeRequest(
+            String state,
+            String detail,
+            List<String> files) {
+    }
 
-    return response;
-}
+    @Override
+    public WorkContractResponse getContractById(Long id) {
+        log.info("Buscando contrato con id {}", id);
+        var response = workContractClient.getContractById(id);
+
+        log.info("Contrato encontrado con id {}", id);
+
+        return response;
+    }
 
 }

@@ -31,7 +31,7 @@ public interface WorkContractService {
     /**
      * Finalizar un contrato laboral
      *
-     * @param id id del contrato a finalizar
+     * @param id      id del contrato a finalizar
      * @param request datos del contrato a finalizar
      */
     void finalizeContract(Long id, WorkContractFinalizeRequest request);
