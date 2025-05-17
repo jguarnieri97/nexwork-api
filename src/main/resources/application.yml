@@ -1,5 +1,5 @@
 spring.application.name: nexwork-api
 server.port: 8081
 
-budgets.host: http://localhost:8085/budgets/v1/
-contracts.host: http://localhost:8086/contracts/v1/
+budgets.host: ${BUDGETS_API_URI:http://localhost:8085/budgets/v1/}
+contracts.host: ${CONTRACTS_API_URI:http://localhost:8086/contracts/v1/}
