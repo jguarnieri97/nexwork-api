@@ -48,7 +48,10 @@ public class WorkContractServiceImpl implements WorkContractService {
 
         workContractClient.finalizeContract(id, contractsRequest);
 
-        log.info("Contrato finalizado exitosamente");
+        DeliveryNoteRequest remito = buildMockedDeliveryNote(id, request);
+    workContractClient.createDeliveryNote(remito);
+
+    log.info("Contrato finalizado y remito generado exitosamente.");
     }
 
     @Override
@@ -69,4 +72,35 @@ public class WorkContractServiceImpl implements WorkContractService {
                 .build();
     }
 
+    private DeliveryNoteRequest buildMockedDeliveryNote(Long contractId, ContractsFinalizeRequest request) {
+        CompanyData supplier = new CompanyData();
+        supplier.setCompanyName("Proveedor Mock S.A.");
+        supplier.setCuit("30-12345678-9");
+    
+        CompanyData applicant = new CompanyData();
+        applicant.setCompanyName("Solicitante Mock SRL");
+        applicant.setCuit("20-98765432-1");
+    
+        DescriptionObject item = new DescriptionObject();
+        item.setDetail(request.getDetail());
+        item.setPrice(150000.0); // precio simulado
+    
+        BodyData body = new BodyData();
+        body.setNoteNumber("00001");
+        body.setDescriptionData(List.of(item));
+    
+        FootData foot = new FootData();
+        foot.setSignature("Firma simulada");
+    
+        DeliveryNoteRequest remito = DeliveryNoteRequest.builder()
+        .contractId(contractId)
+        .supplierData(supplier)
+        .applicantData(applicant)
+        .bodyData(body)
+        .footData(foot)
+        .build();
+    
+        return remito;
+    }
+    
 }

@@ -120,6 +120,22 @@ public void finalizeContract(Long id, ContractsFinalizeRequest request) {
     }
 
 
+    @Override
+public void createDeliveryNote(DeliveryNoteRequest request) {
+    webClient.post()
+            .uri(host + "delivery-note")
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .bodyValue(request)
+            .retrieve()
+            .onStatus(HttpStatusCode::is4xxClientError,
+                    r -> r.bodyToMono(ErrorResponse.class).flatMap(WorkContractClientImpl::handle4xxError))
+            .onStatus(HttpStatusCode::is5xxServerError,
+                    r -> r.bodyToMono(ErrorResponse.class).flatMap(WorkContractClientImpl::handle5xxError))
+            .bodyToMono(Void.class)
+            .block();
+}
+
+
 
     private static Mono<Throwable> handle4xxError(ErrorResponse error) {
         log.error("Error del cliente externo Contracts API (4xx): {}", error);

@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.client;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.DeliveryNoteRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
@@ -41,5 +42,13 @@ public interface WorkContractClient {
      * @return datos del contrato obtenido
      */
     WorkContractResponse getContractById(Long id);
+
+    /**
+     * Método para crear una nota de entrega
+     *
+     * @param request datos de la nota de entrega
+     * @return datos de la nota de entrega creada
+     */
+    void createDeliveryNote(DeliveryNoteRequest request);
 
 }
