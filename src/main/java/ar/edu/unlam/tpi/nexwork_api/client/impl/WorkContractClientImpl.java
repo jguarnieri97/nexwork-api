@@ -120,6 +120,39 @@ public void finalizeContract(Long id, ContractsFinalizeRequest request) {
     }
 
 
+    @Override
+public void createDeliveryNote(DeliveryNoteRequest request) {
+    webClient.post()
+            .uri(host + "delivery-note")
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .bodyValue(request)
+            .retrieve()
+            .onStatus(HttpStatusCode::is4xxClientError,
+                    r -> r.bodyToMono(ErrorResponse.class).flatMap(WorkContractClientImpl::handle4xxError))
+            .onStatus(HttpStatusCode::is5xxServerError,
+                    r -> r.bodyToMono(ErrorResponse.class).flatMap(WorkContractClientImpl::handle5xxError))
+            .bodyToMono(Void.class)
+            .block();
+}
+
+
+@Override
+public DeliveryNoteResponse getDeliveryNoteById(Long contractId) {
+    String url = host + "delivery-note/" + contractId;
+
+    return webClient.get()
+            .uri(url)
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .retrieve()
+            .onStatus(HttpStatusCode::is4xxClientError,
+                    r -> r.bodyToMono(ErrorResponse.class).flatMap(WorkContractClientImpl::handle4xxError))
+            .onStatus(HttpStatusCode::is5xxServerError,
+                    r -> r.bodyToMono(ErrorResponse.class).flatMap(WorkContractClientImpl::handle5xxError))
+            .bodyToMono(new ParameterizedTypeReference<GenericResponse<DeliveryNoteResponse>>() {})
+            .block()
+            .getData();
+}
+
 
     private static Mono<Throwable> handle4xxError(ErrorResponse error) {
         log.error("Error del cliente externo Contracts API (4xx): {}", error);
