@@ -55,4 +55,9 @@ public interface WorkContractController {
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<WorkContractResponse> getContractById(@PathVariable Long id);
+
+    @GetMapping("/delivery-note/{id}")
+@ResponseStatus(HttpStatus.OK)
+GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(@PathVariable("id") Long id);
+
 }

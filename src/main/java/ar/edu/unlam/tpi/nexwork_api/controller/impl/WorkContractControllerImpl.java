@@ -55,4 +55,15 @@ public GenericResponse<Void> finalizeContract(Long id, ContractsFinalizeRequest 
             );
         }
 
+        @Override
+public GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(Long id) {
+    var deliveryNote = workContractService.getDeliveryNoteById (id);
+    return new GenericResponse<>(
+            Constants.STATUS_OK,
+            Constants.SUCCESS_MESSAGE,
+            deliveryNote
+    );
+}
+
+
 }

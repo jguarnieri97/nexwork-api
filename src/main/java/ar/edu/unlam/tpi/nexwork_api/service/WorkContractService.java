@@ -40,4 +40,13 @@ public interface WorkContractService {
      * @return datos del contrato obtenido
      */
     WorkContractResponse getContractById(Long id);
+
+    /**
+     * Obtener una nota de entrega por su ID
+     *
+     * @param contractId id del contrato a obtener
+     * @return datos de la nota de entrega obtenida
+     */
+    DeliveryNoteResponse getDeliveryNoteById(Long contractId);
+
 }

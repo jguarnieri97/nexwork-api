@@ -136,6 +136,23 @@ public void createDeliveryNote(DeliveryNoteRequest request) {
 }
 
 
+@Override
+public DeliveryNoteResponse getDeliveryNoteById(Long contractId) {
+    String url = host + "delivery-note/" + contractId;
+
+    return webClient.get()
+            .uri(url)
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .retrieve()
+            .onStatus(HttpStatusCode::is4xxClientError,
+                    r -> r.bodyToMono(ErrorResponse.class).flatMap(WorkContractClientImpl::handle4xxError))
+            .onStatus(HttpStatusCode::is5xxServerError,
+                    r -> r.bodyToMono(ErrorResponse.class).flatMap(WorkContractClientImpl::handle5xxError))
+            .bodyToMono(new ParameterizedTypeReference<GenericResponse<DeliveryNoteResponse>>() {})
+            .block()
+            .getData();
+}
+
 
     private static Mono<Throwable> handle4xxError(ErrorResponse error) {
         log.error("Error del cliente externo Contracts API (4xx): {}", error);

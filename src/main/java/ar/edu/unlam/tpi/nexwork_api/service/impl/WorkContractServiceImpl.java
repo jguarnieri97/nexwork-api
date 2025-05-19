@@ -40,6 +40,16 @@ public class WorkContractServiceImpl implements WorkContractService {
         return response;
     }
 
+    
+        @Override
+        public WorkContractResponse getContractById(Long id) {
+            log.info("Buscando contrato con id {}", id);
+            var response = workContractClient.getContractById(id);
+    
+            log.info("Contrato encontrado con id {}", id);
+    
+            return response;
+        }
     @Override
     public void finalizeContract(Long id, ContractsFinalizeRequest request) {
         log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
@@ -55,14 +65,10 @@ public class WorkContractServiceImpl implements WorkContractService {
     }
 
     @Override
-    public WorkContractResponse getContractById(Long id) {
-        log.info("Buscando contrato con id {}", id);
-        var response = workContractClient.getContractById(id);
-
-        log.info("Contrato encontrado con id {}", id);
-
-        return response;
-    }
+public DeliveryNoteResponse getDeliveryNoteById(Long contractId) {
+    log.info("Consultando remito para contrato id {}", contractId);
+    return workContractClient.getDeliveryNoteById(contractId);
+}
 
     private ContractsFinalizeRequest buildFinalizeRequest(ContractsFinalizeRequest request) {
         return ContractsFinalizeRequest.builder()
