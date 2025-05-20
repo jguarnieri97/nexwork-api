@@ -15,7 +15,7 @@ public interface WorkContractController {
     /**
      * Recurso para obtener los contratos laborales según el tipo de cuenta
      *
-    * @param request datos del tipo de cuenta, id y límite de contratos
+     * @param request datos del tipo de cuenta, id y límite de contratos
      * @return lista de contratos laborales
      */
     @PostMapping
@@ -35,7 +35,7 @@ public interface WorkContractController {
     /**
      * Recurso para finalizar un contrato laboral
      *
-     * @param id id del contrato a finalizar
+     * @param id      id del contrato a finalizar
      * @param request datos del contrato a finalizar
      * @return datos del contrato finalizado
      */
@@ -43,8 +43,8 @@ public interface WorkContractController {
     @PostMapping("{id}/finalize")
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<Void> finalizeContract(
-        @PathVariable Long id,
-        @RequestBody ContractsFinalizeRequest request);
+            @PathVariable Long id,
+            @RequestBody ContractsFinalizeRequest request);
 
     /**
      * Recurso para obtener un contrato laboral por su ID
@@ -56,8 +56,8 @@ public interface WorkContractController {
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<WorkContractResponse> getContractById(@PathVariable Long id);
 
-    @GetMapping("/delivery-note/{id}")
-@ResponseStatus(HttpStatus.OK)
-GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(@PathVariable("id") Long id);
+    @GetMapping("/delivery-note/{contractId}")
+    @ResponseStatus(HttpStatus.OK)
+    GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(@PathVariable("contractId") Long contractId);
 
 }

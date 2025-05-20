@@ -26,7 +26,7 @@ public class WorkContractControllerImpl implements WorkContractController {
     }
 
     @Override
-public GenericResponse<WorkContractResponse> createContract(WorkContractCreateRequest request) {
+    public GenericResponse<WorkContractResponse> createContract(WorkContractCreateRequest request) {
     var contract = workContractService.createContract(request);
     return new GenericResponse<>(
             Constants.STATUS_CREATED,
@@ -56,8 +56,8 @@ public GenericResponse<Void> finalizeContract(Long id, ContractsFinalizeRequest 
         }
 
         @Override
-public GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(Long id) {
-    var deliveryNote = workContractService.getDeliveryNoteById (id);
+public GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(Long contractId) {
+    var deliveryNote = workContractService.getDeliveryNoteById (contractId);
     return new GenericResponse<>(
             Constants.STATUS_OK,
             Constants.SUCCESS_MESSAGE,
