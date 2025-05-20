@@ -9,6 +9,7 @@ public class BudgetResponse {
 
     private String id;
     private Long applicantId;
+    private String applicantName;
     private String date;
 
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class BudgetData {
     private Long supplierId;
+    private String supplierName;
     private Double price;
     private Integer daysCount;
     private Integer workerCount;
