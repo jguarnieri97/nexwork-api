@@ -1,14 +1,13 @@
 package ar.edu.unlam.tpi.nexwork_api.dto;
 
-
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class DescriptionObject {
+public class AccountDetailRequest {
 
-    private String detail;
-    private Double price;
+    private Long userId;
+    private String type;
 
 }

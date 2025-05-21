@@ -3,3 +3,4 @@ server.port: 8081
 
 budgets.host: ${BUDGETS_API_URI:http://localhost:8085/budgets/v1/}
 contracts.host: ${CONTRACTS_API_URI:http://localhost:8084/contracts/v1/}
+accounts.host: ${ACCOUNTS_API_URI:http://localhost:8083/accounts/v1/}
