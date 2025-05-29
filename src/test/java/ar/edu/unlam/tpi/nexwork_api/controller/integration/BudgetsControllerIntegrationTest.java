@@ -6,7 +6,6 @@ import ar.edu.unlam.tpi.nexwork_api.dto.BudgetDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
