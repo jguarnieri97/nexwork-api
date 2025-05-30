@@ -2,6 +2,11 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.*;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;

@@ -2,6 +2,11 @@ package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.*;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

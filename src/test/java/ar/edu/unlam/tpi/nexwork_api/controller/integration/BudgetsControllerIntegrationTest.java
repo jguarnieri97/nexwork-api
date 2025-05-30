@@ -3,8 +3,8 @@ package ar.edu.unlam.tpi.nexwork_api.controller.integration;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetData;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetDetail;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

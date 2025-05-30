@@ -1,9 +1,11 @@
 package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.*;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.AccountDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.AccountsClientException;
-import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
