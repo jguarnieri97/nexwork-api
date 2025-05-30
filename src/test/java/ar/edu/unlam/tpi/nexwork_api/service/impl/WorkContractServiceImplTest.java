@@ -1,7 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
@@ -19,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.*;    
 
 @ExtendWith(MockitoExtension.class)
 class WorkContractServiceImplTest {
