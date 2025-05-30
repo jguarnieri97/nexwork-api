@@ -1,24 +1,23 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
-
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
+import ar.edu.unlam.tpi.nexwork_api.utils.WorkContractDataHelper;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;    
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class WorkContractServiceImplTest {
@@ -26,111 +25,66 @@ class WorkContractServiceImplTest {
     @Mock
     private WorkContractClient workContractClient;
 
+    @Mock
+    private DeliveryNoteService deliveryNoteService;
+
+
     @InjectMocks
     private WorkContractServiceImpl workContractService;
 
-    private WorkContractRequest workContractRequest;
-    private WorkContractCreateRequest workContractCreateRequest;
-    private ContractsFinalizeRequest workContractFinalizeRequest;
-    private WorkContractResponse workContractResponse;
-    private List<WorkContractResponse> workContractResponseList;
-
-    @BeforeEach
-    void setUp() {
-        // Configuración de datos de prueba
-        workContractRequest = WorkContractRequest.builder()
-                .id(1L)
-                .accountType("worker")
-                .limit(true)
-                .build();
-
-        workContractCreateRequest = WorkContractCreateRequest.builder()
-                .price(150000.0)
-                .dateFrom("2025-05-16T09:00:00Z")
-                .dateTo("2025-05-22T18:00:00Z")
-                .detail("Trabajo de pintura")
-                .supplierId(1L)
-                .applicantId(2L)
-                .workers(Arrays.asList(4L, 5L, 6L))
-                .build();
-
-        workContractFinalizeRequest = ContractsFinalizeRequest.builder()
-                .detail("Trabajo finalizado correctamente")
-                .build();
-
-        workContractResponse = WorkContractResponse.builder()
-                .id(1L)
-                .price(150000.0)
-                .dateFrom("2025-05-16T09:00:00Z")
-                .dateTo("2025-05-22T18:00:00Z")
-                .state("ACTIVE")
-                .detail("Trabajo de pintura")
-                .supplierId(1L)
-                .applicantId(2L)
-                .build();
-
-        workContractResponseList = Arrays.asList(workContractResponse);
-    }
-
     @Test
     void getContracts_ShouldReturnContractList() {
-        // Arrange
-        when(workContractClient.getContracts(any(WorkContractRequest.class)))
-                .thenReturn(workContractResponseList);
+        WorkContractRequest request = WorkContractDataHelper.buildRequest(1L, "worker");
+        List<WorkContractResponse> expected = WorkContractDataHelper.buildResponseList();
 
-        // Act
-        List<WorkContractResponse> result = workContractService.getContracts(workContractRequest);
+        when(workContractClient.getContracts(any(WorkContractRequest.class))).thenReturn(expected);
 
-        // Assert
+        List<WorkContractResponse> result = workContractService.getContracts(request);
+
         assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(workContractResponse.getId(), result.get(0).getId());
-        verify(workContractClient, times(1)).getContracts(workContractRequest);
+        assertEquals(expected.size(), result.size());
+        assertEquals(expected.get(0).getId(), result.get(0).getId());
     }
 
     @Test
     void createContract_ShouldReturnCreatedContract() {
-        // Arrange
-        when(workContractClient.createContract(any(WorkContractCreateRequest.class)))
-                .thenReturn(workContractResponse);
+        WorkContractCreateRequest request = WorkContractDataHelper.buildCreateRequest();
+        WorkContractResponse expected = WorkContractDataHelper.buildResponse(99L);
 
-        // Act
-        WorkContractResponse result = workContractService.createContract(workContractCreateRequest);
+        when(workContractClient.createContract(any(WorkContractCreateRequest.class))).thenReturn(expected);
 
-        // Assert
+        WorkContractResponse result = workContractService.createContract(request);
+
         assertNotNull(result);
-        assertEquals(workContractResponse.getId(), result.getId());
-        assertEquals(workContractResponse.getPrice(), result.getPrice());
-        verify(workContractClient, times(1)).createContract(workContractCreateRequest);
+        assertEquals(expected.getId(), result.getId());
+        assertEquals(expected.getPrice(), result.getPrice());
     }
 
     @Test
-    void finalizeContract_ShouldCallClient() {
-        // Arrange
-        Long contractId = 1L;
-        doNothing().when(workContractClient).finalizeContract(anyLong(), any());
+void finalizeContract_ShouldCallClient() {
+    Long id = 1L;
+    ContractsFinalizeRequest request = WorkContractDataHelper.buildFinalizeRequest();
 
-        // Act
-        workContractService.finalizeContract(contractId, workContractFinalizeRequest);
+    doNothing().when(workContractClient).finalizeContract(anyLong(), any());
+    doNothing().when(deliveryNoteService).buildDeliveryNote(id); // 👈 mock necesario
 
-        // Assert
-        verify(workContractClient, times(1)).finalizeContract(anyLong(), any());
-    }
+    workContractService.finalizeContract(id, request);
+
+    verify(workContractClient, times(1)).finalizeContract(eq(id), any());
+    verify(deliveryNoteService, times(1)).buildDeliveryNote(id);
+}
 
     @Test
     void getContractById_ShouldReturnContract() {
-        // Arrange
-        Long contractId = 1L;
-        when(workContractClient.getContractById(anyLong()))
-                .thenReturn(workContractResponse);
+        Long id = 1L;
+        WorkContractResponse expected = WorkContractDataHelper.buildResponse(id);
 
-        // Act
-        WorkContractResponse result = workContractService.getContractById(contractId);
+        when(workContractClient.getContractById(anyLong())).thenReturn(expected);
 
-        // Assert
+        WorkContractResponse result = workContractService.getContractById(id);
+
         assertNotNull(result);
-        assertEquals(workContractResponse.getId(), result.getId());
-        assertEquals(workContractResponse.getPrice(), result.getPrice());
-        verify(workContractClient, times(1)).getContractById(contractId);
+        assertEquals(expected.getId(), result.getId());
+        assertEquals(expected.getPrice(), result.getPrice());
     }
-} 
+}
