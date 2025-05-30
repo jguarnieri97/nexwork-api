@@ -2,6 +2,14 @@ package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.*;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

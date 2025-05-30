@@ -1,4 +1,4 @@
-package ar.edu.unlam.tpi.nexwork_api.dto;
+package ar.edu.unlam.tpi.nexwork_api.dto.response;
 
 import java.util.List;
 

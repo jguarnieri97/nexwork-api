@@ -1,4 +1,4 @@
-package ar.edu.unlam.tpi.nexwork_api.dto;
+package ar.edu.unlam.tpi.nexwork_api.dto.request;
 
 import lombok.Data;
 
