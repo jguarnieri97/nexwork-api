@@ -1,15 +1,16 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
+import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
+import ar.edu.unlam.tpi.nexwork_api.utils.AccountTypeEnum;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +19,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static ar.edu.unlam.tpi.nexwork_api.service.impl.DeliveryNoteServiceImpl.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class WorkContractServiceImpl implements WorkContractService {
 
     private final WorkContractClient workContractClient;
+    private final AccountsClient accountsClient;
     private final DeliveryNoteService deliveryNoteService;
     public static final String CONTRACT_FINALIZED = "FINALIZED";
 
@@ -48,24 +52,21 @@ public class WorkContractServiceImpl implements WorkContractService {
     }
 
     @Override
-    public WorkContractResponse getContractById(Long id) {
+    public WorkContractDetailResponse getContractById(Long id) {
         log.info("Buscando contrato con id {}", id);
 
-        return Optional.ofNullable(workContractClient.getContractById(id))
-                .map(response -> {
-                    log.info("Contrato encontrado con id {}", id);
-                    return response;
-                })
-                .orElseThrow(() -> {
-                    log.error("No se encontró contrato con id {}", id);
-                    return new WorkContractClientException(
-                            ErrorResponse.builder()
-                                    .code(404)
-                                    .message("CONTRACT_NOT_FOUND")
-                                    .detail("No se encontró contrato con ID: " + id)
-                                    .build()
-                    );
-                });
+        WorkContractResponse contract = workContractClient.getContractById(id);
+
+        List<AccountDetailRequest> accountRequests = List.of(
+                Converter.toAccountRequest(contract.getSupplierId(), AccountTypeEnum.SUPPLIER.getValue()),
+                Converter.toAccountRequest(contract.getApplicantId(), AccountTypeEnum.APPLICANT.getValue())
+        );
+
+        UserResponse accountDetails = accountsClient.getAccountById(accountRequests);
+
+        log.info("Detalles de la cuenta obtenidos: {}", accountDetails);
+
+        return Converter.toWorkContractDetailResponse(contract, accountDetails.getSuppliers(), accountDetails.getApplicants());
     }
 
     @Override

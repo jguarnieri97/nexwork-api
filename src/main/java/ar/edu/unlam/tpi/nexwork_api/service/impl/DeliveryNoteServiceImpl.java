@@ -9,6 +9,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.response.AccountDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
+import ar.edu.unlam.tpi.nexwork_api.utils.AccountTypeEnum;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,6 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
 
     private final WorkContractClient workContractClient;
     private final AccountsClient accountsClient;
-    public static final String SUPPLIER_ACCOUNT = "supplier";
-    public static final String APPLICANT_ACCOUNT = "applicant";
 
     @Override
     public void buildDeliveryNote(Long contractId) {
@@ -33,8 +32,8 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
         log.info("Contrato encontrado: {}", Converter.convertToString(contract));
 
         List<AccountDetailRequest> accountRequests = List.of(
-                buildAccountRequest(contract.getSupplierId(), SUPPLIER_ACCOUNT),
-                buildAccountRequest(contract.getApplicantId(), APPLICANT_ACCOUNT)
+                Converter.toAccountRequest(contract.getSupplierId(), AccountTypeEnum.SUPPLIER.getValue()),
+                Converter.toAccountRequest(contract.getApplicantId(), AccountTypeEnum.APPLICANT.getValue())
         );
 
         log.info("Buscando información de cuenta del proveedor con id {}", contract.getSupplierId());
@@ -46,13 +45,6 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
         log.info("Enviando remito a crear en el servicio Contracts");
         workContractClient.createDeliveryNote(request);
         log.info("Remito creado con éxito!");
-    }
-
-    private static AccountDetailRequest buildAccountRequest(Long contract, String supplierAccount) {
-        return AccountDetailRequest.builder()
-                .userId(contract)
-                .type(supplierAccount)
-                .build();
     }
 
     private DeliveryNoteRequest buildDeliveryNote(WorkContractResponse contract, List<AccountDetailResponse> supplier, List<AccountDetailResponse> applicant) {
