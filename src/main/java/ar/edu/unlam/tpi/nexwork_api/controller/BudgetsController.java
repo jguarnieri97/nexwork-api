@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.controller;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
@@ -36,7 +37,7 @@ public interface BudgetsController {
      */
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<BudgetResponseDetail> getBudgetDetail(@PathVariable String id);
+    GenericResponse<BudgetDetailResponse> getBudgetDetail(@PathVariable String id);
 
     /**
      * Recurso para crear un nuevo presupuesto
