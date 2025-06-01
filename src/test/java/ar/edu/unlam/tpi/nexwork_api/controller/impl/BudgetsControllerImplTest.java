@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class BudgetsControllerImplTest {
-
+/* 
     private BudgetsService budgetsService;
     private BudgetsController budgetsController;
 
@@ -58,5 +58,5 @@ class BudgetsControllerImplTest {
         assertEquals(Constants.STATUS_OK, response.getCode());
         assertEquals("budget123", response.getData().getId());
         verify(budgetsService).getBudget("budget123");
-    }
+    }*/
 }

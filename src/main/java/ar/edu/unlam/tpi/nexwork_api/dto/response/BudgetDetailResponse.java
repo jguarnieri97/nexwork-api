@@ -14,7 +14,7 @@ public class BudgetDetailResponse {
     private String id;
     private String budgetNumber;
     private Boolean isRead;
-    private List<AccountDetailResponse> applicant;
+    private List<AccountDetailResponse> applicants;
     private String createdAt;
     private String category;
     private String state;
