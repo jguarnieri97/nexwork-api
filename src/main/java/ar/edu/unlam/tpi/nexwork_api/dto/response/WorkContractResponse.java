@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class WorkContractResponse {
     private Long id;
+    private String codeNumber;
     private Double price;
     private String dateFrom;
     private String dateTo;
