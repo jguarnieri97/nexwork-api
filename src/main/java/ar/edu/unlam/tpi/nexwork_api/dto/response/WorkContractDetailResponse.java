@@ -1,13 +1,13 @@
 package ar.edu.unlam.tpi.nexwork_api.dto.response;
 
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
-public class WorkContractResponse {
+public class WorkContractDetailResponse {
     private Long id;
     private String codeNumber;
     private Double price;
@@ -15,8 +15,8 @@ public class WorkContractResponse {
     private String dateTo;
     private String state;
     private String detail;
-    private Long supplierId;
-    private Long applicantId;
+    private List<AccountDetailResponse> suppliers;
+    private List<AccountDetailResponse> applicants;
     private List<Long> workers;
     private List<String> files;
 }

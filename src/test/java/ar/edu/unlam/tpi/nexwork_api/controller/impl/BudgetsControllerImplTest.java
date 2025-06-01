@@ -5,7 +5,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.ValidatorException;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
-import ar.edu.unlam.tpi.nexwork_api.utils.BudgetsDataHelper;
+import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.Constants;
 
 import org.junit.jupiter.api.BeforeEach;

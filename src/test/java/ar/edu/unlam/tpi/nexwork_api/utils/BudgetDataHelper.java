@@ -2,13 +2,15 @@ package ar.edu.unlam.tpi.nexwork_api.utils;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetData;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetDataRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import java.util.List;
 
-public class BudgetsDataHelper {
+public class BudgetDataHelper {
 
-    public static BudgetResponse buildBudgetResponse(String id) {
+    public static BudgetResponse createBudgetResponse(String id) {
         return BudgetResponse.builder()
                 .id(id)
                 .applicantId(1L)
@@ -17,7 +19,7 @@ public class BudgetsDataHelper {
                 .build();
     }
 
-    public static BudgetResponseDetail buildBudgetResponseDetail(String id) {
+    public static BudgetResponseDetail createBudgetResponseDetail(String id) {
         return BudgetResponseDetail.builder()
                 .id(id)
                 .createdAt("2025-05-04T11:00:00Z")
@@ -38,10 +40,27 @@ public class BudgetsDataHelper {
                 .build();
     }
 
-    public static List<BudgetResponse> buildBudgetList() {
+    public static List<BudgetResponse> createBudgetResponseList() {
         return List.of(
-                buildBudgetResponse("budget123"),
-                buildBudgetResponse("budget456")
+                createBudgetResponse("budget123"),
+                createBudgetResponse("budget456")
         );
+    }
+
+    public static BudgetRequest createBudgetRequest() {
+        return BudgetRequest.builder()
+                .applicantId(1L)
+                .applicantName("Nombre del Solicitante")
+                .workResume("Resumen del Trabajo")
+                .workDetail("Detalle del Trabajo")
+                .category("Categoría de Trabajo")
+                .files(List.of("archivo1.pdf", "archivo2.jpg"))
+                .suppliers(List.of(
+                        BudgetDataRequest.builder()
+                                .supplierId(1L)
+                                .supplierName("Proveedor 1")
+                                .build()
+                ))
+                .build();
     }
 }

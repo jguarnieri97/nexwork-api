@@ -3,7 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.controller.integration;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
-import ar.edu.unlam.tpi.nexwork_api.utils.BudgetsDataHelper;
+import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
