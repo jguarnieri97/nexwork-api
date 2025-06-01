@@ -4,11 +4,12 @@ import ar.edu.unlam.tpi.nexwork_api.dto.CompanyData;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class DeliveryNoteRequest {
-
     private Long contractId;
-    private CompanyData supplierData;
-    private CompanyData applicantData;
+    private List<CompanyData> supplierData;
+    private List<CompanyData> applicantData;
 }
