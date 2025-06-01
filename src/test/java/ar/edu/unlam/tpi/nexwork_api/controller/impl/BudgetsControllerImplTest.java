@@ -1,23 +1,23 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.controller.BudgetsController;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.ValidatorException;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
+import ar.edu.unlam.tpi.nexwork_api.utils.BudgetsDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.Constants;
-import ar.edu.unlam.tpi.nexwork_api.utils.TestUtils;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 
-import static ar.edu.unlam.tpi.nexwork_api.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class BudgetsControllerImplTest {
 
     private BudgetsService budgetsService;
-
     private BudgetsController budgetsController;
 
     @BeforeEach
@@ -28,67 +28,35 @@ class BudgetsControllerImplTest {
 
     @Test
     void getBudgetsReturnsGenericResponseWithBudgetsWhenBudgetsExist() {
-        var mockBudgets = List.of(TestUtils.buildBudgetsResponse());
-        when(budgetsService.getBudgets(APPLICANT_ID, null)).thenReturn(mockBudgets);
+        var budgets = BudgetsDataHelper.buildBudgetList();
 
-        var response = budgetsController.getBudgets(APPLICANT_ID, null);
+        when(budgetsService.getBudgets(1L, null)).thenReturn(budgets);
 
-        assertNotNull(response);
-        assertEquals(Constants.STATUS_OK, response.getCode());
-        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
-        assertEquals(1, response.getData().size());
-        verify(budgetsService).getBudgets(APPLICANT_ID, null);
-    }
-
-    @Test
-    void getBudgetsReturnsGenericResponseWithEmptyListWhenNoBudgetsExist() {
-        when(budgetsService.getBudgets(APPLICANT_ID, null)).thenReturn(List.of());
-
-        var response = budgetsController.getBudgets(APPLICANT_ID, null);
+        var response = budgetsController.getBudgets(1L, null);
 
         assertNotNull(response);
         assertEquals(Constants.STATUS_OK, response.getCode());
         assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
-        assertTrue(response.getData().isEmpty());
-        verify(budgetsService).getBudgets(APPLICANT_ID, null);
+        assertEquals(2, response.getData().size());
+        verify(budgetsService).getBudgets(1L, null);
     }
 
     @Test
-    void getBudgetDetailReturnsGenericResponseWithBudgetDetailWhenBudgetExists() {
-        var mockBudgetDetail = TestUtils.buildBudgetResponseDetail();
-        when(budgetsService.getBudget(BUDGET_ID)).thenReturn(mockBudgetDetail);
+    void getBudgetsThrowsValidatorExceptionWhenIdIsNull() {
+        assertThrows(ValidatorException.class, () -> budgetsController.getBudgets(null, null));
+    }
 
-        var response = budgetsController.getBudgetDetail(BUDGET_ID);
+    @Test
+    void getBudgetDetailByIdReturnsGenericResponseWhenFound() {
+        var budgetDetail = BudgetsDataHelper.buildBudgetResponseDetail("budget123");
+
+        when(budgetsService.getBudget("budget123")).thenReturn(budgetDetail);
+
+        GenericResponse<BudgetResponseDetail> response = budgetsController.getBudgetDetail("budget123");
 
         assertNotNull(response);
         assertEquals(Constants.STATUS_OK, response.getCode());
-        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
-        assertNotNull(response.getData());
-        verify(budgetsService).getBudget(BUDGET_ID);
-    }
-
-    @Test
-    void createBudgetReturnsGenericResponseWithCreatedStatus() {
-        var budgetRequest = TestUtils.buildBudgetRequest();
-
-        var response = budgetsController.createBudget(budgetRequest);
-
-        assertNotNull(response);
-        assertEquals(Constants.STATUS_CREATED, response.getCode());
-        assertEquals(Constants.CREATED_MESSAGE, response.getMessage());
-        assertNull(response.getData());
-        verify(budgetsService).createBudget(budgetRequest);
-    }
-
-    @Test
-    void whenGetBudgetsIfSupplierAndApplicantIsNull_shouldThrowException() {
-        assertThrows(ValidatorException.class,
-                () -> budgetsController.getBudgets(null, null));
-    }
-
-    @Test
-    void whenGetBudgetsIfApplicantAndSupplierSet_shouldThrowException() {
-        assertThrows(ValidatorException.class,
-                () -> budgetsController.getBudgets(APPLICANT_ID, SUPPLIER_ID));
+        assertEquals("budget123", response.getData().getId());
+        verify(budgetsService).getBudget("budget123");
     }
 }

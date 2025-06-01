@@ -1,9 +1,9 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
 import lombok.RequiredArgsConstructor;

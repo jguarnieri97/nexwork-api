@@ -1,7 +1,13 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.*;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
@@ -10,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -24,10 +31,9 @@ public class WorkContractServiceImpl implements WorkContractService {
     public List<WorkContractResponse> getContracts(WorkContractRequest request) {
         log.info("Buscando contratos para tipo de cuenta '{}' con id {}", request.getAccountType(), request.getId());
 
-        var contracts = workContractClient.getContracts(request);
+        List<WorkContractResponse> contracts = workContractClient.getContracts(request);
 
         log.info("Contratos obtenidos: {}", contracts.size());
-
         return contracts;
     }
 
@@ -35,41 +41,70 @@ public class WorkContractServiceImpl implements WorkContractService {
     public WorkContractResponse createContract(WorkContractCreateRequest request) {
         log.info("Creando nuevo contrato de trabajo: {}", Converter.convertToString(request));
 
-        var response = workContractClient.createContract(request);
+        WorkContractResponse response = workContractClient.createContract(request);
 
         log.info("Contrato creado con ID: {}", response.getId());
-
         return response;
     }
-
 
     @Override
     public WorkContractResponse getContractById(Long id) {
         log.info("Buscando contrato con id {}", id);
-        var response = workContractClient.getContractById(id);
 
-        log.info("Contrato encontrado con id {}", id);
-
-        return response;
+        return Optional.ofNullable(workContractClient.getContractById(id))
+                .map(response -> {
+                    log.info("Contrato encontrado con id {}", id);
+                    return response;
+                })
+                .orElseThrow(() -> {
+                    log.error("No se encontró contrato con id {}", id);
+                    return new WorkContractClientException(
+                            ErrorResponse.builder()
+                                    .code(404)
+                                    .message("CONTRACT_NOT_FOUND")
+                                    .detail("No se encontró contrato con ID: " + id)
+                                    .build()
+                    );
+                });
     }
 
     @Override
     public void finalizeContract(Long id, ContractsFinalizeRequest request) {
         log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
 
-        var contractsRequest = this.buildFinalizeRequest(request);
+        ContractsFinalizeRequest finalRequest = this.buildFinalizeRequest(request);
 
-        workContractClient.finalizeContract(id, contractsRequest);
-
-        deliveryNoteService.buildDeliveryNote(id);
-
-        log.info("Contrato finalizado y remito generado exitosamente.");
+        try {
+            workContractClient.finalizeContract(id, finalRequest);
+            deliveryNoteService.buildDeliveryNote(id);
+            log.info("Contrato finalizado y remito generado exitosamente.");
+        } catch (Exception ex) {
+            log.error("Error al finalizar contrato con id {}: {}", id, ex.getMessage(), ex);
+            throw new WorkContractClientException(
+                    ErrorResponse.builder()
+                            .code(500)
+                            .message("CONTRACT_FINALIZATION_ERROR")
+                            .detail("Error al finalizar contrato con ID: " + id)
+                            .build()
+            );
+        }
     }
 
     @Override
     public DeliveryNoteResponse getDeliveryNoteById(Long contractId) {
         log.info("Consultando remito para contrato id {}", contractId);
-        return workContractClient.getDeliveryNoteById(contractId);
+
+        return Optional.ofNullable(workContractClient.getDeliveryNoteById(contractId))
+                .orElseThrow(() -> {
+                    log.error("No se encontró remito para contrato id {}", contractId);
+                    return new WorkContractClientException(
+                            ErrorResponse.builder()
+                                    .code(404)
+                                    .message("DELIVERY_NOTE_NOT_FOUND")
+                                    .detail("Remito no encontrado para contrato ID: " + contractId)
+                                    .build()
+                    );
+                });
     }
 
     private ContractsFinalizeRequest buildFinalizeRequest(ContractsFinalizeRequest request) {
@@ -79,6 +114,4 @@ public class WorkContractServiceImpl implements WorkContractService {
                 .files(request.getFiles())
                 .build();
     }
-
-
 }

@@ -1,5 +1,8 @@
-package ar.edu.unlam.tpi.nexwork_api.dto;
+package ar.edu.unlam.tpi.nexwork_api.dto.request;
 
+import ar.edu.unlam.tpi.nexwork_api.dto.BodyData;
+import ar.edu.unlam.tpi.nexwork_api.dto.CompanyData;
+import ar.edu.unlam.tpi.nexwork_api.dto.FootData;
 import lombok.Builder;
 import lombok.Data;
 

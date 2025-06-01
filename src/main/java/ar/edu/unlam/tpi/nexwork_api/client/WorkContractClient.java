@@ -1,11 +1,11 @@
 package ar.edu.unlam.tpi.nexwork_api.client;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.ContractsFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.DeliveryNoteRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.DeliveryNoteResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 
 import java.util.List;
 

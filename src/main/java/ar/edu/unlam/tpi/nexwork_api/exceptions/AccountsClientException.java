@@ -1,6 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.exceptions;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 
 public class AccountsClientException extends GenericException{
     public AccountsClientException(ErrorResponse error) {

@@ -1,6 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.handler;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.ConverterException;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.GenericException;
