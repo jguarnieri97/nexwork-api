@@ -2,6 +2,8 @@ package ar.edu.unlam.tpi.nexwork_api.utils;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetData;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetDataRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import java.util.List;
@@ -38,10 +40,27 @@ public class BudgetDataHelper {
                 .build();
     }
 
-    public static List<BudgetResponse> createBudgetList() {
+    public static List<BudgetResponse> createBudgetResponseList() {
         return List.of(
                 createBudgetResponse("budget123"),
                 createBudgetResponse("budget456")
         );
+    }
+
+    public static BudgetRequest createBudgetRequest() {
+        return BudgetRequest.builder()
+                .applicantId(1L)
+                .applicantName("Nombre del Solicitante")
+                .workResume("Resumen del Trabajo")
+                .workDetail("Detalle del Trabajo")
+                .category("Categoría de Trabajo")
+                .files(List.of("archivo1.pdf", "archivo2.jpg"))
+                .suppliers(List.of(
+                        BudgetDataRequest.builder()
+                                .supplierId(1L)
+                                .supplierName("Proveedor 1")
+                                .build()
+                ))
+                .build();
     }
 }

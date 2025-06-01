@@ -2,12 +2,13 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
-import ar.edu.unlam.tpi.nexwork_api.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static ar.edu.unlam.tpi.nexwork_api.utils.TestUtils.APPLICANT_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -34,25 +34,29 @@ class BudgetsServiceImplTest {
 
     @Test
     void givenApplicantIdWhenGetBudgetsThenReturnBudgetsList() {
-        var mockBudgets = List.of(TestUtils.buildBudgetsResponse());
-        when(budgetsClient.getApplicantBudgets(APPLICANT_ID)).thenReturn(mockBudgets);
+        Long applicantId = 1L;
+        List<BudgetResponse> mockBudgets = BudgetDataHelper.createBudgetResponseList();
 
-        var result = budgetsService.getBudgets(APPLICANT_ID, null);
+        when(budgetsClient.getApplicantBudgets(applicantId)).thenReturn(mockBudgets);
+
+        List<BudgetResponse> result = budgetsService.getBudgets(applicantId, null);
 
         assertNotNull(result);
-        assertEquals(1, result.size());
-        verify(budgetsClient).getApplicantBudgets(APPLICANT_ID);
+        assertEquals(2, result.size());
+        verify(budgetsClient).getApplicantBudgets(applicantId);
     }
 
     @Test
     void givenNoBudgetsWhenGetBudgetsThenReturnEmptyList() {
-        when(budgetsClient.getApplicantBudgets(APPLICANT_ID)).thenReturn(List.of());
+        Long applicantId = 1L;
 
-        var result = budgetsService.getBudgets(APPLICANT_ID, null);
+        when(budgetsClient.getApplicantBudgets(applicantId)).thenReturn(List.of());
+
+        List<BudgetResponse> result = budgetsService.getBudgets(applicantId, null);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(budgetsClient).getApplicantBudgets(APPLICANT_ID);
+        verify(budgetsClient).getApplicantBudgets(applicantId);
     }
 
     @Test
@@ -76,7 +80,7 @@ class BudgetsServiceImplTest {
 
     @Test
     void givenBudgetRequestWhenCreateBudgetThenCallClient() {
-        var budgetRequest = TestUtils.buildBudgetRequest();
+        BudgetRequest budgetRequest = BudgetDataHelper.createBudgetRequest();
 
         budgetsService.createBudget(budgetRequest);
 
