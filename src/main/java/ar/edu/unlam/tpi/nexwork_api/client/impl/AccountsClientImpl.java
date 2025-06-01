@@ -1,11 +1,11 @@
 package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
+import ar.edu.unlam.tpi.nexwork_api.client.error.ErrorHandler;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
-import ar.edu.unlam.tpi.nexwork_api.exceptions.AccountsClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -26,6 +25,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 public class AccountsClientImpl implements AccountsClient {
 
     private final WebClient webClient;
+    private final ErrorHandler errorHandler;
 
     @Value("${accounts.host}")
     private String host;
@@ -38,9 +38,9 @@ public class AccountsClientImpl implements AccountsClient {
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
-                        r -> r.bodyToMono(ErrorResponse.class).flatMap(AccountsClientImpl::handle4xxError))
+                        r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
-                        r -> r.bodyToMono(ErrorResponse.class).flatMap(AccountsClientImpl::handle5xxError))
+                        r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle5xxError))
                 .bodyToMono(new ParameterizedTypeReference<GenericResponse<UserResponse>>() {})
                 .block();
 
@@ -48,13 +48,4 @@ public class AccountsClientImpl implements AccountsClient {
         return response.getData();
     }
 
-    private static Mono<Throwable> handle4xxError(ErrorResponse error) {
-        log.error("Error del cliente externo Accounts API (4xx): {}", error);
-        return Mono.error(new AccountsClientException(error));
-    }
-
-    private static Mono<Throwable> handle5xxError(ErrorResponse error) {
-        log.error("Error del servidor externo Accounts API (5xx): {}", error);
-        return Mono.error(new AccountsClientException(error));
-    }
 }

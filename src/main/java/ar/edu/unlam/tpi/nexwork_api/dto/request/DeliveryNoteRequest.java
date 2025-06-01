@@ -10,6 +10,6 @@ import java.util.List;
 @Builder
 public class DeliveryNoteRequest {
     private Long contractId;
-    private List<CompanyData> supplierData;
-    private List<CompanyData> applicantData;
+    private List<CompanyData> suppliersData;
+    private List<CompanyData> applicantsData;
 }

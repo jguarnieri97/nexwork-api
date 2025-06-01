@@ -10,8 +10,8 @@ public class DeliveryNoteDataHelper {
     public static DeliveryNoteRequest createDeliveryNoteRequest() {
         return DeliveryNoteRequest.builder()
                 .contractId(1L)
-                .supplierData(createCompanyDataList("Supplier"))
-                .applicantData(createCompanyDataList("Applicant"))
+                .suppliersData(createCompanyDataList("Supplier"))
+                .applicantsData(createCompanyDataList("Applicant"))
                 .build();
     }
 

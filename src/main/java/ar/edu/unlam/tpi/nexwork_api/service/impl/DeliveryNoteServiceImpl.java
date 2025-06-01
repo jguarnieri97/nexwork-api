@@ -49,7 +49,7 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
 
     private DeliveryNoteRequest buildDeliveryNote(WorkContractResponse contract, List<AccountDetailResponse> supplier, List<AccountDetailResponse> applicant) {
 
-        List<CompanyData> supplierData = supplier.stream()
+        List<CompanyData> suppliersData = supplier.stream()
                 .map(s -> CompanyData.builder()
                         .companyName(s.getName())
                         .email(s.getEmail())
@@ -59,7 +59,7 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
                         .build())
                 .toList();
 
-        List<CompanyData> applicantData = applicant.stream()
+        List<CompanyData> applicantsData = applicant.stream()
                 .map(a -> CompanyData.builder()
                         .companyName(a.getName())
                         .email(a.getEmail())
@@ -82,8 +82,8 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
 
         return DeliveryNoteRequest.builder()
                 .contractId(contract.getId())
-                .supplierData(supplierData)
-                .applicantData(applicantData)
+                .suppliersData(suppliersData)
+                .applicantsData(applicantsData)
                 .build();
     }
 }

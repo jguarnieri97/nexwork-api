@@ -1,13 +1,12 @@
 package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.*;
+import ar.edu.unlam.tpi.nexwork_api.client.error.ErrorHandler;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
-import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +27,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 public class BudgetsClientImpl implements BudgetsClient {
 
     private final WebClient webClient;
+    private final ErrorHandler errorHandler;
 
     @Value("${budgets.host}")
     private String host;
@@ -40,10 +40,10 @@ public class BudgetsClientImpl implements BudgetsClient {
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(BudgetsClientImpl::handle4xxError))
+                                .flatMap(errorHandler::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(BudgetsClientImpl::handle5xxError))
+                                .flatMap(errorHandler::handle5xxError))
                 .bodyToMono(new ParameterizedTypeReference<GenericResponse<List<BudgetResponse>>>() {
                 })
                 .block();
@@ -59,10 +59,10 @@ public class BudgetsClientImpl implements BudgetsClient {
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(BudgetsClientImpl::handle4xxError))
+                                .flatMap(errorHandler::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(BudgetsClientImpl::handle5xxError))
+                                .flatMap(errorHandler::handle5xxError))
                 .bodyToMono(new ParameterizedTypeReference<GenericResponse<List<BudgetResponse>>>() {
                 })
                 .block();
@@ -78,10 +78,10 @@ public class BudgetsClientImpl implements BudgetsClient {
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(BudgetsClientImpl::handle4xxError))
+                                .flatMap(errorHandler::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(BudgetsClientImpl::handle5xxError))
+                                .flatMap(errorHandler::handle5xxError))
                 .bodyToMono(new ParameterizedTypeReference<GenericResponse<BudgetResponseDetail>>() {})
                 .block();
         assert response != null;
@@ -97,22 +97,13 @@ public class BudgetsClientImpl implements BudgetsClient {
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(BudgetsClientImpl::handle4xxError))
+                                .flatMap(errorHandler::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
-                                .flatMap(BudgetsClientImpl::handle5xxError))
+                                .flatMap(errorHandler::handle5xxError))
                 .bodyToMono(Void.class)
                 .block();
     }
 
-    private static Mono<Throwable> handle4xxError(ErrorResponse error) {
-        log.error("Error del cliente externo Budgets API: {}", error);
-        return Mono.error(new BudgetsClientException(error));
-    }
-
-    private static Mono<Throwable> handle5xxError(ErrorResponse error) {
-        log.error("Error del servidor externo Budgets API: {}", error);
-        return Mono.error(new BudgetsClientException(error));
-    }
 
 }

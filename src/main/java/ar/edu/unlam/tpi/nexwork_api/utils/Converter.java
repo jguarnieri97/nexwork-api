@@ -29,7 +29,7 @@ public class Converter {
                 .id(budgetResponseDetail.getId())
                 .budgetNumber(budgetResponseDetail.getBudgetNumber())
                 .isRead(budgetResponseDetail.getIsRead())
-                .applicant(accountDetailResponse)
+                .applicants(accountDetailResponse)
                 .createdAt(budgetResponseDetail.getCreatedAt())
                 .category(budgetResponseDetail.getCategory())
                 .state(budgetResponseDetail.getState())
