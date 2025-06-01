@@ -6,9 +6,9 @@ import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import java.util.List;
 
-public class BudgetsDataHelper {
+public class BudgetDataHelper {
 
-    public static BudgetResponse buildBudgetResponse(String id) {
+    public static BudgetResponse createBudgetResponse(String id) {
         return BudgetResponse.builder()
                 .id(id)
                 .applicantId(1L)
@@ -17,7 +17,7 @@ public class BudgetsDataHelper {
                 .build();
     }
 
-    public static BudgetResponseDetail buildBudgetResponseDetail(String id) {
+    public static BudgetResponseDetail createBudgetResponseDetail(String id) {
         return BudgetResponseDetail.builder()
                 .id(id)
                 .createdAt("2025-05-04T11:00:00Z")
@@ -38,10 +38,10 @@ public class BudgetsDataHelper {
                 .build();
     }
 
-    public static List<BudgetResponse> buildBudgetList() {
+    public static List<BudgetResponse> createBudgetList() {
         return List.of(
-                buildBudgetResponse("budget123"),
-                buildBudgetResponse("budget456")
+                createBudgetResponse("budget123"),
+                createBudgetResponse("budget456")
         );
     }
 }
