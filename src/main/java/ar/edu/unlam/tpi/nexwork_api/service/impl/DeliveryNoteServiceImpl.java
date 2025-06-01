@@ -85,8 +85,6 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
                 .contractId(contract.getId())
                 .supplierData(supplierData)
                 .applicantData(applicantData)
-                .bodyData(body)
-                .footData(new FootData())
                 .build();
     }
 }
