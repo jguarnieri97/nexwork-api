@@ -14,6 +14,7 @@ public class WorkContractDataHelper {
         return WorkContractRequest.builder()
                 .id(id)
                 .accountType(accountType)
+                .limit(true)
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class WorkContractDataHelper {
 
     public static ContractsFinalizeRequest createContractsFinalizeRequest() {
         return ContractsFinalizeRequest.builder()
+                .state("FINALIZED")
                 .detail("Trabajo finalizado correctamente.")
                 .files(List.of("base64file1", "base64file2"))
                 .build();
@@ -39,11 +41,16 @@ public class WorkContractDataHelper {
     public static WorkContractResponse createWorkContractResponse(Long id) {
         return WorkContractResponse.builder()
                 .id(id)
+                .codeNumber("CONTRACT-" + id)
                 .price(150000.0)
+                .dateFrom(LocalDate.now().toString())
+                .dateTo(LocalDate.now().plusDays(7).toString())
+                .state("ACTIVE")
                 .detail("Instalación eléctrica general")
                 .supplierId(1L)
                 .applicantId(2L)
                 .workers(List.of(3L, 4L))
+                .files(List.of("file1.pdf", "file2.pdf"))
                 .build();
     }
 

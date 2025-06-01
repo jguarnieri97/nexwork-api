@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static ar.edu.unlam.tpi.nexwork_api.service.impl.DeliveryNoteServiceImpl.*;
 
 @Slf4j
 @Service
