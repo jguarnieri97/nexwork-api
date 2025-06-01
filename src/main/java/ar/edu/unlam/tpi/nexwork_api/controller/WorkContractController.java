@@ -1,6 +1,13 @@
 package ar.edu.unlam.tpi.nexwork_api.controller;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.*;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +61,7 @@ public interface WorkContractController {
      */
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<WorkContractResponse> getContractById(@PathVariable Long id);
+    GenericResponse<WorkContractDetailResponse> getContractById(@PathVariable Long id);
 
     @GetMapping("/delivery-note/{contractId}")
     @ResponseStatus(HttpStatus.OK)

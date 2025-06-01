@@ -12,4 +12,6 @@ public class BudgetData {
     private Integer daysCount;
     private Integer workerCount;
     private String detail;
+    private String state;
+    private Boolean hired;
 }

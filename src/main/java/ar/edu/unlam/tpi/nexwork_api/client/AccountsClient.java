@@ -1,10 +1,12 @@
 package ar.edu.unlam.tpi.nexwork_api.client;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.AccountDetailRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.AccountDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
+
+import java.util.List;
 
 public interface AccountsClient {
 
-    AccountDetailResponse getAccountById(AccountDetailRequest request);
+    UserResponse getAccountById(List<AccountDetailRequest> request);
 
 }

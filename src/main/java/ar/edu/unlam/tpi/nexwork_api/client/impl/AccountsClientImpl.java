@@ -1,9 +1,11 @@
 package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.*;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.AccountsClientException;
-import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
@@ -27,7 +31,7 @@ public class AccountsClientImpl implements AccountsClient {
     private String host;
 
     @Override
-    public AccountDetailResponse getAccountById(AccountDetailRequest request) {
+    public UserResponse getAccountById(List<AccountDetailRequest> request) {
         var response = webClient.post()
                 .uri(host + "users")
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -37,7 +41,7 @@ public class AccountsClientImpl implements AccountsClient {
                         r -> r.bodyToMono(ErrorResponse.class).flatMap(AccountsClientImpl::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         r -> r.bodyToMono(ErrorResponse.class).flatMap(AccountsClientImpl::handle5xxError))
-                .bodyToMono(new ParameterizedTypeReference<GenericResponse<AccountDetailResponse>>() {})
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<UserResponse>>() {})
                 .block();
 
         assert response != null;

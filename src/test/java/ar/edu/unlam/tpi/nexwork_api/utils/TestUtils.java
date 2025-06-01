@@ -1,8 +1,8 @@
 package ar.edu.unlam.tpi.nexwork_api.utils;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 
 import java.util.List;
 
@@ -34,8 +34,6 @@ public class TestUtils {
     public static BudgetRequest buildBudgetRequest() {
         return BudgetRequest.builder()
                 .applicantId(APPLICANT_ID)
-                .isUrgent(false)
-                .estimatedDate(DATE)
                 .workResume("WORK RESUME")
                 .workDetail("WORK DETAIL")
                 .files(List.of())

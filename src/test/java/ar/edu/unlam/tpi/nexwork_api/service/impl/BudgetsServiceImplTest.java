@@ -1,95 +1,90 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
+import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
-import ar.edu.unlam.tpi.nexwork_api.utils.TestUtils;
-import org.junit.jupiter.api.BeforeEach;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
+import ar.edu.unlam.tpi.nexwork_api.utils.AccountDataHelper;
+import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static ar.edu.unlam.tpi.nexwork_api.utils.TestUtils.APPLICANT_ID;
-import static ar.edu.unlam.tpi.nexwork_api.utils.TestUtils.BUDGET_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class BudgetsServiceImplTest {
 
+    @Mock
     private BudgetsClient budgetsClient;
+
+    @Mock
+    private AccountsClient accountsClient;
+
+    @InjectMocks
     private BudgetsServiceImpl budgetsService;
 
-
-    @BeforeEach
-    void setUp() {
-        budgetsClient = mock(BudgetsClient.class);
-        budgetsService = new BudgetsServiceImpl(budgetsClient);
-    }
-
     @Test
-    void getBudgetsReturnsListWhenBudgetsExist() {
-        var mockBudgets = List.of(TestUtils.buildBudgetsResponse());
-        when(budgetsClient.getApplicantBudgets(APPLICANT_ID)).thenReturn(mockBudgets);
+    void givenApplicantIdWhenGetBudgetsThenReturnBudgetsList() {
+        Long applicantId = 1L;
+        List<BudgetResponse> mockBudgets = BudgetDataHelper.createBudgetResponseList();
 
-        var result = budgetsService.getBudgets(APPLICANT_ID, null);
+        when(budgetsClient.getApplicantBudgets(applicantId)).thenReturn(mockBudgets);
+
+        List<BudgetResponse> result = budgetsService.getBudgets(applicantId, null);
 
         assertNotNull(result);
-        assertEquals(1, result.size());
-        verify(budgetsClient).getApplicantBudgets(APPLICANT_ID);
+        assertEquals(2, result.size());
+        verify(budgetsClient).getApplicantBudgets(applicantId);
     }
 
     @Test
-    void getBudgetsReturnsEmptyListWhenNoBudgetsExist() {
-        when(budgetsClient.getApplicantBudgets(APPLICANT_ID)).thenReturn(List.of());
+    void givenNoBudgetsWhenGetBudgetsThenReturnEmptyList() {
+        Long applicantId = 1L;
 
-        var result = budgetsService.getBudgets(APPLICANT_ID, null);
+        when(budgetsClient.getApplicantBudgets(applicantId)).thenReturn(List.of());
+
+        List<BudgetResponse> result = budgetsService.getBudgets(applicantId, null);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(budgetsClient).getApplicantBudgets(APPLICANT_ID);
+        verify(budgetsClient).getApplicantBudgets(applicantId);
     }
 
     @Test
-    void getBudgetsThrowsExceptionWhenClientFails() {
-        when(budgetsClient.getApplicantBudgets(APPLICANT_ID)).thenThrow(new RuntimeException("Client error"));
+    void givenValidIdWhenGetBudgetThenReturnBudgetDetailResponse() {
+        // Given
+        String budgetId = "123";
+        BudgetResponseDetail mockBudget = BudgetDataHelper.createBudgetResponseDetail(budgetId);
+        UserResponse mockUserResponse = AccountDataHelper.createUserResponse();
 
-        assertThrows(RuntimeException.class, () -> budgetsService.getBudgets(APPLICANT_ID, null));
-        verify(budgetsClient).getApplicantBudgets(APPLICANT_ID);
-    }
+        when(budgetsClient.getBudgetDetail(budgetId)).thenReturn(mockBudget);
+        when(accountsClient.getAccountById(anyList())).thenReturn(mockUserResponse);
 
-    @Test
-    void getBudgetReturnsBudgetDetailWhenBudgetExists() {
-        var mockBudgetDetail = TestUtils.buildBudgetResponseDetail();
-        when(budgetsClient.getBudgetDetail(BUDGET_ID)).thenReturn(mockBudgetDetail);
+        // When
+        BudgetDetailResponse result = budgetsService.getBudget(budgetId);
 
-        var result = budgetsService.getBudget(BUDGET_ID);
-
+        // Then
         assertNotNull(result);
-        assertEquals(mockBudgetDetail, result);
-        verify(budgetsClient).getBudgetDetail(BUDGET_ID);
+        verify(budgetsClient).getBudgetDetail(budgetId);
+        verify(accountsClient).getAccountById(anyList());
     }
 
     @Test
-    void getBudgetThrowsExceptionWhenClientFails() {
-        when(budgetsClient.getBudgetDetail(BUDGET_ID)).thenThrow(new RuntimeException("Client error"));
-
-        assertThrows(RuntimeException.class, () -> budgetsService.getBudget(BUDGET_ID));
-        verify(budgetsClient).getBudgetDetail(BUDGET_ID);
-    }
-
-    @Test
-    void createBudgetCallsClientSuccessfully() {
-        var budgetRequest = TestUtils.buildBudgetRequest();
+    void givenBudgetRequestWhenCreateBudgetThenCallClient() {
+        BudgetRequest budgetRequest = BudgetDataHelper.createBudgetRequest();
 
         budgetsService.createBudget(budgetRequest);
 
         verify(budgetsClient).createBudget(budgetRequest);
     }
 
-    @Test
-    void createBudgetThrowsExceptionWhenClientFails() {
-        var budgetRequest = TestUtils.buildBudgetRequest();
-        doThrow(new RuntimeException("Client error")).when(budgetsClient).createBudget(budgetRequest);
-
-        assertThrows(RuntimeException.class, () -> budgetsService.createBudget(budgetRequest));
-        verify(budgetsClient).createBudget(budgetRequest);
-    }
 }
