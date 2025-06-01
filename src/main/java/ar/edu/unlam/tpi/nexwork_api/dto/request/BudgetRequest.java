@@ -11,10 +11,9 @@ public class BudgetRequest {
 
     private Long applicantId;
     private String applicantName;
-    private boolean isUrgent;
-    private String estimatedDate;
     private String workResume;
     private String workDetail;
+    private String category;
     private List<String> files;
     private List<BudgetDataRequest> suppliers;
 

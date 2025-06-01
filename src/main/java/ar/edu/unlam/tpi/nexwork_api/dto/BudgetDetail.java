@@ -6,8 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class BudgetDetail {
-    private boolean isUrgent;
-    private String estimatedDate;
     private String workResume;
     private String workDetail;
 }
