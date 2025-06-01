@@ -1,15 +1,17 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
+import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,6 +21,7 @@ import java.util.Objects;
 public class BudgetsServiceImpl implements BudgetsService {
 
     private final BudgetsClient budgetsClient;
+    private final AccountsClient accountsClient;
 
     @Override
     public List<BudgetResponse> getBudgets(Long applicantId, Long supplierId) {
@@ -38,14 +41,23 @@ public class BudgetsServiceImpl implements BudgetsService {
     }
 
     @Override
-    public BudgetResponseDetail getBudget(String id) {
+    public BudgetDetailResponse getBudget(String id) {
         log.info("Obteniendo presupuesto con id: {}", id);
 
-        var budget = budgetsClient.getBudgetDetail(id);
+        BudgetResponseDetail budget = budgetsClient.getBudgetDetail(id);
+
+        List<AccountDetailRequest> requests = Collections.singletonList(
+                AccountDetailRequest.builder()
+                        .userId(budget.getApplicantId())
+                        .type("applicant")
+                        .build()
+        );
+
+        UserResponse accountDetail = accountsClient.getAccountById(requests);
 
         log.info("Presupuesto obtenido: {}", Converter.convertToString(budget));
 
-        return budget;
+        return Converter.toBudgetDetailResponse(budget, accountDetail.getApplicants());
     }
 
     @Override

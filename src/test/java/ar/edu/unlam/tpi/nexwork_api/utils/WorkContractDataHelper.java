@@ -10,14 +10,14 @@ import java.util.List;
 
 public class WorkContractDataHelper {
 
-    public static WorkContractRequest buildRequest(Long id, String accountType) {
+    public static WorkContractRequest createWorkContractRequest(Long id, String accountType) {
         return WorkContractRequest.builder()
                 .id(id)
                 .accountType(accountType)
                 .build();
     }
 
-    public static WorkContractCreateRequest buildCreateRequest() {
+    public static WorkContractCreateRequest createWorkContractCreateRequest() {
         return WorkContractCreateRequest.builder()
                 .price(150000.0)
                 .dateFrom(LocalDate.now().toString())
@@ -29,14 +29,14 @@ public class WorkContractDataHelper {
                 .build();
     }
 
-    public static ContractsFinalizeRequest buildFinalizeRequest() {
+    public static ContractsFinalizeRequest createContractsFinalizeRequest() {
         return ContractsFinalizeRequest.builder()
                 .detail("Trabajo finalizado correctamente.")
                 .files(List.of("base64file1", "base64file2"))
                 .build();
     }
 
-    public static WorkContractResponse buildResponse(Long id) {
+    public static WorkContractResponse createWorkContractResponse(Long id) {
         return WorkContractResponse.builder()
                 .id(id)
                 .price(150000.0)
@@ -47,10 +47,10 @@ public class WorkContractDataHelper {
                 .build();
     }
 
-    public static List<WorkContractResponse> buildResponseList() {
+    public static List<WorkContractResponse> createWorkContractResponseList() {
         return List.of(
-                buildResponse(1L),
-                buildResponse(2L)
+                createWorkContractResponse(1L),
+                createWorkContractResponse(2L)
         );
     }
 }
