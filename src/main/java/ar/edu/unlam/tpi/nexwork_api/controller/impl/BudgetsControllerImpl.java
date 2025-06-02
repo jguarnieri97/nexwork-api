@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.controller.BudgetsController;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
@@ -45,6 +46,15 @@ public class BudgetsControllerImpl implements BudgetsController {
         return new GenericResponse<>(
                 Constants.STATUS_CREATED,
                 Constants.CREATED_MESSAGE,
+                null);
+    }
+
+    @Override
+    public GenericResponse<Void> finalizeBudget(String id, BudgetFinalizeRequest budgetFinalizeRequest) {
+        budgetsService.finalizeBudget(id, budgetFinalizeRequest);
+        return new GenericResponse<>(
+                Constants.STATUS_OK,
+                Constants.SUCCESS_MESSAGE,
                 null);
     }
 }

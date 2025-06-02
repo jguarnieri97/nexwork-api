@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
@@ -131,5 +132,22 @@ public class BudgetsControllerImplTest {
         // When & Then
         assertThrows(BudgetsClientException.class, () -> budgetsController.createBudget(request));
     }
+
+    @Test
+    void givenValidRequest_whenFinalizeBudget_thenReturnsGenericResponseWithFinalizedStatus() {
+        // Given
+        BudgetFinalizeRequest request = BudgetDataHelper.createBudgetFinalizeRequest();
+        doNothing().when(budgetsService).finalizeBudget("budget123", request);
+    
+        // When
+        GenericResponse<Void> response = budgetsController.finalizeBudget("budget123", request);
+    
+        // Then
+        assertNotNull(response);
+        assertEquals(Constants.STATUS_OK, response.getCode());
+        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage()); 
+    }
+
+    
   
 }
