@@ -13,5 +13,5 @@ public class Constants {
     public static final String CREATED_MESSAGE = "CREATED";
     public static final String BAD_REQUEST = "BAD_REQUEST";
     public static final String INTERNAL_ERROR = "INTERNAL_ERROR";
-
+    public static final String UPDATED_MESSAGE= "UPDATED";
 }

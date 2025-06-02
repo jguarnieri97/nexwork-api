@@ -4,6 +4,7 @@ import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
@@ -68,4 +69,14 @@ public class BudgetsServiceImpl implements BudgetsService {
 
         log.info("Presupuesto creado con éxito");
     }
+
+    @Override
+    public void updateBudget(String budgetId, Long supplierId, BudgetUpdateDataRequestDto budgetRequest) {
+        log.info("Actualizando presupuesto con id: {} para el proveedor: {}", budgetId, supplierId);
+
+        budgetsClient.updateBudget(budgetId, supplierId, budgetRequest);
+
+        log.info("Presupuesto actualizado con éxito");
+    }
+    
 }
