@@ -4,13 +4,17 @@ import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
+import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetFinalizeBuilder;
+import ar.edu.unlam.tpi.nexwork_api.utils.BudgetUpdateDataRequestHelper;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +41,7 @@ public class BudgetsServiceImplTest {
 
     @InjectMocks
     private BudgetsServiceImpl budgetsService;
+
 
     @Test
     void givenApplicantIdWhenGetBudgetsThenReturnBudgetsList() {
@@ -114,4 +119,29 @@ public class BudgetsServiceImplTest {
         verify(budgetsClient).finalizeBudget(budgetId, expectedRequest);
     }
 
+    void givenValidRequest_whenUpdateBudget_thenSucceeds() {
+        BudgetUpdateDataRequestDto validRequest = BudgetUpdateDataRequestHelper.buildBudgetDataRequestDto();
+
+        doNothing().when(budgetsClient).updateBudget(eq("budget123"), eq(1L), any(BudgetUpdateDataRequestDto.class));
+
+        assertDoesNotThrow(() -> budgetsService.updateBudget("budget123", 1L, validRequest));
+
+        verify(budgetsClient).updateBudget("budget123", 1L, validRequest);
+    }
+
+    @Test
+    void givenClientError_whenUpdateBudget_thenThrowsException() {
+
+        BudgetUpdateDataRequestDto validRequest = BudgetUpdateDataRequestHelper.buildBudgetDataRequestDto();
+
+        doThrow(new BudgetsClientException(ErrorResponse.builder()
+                .code(400)
+                .message("Bad Request")
+                .detail("Invalid budget update data")
+                .build()))
+            .when(budgetsClient).updateBudget(eq("budget123"), eq(1L), any(BudgetUpdateDataRequestDto.class));
+
+        assertThrows(BudgetsClientException.class, 
+            () -> budgetsService.updateBudget("budget123", 1L, validRequest));
+    }
 }

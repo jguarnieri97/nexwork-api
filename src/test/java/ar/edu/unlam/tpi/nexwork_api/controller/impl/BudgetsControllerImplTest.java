@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
@@ -10,6 +11,7 @@ import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.ValidatorException;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
+import ar.edu.unlam.tpi.nexwork_api.utils.BudgetUpdateDataRequestHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.Constants;
 
 import org.junit.jupiter.api.Test;
@@ -150,4 +152,30 @@ public class BudgetsControllerImplTest {
 
     
   
+    
+    @Test
+    void givenValidRequest_whenUpdateBudget_thenReturnsSuccessResponse() {
+        BudgetUpdateDataRequestDto request = BudgetUpdateDataRequestHelper.buildBudgetDataRequestDto();
+        doNothing().when(budgetsService).updateBudget("budget123", 1L, request);
+
+        GenericResponse<Void> response = budgetsController.updateBudget("budget123", 1L, request);
+
+        assertEquals(Constants.STATUS_OK, response.getCode());
+        assertEquals(Constants.UPDATED_MESSAGE, response.getMessage());
+        verify(budgetsService).updateBudget("budget123", 1L, request);
+    }
+
+    @Test
+    void givenServiceError_whenUpdateBudget_thenPropagatesException() {
+        BudgetUpdateDataRequestDto request = BudgetUpdateDataRequestHelper.buildBudgetDataRequestDto();
+        doThrow(new BudgetsClientException(ErrorResponse.builder()
+                .code(400)
+                .message("Bad Request")
+                .detail("Error updating budget")
+                .build()))
+            .when(budgetsService).updateBudget("budget123", 1L, request);
+
+        assertThrows(BudgetsClientException.class, 
+            () -> budgetsController.updateBudget("budget123", 1L, request));
+    }
 }

@@ -2,10 +2,12 @@ package ar.edu.unlam.tpi.nexwork_api.controller;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -61,4 +63,9 @@ public interface BudgetsController {
     GenericResponse<Void> finalizeBudget(@PathVariable String id, @RequestBody BudgetFinalizeRequest budgetFinalizeRequest);
     
 
+    @PutMapping("/{budgetId}/user/{supplierId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update budget request")
+    GenericResponse<Void> updateBudget(@PathVariable String budgetId, @PathVariable Long supplierId,
+            @Valid @RequestBody BudgetUpdateDataRequestDto request);
 }
