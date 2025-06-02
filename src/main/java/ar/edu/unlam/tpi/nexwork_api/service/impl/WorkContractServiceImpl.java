@@ -12,6 +12,7 @@ import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountTypeEnum;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
+import ar.edu.unlam.tpi.nexwork_api.utils.WorkContractFinalizeBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class WorkContractServiceImpl implements WorkContractService {
     private final WorkContractClient workContractClient;
     private final AccountsClient accountsClient;
     private final DeliveryNoteService deliveryNoteService;
-    public static final String CONTRACT_FINALIZED = "FINALIZED";
+    private final WorkContractFinalizeBuilder workContractFinalizeBuilder;
 
     @Override
     public List<WorkContractResponse> getContracts(WorkContractRequest request) {
@@ -72,7 +73,7 @@ public class WorkContractServiceImpl implements WorkContractService {
     public void finalizeContract(Long id, ContractsFinalizeRequest request) {
         log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
 
-        ContractsFinalizeRequest finalRequest = this.buildFinalizeRequest(request);
+        ContractsFinalizeRequest finalRequest = workContractFinalizeBuilder.buildFinalizeRequest(request);
 
         try {
             workContractClient.finalizeContract(id, finalRequest);
@@ -107,11 +108,5 @@ public class WorkContractServiceImpl implements WorkContractService {
                 });
     }
 
-    private ContractsFinalizeRequest buildFinalizeRequest(ContractsFinalizeRequest request) {
-        return ContractsFinalizeRequest.builder()
-                .state(CONTRACT_FINALIZED)
-                .detail(request.getDetail())
-                .files(request.getFiles())
-                .build();
-    }
+   
 }

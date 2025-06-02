@@ -3,6 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.utils;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetData;
 import ar.edu.unlam.tpi.nexwork_api.dto.BudgetDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetDataRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
@@ -91,6 +92,12 @@ public class BudgetDataHelper {
                                 .supplierName("Proveedor 1")
                                 .build()
                 ))
+                .build();
+    }
+
+    public static BudgetFinalizeRequest createBudgetFinalizeRequest() {
+        return BudgetFinalizeRequest.builder()
+                .supplierHired(1L)
                 .build();
     }
 }

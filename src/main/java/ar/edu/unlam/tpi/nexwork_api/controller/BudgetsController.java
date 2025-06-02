@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.controller;
 
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
@@ -50,6 +51,17 @@ public interface BudgetsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     GenericResponse<Void> createBudget(@RequestBody BudgetRequest budgetRequest);
+
+    /**
+     * Recurso para finalizar un presupuesto y contratar un proveedor
+     *
+     * @param id: id del presupuesto
+     * @param budgetFinalizeRequest: el presupuesto a finalizar
+     */
+    @PostMapping("{id}/finalize")
+    @ResponseStatus(HttpStatus.OK)
+    GenericResponse<Void> finalizeBudget(@PathVariable String id, @RequestBody BudgetFinalizeRequest budgetFinalizeRequest);
+    
 
     @PutMapping("/{budgetId}/user/{supplierId}")
     @ResponseStatus(HttpStatus.OK)
