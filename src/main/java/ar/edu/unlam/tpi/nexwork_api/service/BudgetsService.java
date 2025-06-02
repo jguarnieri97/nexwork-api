@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
@@ -35,4 +36,13 @@ public interface BudgetsService {
      * @param budgetRequest: el presupuesto a crear
      */
     void createBudget(BudgetRequest budgetRequest);
+
+    /**
+     * Método para actualizar un presupuesto
+     *
+     * @param budgetId: id del presupuesto a actualizar
+     * @param supplierId: id del proveedor que actualiza el presupuesto
+     * @param budgetRequest: los datos a actualizar en el presupuesto
+     */
+    void updateBudget(String budgetId, Long supplierId, BudgetUpdateDataRequestDto budgetRequest);
 }
