@@ -1,7 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -98,16 +98,16 @@ public class WorkContractServiceImplTest {
     void givenValidIdAndRequestWhenFinalizeContractThenSuccess() {
         // Given
         Long contractId = 1L;
-        ContractsFinalizeRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
+        WorkContractUpdateRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
 
-        doNothing().when(workContractClient).finalizeContract(eq(contractId), any(ContractsFinalizeRequest.class));
+        doNothing().when(workContractClient).updateContractState(eq(contractId), any(WorkContractUpdateRequest.class));
         doNothing().when(deliveryNoteService).buildDeliveryNote(contractId);
 
         // When
         assertDoesNotThrow(() -> workContractService.finalizeContract(contractId, request));
 
         // Then
-        verify(workContractClient).finalizeContract(eq(contractId), any(ContractsFinalizeRequest.class));
+        verify(workContractClient).updateContractState(eq(contractId), any(WorkContractUpdateRequest.class));
         verify(deliveryNoteService).buildDeliveryNote(contractId);
     }
 
@@ -115,14 +115,14 @@ public class WorkContractServiceImplTest {
     void givenErrorWhenFinalizeContractThenThrowException() {
         // Given
         Long contractId = 1L;
-        ContractsFinalizeRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
+        WorkContractUpdateRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
 
-        doThrow(new RuntimeException("Error")).when(workContractClient).finalizeContract(eq(contractId), any(ContractsFinalizeRequest.class));
+        doThrow(new RuntimeException("Error")).when(workContractClient).updateContractState(eq(contractId), any(WorkContractUpdateRequest.class));
 
         // When & Then
         WorkContractClientException exception = assertThrows(WorkContractClientException.class, () -> workContractService.finalizeContract(contractId, request));
         assertEquals("CONTRACT_FINALIZATION_ERROR", exception.getMessage());
-        verify(workContractClient).finalizeContract(eq(contractId), any(ContractsFinalizeRequest.class));
+        verify(workContractClient).updateContractState(eq(contractId), any(WorkContractUpdateRequest.class));
         verify(deliveryNoteService, never()).buildDeliveryNote(contractId);
     }
 

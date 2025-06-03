@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.utils;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.ConverterException;
 import com.fasterxml.jackson.core.JsonProcessingException;

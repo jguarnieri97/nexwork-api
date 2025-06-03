@@ -1,6 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
@@ -118,7 +118,7 @@ public class WorkContractControllerImplTest {
     void givenValidRequest_whenFinalizeContract_thenReturnsSuccessResponse() {
         // Given
         Long id = 123L;
-        ContractsFinalizeRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
+        WorkContractUpdateRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
         doNothing().when(workContractService).finalizeContract(id, request);
 
         // When
