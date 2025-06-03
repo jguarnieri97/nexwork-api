@@ -1,6 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.client;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
@@ -28,13 +28,13 @@ public interface WorkContractClient {
     WorkContractResponse createContract(WorkContractCreateRequest request);
 
     /**
-     * Método para finalizar un contrato laboral
+     * Método para actualizar un contrato laboral
      *
-     * @param id      id del contrato a finalizar
-     * @param request datos del contrato a finalizar
-     * @return datos del contrato finalizado
+     * @param id      id del contrato a actualizar
+     * @param request datos del contrato a actualizar
+     * @return datos del contrato actualizado
      */
-    void finalizeContract(Long id, ContractsFinalizeRequest request);
+    void updateContractState(Long id, WorkContractUpdateRequest request);
 
     /**
      * Método para obtener un contrato laboral por su ID

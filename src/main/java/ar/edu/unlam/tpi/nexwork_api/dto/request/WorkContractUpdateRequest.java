@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class ContractsFinalizeRequest {
+public class WorkContractUpdateRequest {
             String state;
             String detail;
             List<String> files;

@@ -3,7 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
@@ -12,7 +12,7 @@ import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountTypeEnum;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
-import ar.edu.unlam.tpi.nexwork_api.utils.WorkContractFinalizeBuilder;
+import ar.edu.unlam.tpi.nexwork_api.utils.WorkStateEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,6 @@ public class WorkContractServiceImpl implements WorkContractService {
     private final WorkContractClient workContractClient;
     private final AccountsClient accountsClient;
     private final DeliveryNoteService deliveryNoteService;
-    private final WorkContractFinalizeBuilder workContractFinalizeBuilder;
 
     @Override
     public List<WorkContractResponse> getContracts(WorkContractRequest request) {
@@ -70,13 +69,11 @@ public class WorkContractServiceImpl implements WorkContractService {
     }
 
     @Override
-    public void finalizeContract(Long id, ContractsFinalizeRequest request) {
+    public void finalizeContract(Long id, WorkContractUpdateRequest request) {
         log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
-
-        ContractsFinalizeRequest finalRequest = workContractFinalizeBuilder.buildFinalizeRequest(request);
-
         try {
-            workContractClient.finalizeContract(id, finalRequest);
+            request.setState(WorkStateEnum.FINALIZED.toString());
+            workContractClient.updateContractState(id, request);
             deliveryNoteService.buildDeliveryNote(id);
             log.info("Contrato finalizado y remito generado exitosamente.");
         } catch (Exception ex) {
@@ -108,5 +105,25 @@ public class WorkContractServiceImpl implements WorkContractService {
                 });
     }
 
-   
+    @Override
+    public void iniciateContract(Long id) {
+        try {
+            WorkContractUpdateRequest request = WorkContractUpdateRequest.builder()
+                    .state(WorkStateEnum.INITIATED.toString())
+                    .detail(null)
+                    .files(null)
+                    .build();
+            workContractClient.updateContractState(id, request);
+        } catch (Exception ex) {
+            log.error("Error al iniciar contrato con id {}: {}", id, ex.getMessage(), ex);
+            throw new WorkContractClientException(
+                    ErrorResponse.builder()
+                            .code(500)
+                            .message("CONTRACT_INICIATE_ERROR")
+                            .detail("Error al iniciar contrato con ID: " + id)
+                            .build()
+            );
+        }
+    }
+
 }

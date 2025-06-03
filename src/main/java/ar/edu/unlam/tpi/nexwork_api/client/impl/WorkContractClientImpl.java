@@ -2,7 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.client.error.ErrorHandler;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
@@ -84,7 +84,7 @@ public class WorkContractClientImpl implements WorkContractClient {
     }
     
     @Override
-    public void finalizeContract(Long id, ContractsFinalizeRequest request) {
+    public void updateContractState(Long id, WorkContractUpdateRequest request) {
         String url = host + "work-contract/" + id;
 
         webClient.put()

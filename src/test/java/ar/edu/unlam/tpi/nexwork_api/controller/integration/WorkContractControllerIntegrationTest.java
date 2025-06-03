@@ -1,6 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.integration;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
@@ -134,9 +134,9 @@ public class WorkContractControllerIntegrationTest {
     void givenValidIdAndRequest_whenFinalizeContract_thenReturnsSuccess() throws Exception {
         // Given
         Long id = 1L;
-        ContractsFinalizeRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
+        WorkContractUpdateRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
     
-        doNothing().when(workContractService).finalizeContract(eq(id), any(ContractsFinalizeRequest.class));
+        doNothing().when(workContractService).finalizeContract(eq(id), any(WorkContractUpdateRequest.class));
         doNothing().when(deliveryNoteService).buildDeliveryNote(id);
     
         // When & Then
@@ -148,7 +148,7 @@ public class WorkContractControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
                 .andExpect(jsonPath("$.data").isEmpty());
     
-        verify(workContractService).finalizeContract(eq(id), any(ContractsFinalizeRequest.class));
+        verify(workContractService).finalizeContract(eq(id), any(WorkContractUpdateRequest.class));
     }
     
     @Test
@@ -210,12 +210,12 @@ public class WorkContractControllerIntegrationTest {
     void givenServiceThrowsException_whenFinalizeContract_thenReturnsInternalServerError() throws Exception {
         // Given
         Long id = 1L;
-        ContractsFinalizeRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
+        WorkContractUpdateRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
         doThrow(new WorkContractClientException(ErrorResponse.builder()
                 .code(Constants.STATUS_INTERNAL)
                 .message(Constants.INTERNAL_ERROR)
                 .detail("Error finalizing contract")
-                .build())).when(workContractService).finalizeContract(eq(id), any(ContractsFinalizeRequest.class));
+                .build())).when(workContractService).finalizeContract(eq(id), any(WorkContractUpdateRequest.class));
     
         // When & Then
         mockMvc.perform(post("/nexwork-api/v1/contracts/{id}/finalize", id)
@@ -223,7 +223,7 @@ public class WorkContractControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isInternalServerError());
     
-        verify(workContractService).finalizeContract(eq(id), any(ContractsFinalizeRequest.class));
+        verify(workContractService).finalizeContract(eq(id), any(WorkContractUpdateRequest.class));
         verify(deliveryNoteService, never()).buildDeliveryNote(id);
     }
     

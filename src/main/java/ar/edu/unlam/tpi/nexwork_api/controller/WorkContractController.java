@@ -1,6 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.controller;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -51,7 +51,7 @@ public interface WorkContractController {
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<Void> finalizeContract(
             @PathVariable Long id,
-            @RequestBody ContractsFinalizeRequest request);
+            @RequestBody WorkContractUpdateRequest request);
 
     /**
      * Recurso para obtener un contrato laboral por su ID
@@ -63,8 +63,26 @@ public interface WorkContractController {
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<WorkContractDetailResponse> getContractById(@PathVariable Long id);
 
+
+    /**
+     * Recurso para obtener un remito asociado a un contrato laboral
+     *
+     * @param contractId id del contrato asociado a la nota de entrega
+     * @return datos de la nota de entrega
+     */
     @GetMapping("/delivery-note/{contractId}")
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(@PathVariable("contractId") Long contractId);
+
+    /**
+     * Recurso para iniciar un contrato laboral
+     *
+     * @param contractId id del contrato a iniciar
+     * @return respuesta genérica sin datos
+     */
+    @PostMapping("{contractId}/iniciate")
+    @ResponseStatus(HttpStatus.OK)
+    GenericResponse<Void> iniciateContract(
+            @PathVariable("contractId") Long contractId);
 
 }

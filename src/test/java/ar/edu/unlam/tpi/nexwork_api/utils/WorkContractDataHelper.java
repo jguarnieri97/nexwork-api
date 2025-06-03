@@ -1,6 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.utils;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
@@ -30,8 +30,8 @@ public class WorkContractDataHelper {
                 .build();
     }
 
-    public static ContractsFinalizeRequest createContractsFinalizeRequest() {
-        return ContractsFinalizeRequest.builder()
+    public static WorkContractUpdateRequest createContractsFinalizeRequest() {
+        return WorkContractUpdateRequest.builder()
                 .state("FINALIZED")
                 .detail("Trabajo finalizado correctamente.")
                 .files(List.of("base64file1", "base64file2"))
