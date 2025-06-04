@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.controller.WorkContractController;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -74,6 +75,16 @@ public class WorkContractControllerImpl implements WorkContractController {
     @Override
     public GenericResponse<Void> iniciateContract(Long contractId) {
         workContractService.iniciateContract(contractId);
+        return new GenericResponse<>(
+                Constants.STATUS_OK,
+                Constants.SUCCESS_MESSAGE,
+                null
+        );
+    }
+
+    @Override
+    public GenericResponse<Void> signatureDeliveryNote(Long id, DeliverySignatureRequest request) {
+        workContractService.signatureDeliveryNote(id, request);
         return new GenericResponse<>(
                 Constants.STATUS_OK,
                 Constants.SUCCESS_MESSAGE,

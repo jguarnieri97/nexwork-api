@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -60,5 +61,13 @@ public interface WorkContractService {
      * @param id      id del contrato a iniciar
      */
     void iniciateContract(Long id);
+
+    /**
+     * Firmar remito
+     * 
+     * @param id
+     * @param request
+     */
+    void signatureDeliveryNote(Long id, DeliverySignatureRequest request);
 
 }

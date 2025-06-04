@@ -3,6 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
@@ -121,6 +122,22 @@ public class WorkContractServiceImpl implements WorkContractService {
                             .code(500)
                             .message("CONTRACT_INICIATE_ERROR")
                             .detail("Error al iniciar contrato con ID: " + id)
+                            .build()
+            );
+        }
+    }
+
+    @Override
+    public void signatureDeliveryNote(Long id, DeliverySignatureRequest request) {
+        try{
+            workContractClient.signDeliveryNote(id,request);
+        }catch(Exception ex){
+            log.error("Error al firmar remito con id {}: {}", id, ex.getMessage(), ex);
+            throw new WorkContractClientException(
+                    ErrorResponse.builder()
+                            .code(500)
+                            .message("DELIVERY_NOTE_SIGNATURE_ERROR")
+                            .detail("Error al firmar remito con ID: " + id)
                             .build()
             );
         }

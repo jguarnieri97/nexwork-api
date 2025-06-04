@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.client;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -59,5 +60,11 @@ public interface WorkContractClient {
      * @return datos de la nota de entrega obtenida
      */
     DeliveryNoteResponse getDeliveryNoteById(Long id);
+
+
+    /*
+     * Metodo para mandar la firma 
+     */
+    void signDeliveryNote(Long id, DeliverySignatureRequest request);
 
 }
