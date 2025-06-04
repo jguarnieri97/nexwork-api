@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.controller;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -73,6 +74,18 @@ public interface WorkContractController {
     @GetMapping("/delivery-note/{contractId}")
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(@PathVariable("contractId") Long contractId);
+
+        /**
+         * Recurso para firmar una nota de entrega asociada a un contrato laboral
+         *
+         * @param id      id del contrato asociado a la nota de entrega
+         * @param request datos de la firma de la nota de entrega
+         * @return respuesta genérica sin datos
+        */
+        @PostMapping("/delivery-note/{contractId}")
+        GenericResponse<Void> signatureDeliveryNote(
+                @PathVariable("contractId") Long id,
+                @RequestBody DeliverySignatureRequest request);
 
     /**
      * Recurso para iniciar un contrato laboral
