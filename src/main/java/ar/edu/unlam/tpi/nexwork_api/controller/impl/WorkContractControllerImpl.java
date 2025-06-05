@@ -1,7 +1,8 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.controller.WorkContractController;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -33,23 +34,23 @@ public class WorkContractControllerImpl implements WorkContractController {
 
     @Override
     public GenericResponse<WorkContractResponse> createContract(WorkContractCreateRequest request) {
-    var contract = workContractService.createContract(request);
-    return new GenericResponse<>(
+        var contract = workContractService.createContract(request);
+        return new GenericResponse<>(
             Constants.STATUS_CREATED,
             Constants.CREATED_MESSAGE,
             contract
-    );
-}
+        );
+    }
 
     @Override
-public GenericResponse<Void> finalizeContract(Long id, ContractsFinalizeRequest request) {
-    workContractService.finalizeContract(id, request);
-    return new GenericResponse<>(
+    public GenericResponse<Void> finalizeContract(Long id, WorkContractUpdateRequest request) {
+        workContractService.finalizeContract(id, request);
+        return new GenericResponse<>(
             Constants.STATUS_OK,
             Constants.SUCCESS_MESSAGE,
             null
-    );
-}
+        );
+    }
 
     @Override
     public GenericResponse<WorkContractDetailResponse> getContractById(Long id) {
@@ -59,17 +60,36 @@ public GenericResponse<Void> finalizeContract(Long id, ContractsFinalizeRequest 
                 Constants.SUCCESS_MESSAGE,
                 contract
             );
-        }
+    }
 
-        @Override
-public GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(Long contractId) {
-    var deliveryNote = workContractService.getDeliveryNoteById (contractId);
-    return new GenericResponse<>(
+    @Override
+    public GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(Long contractId) {
+        var deliveryNote = workContractService.getDeliveryNoteById (contractId);
+        return new GenericResponse<>(
             Constants.STATUS_OK,
             Constants.SUCCESS_MESSAGE,
             deliveryNote
-    );
-}
+        );
+    }
 
+    @Override
+    public GenericResponse<Void> iniciateContract(Long contractId) {
+        workContractService.iniciateContract(contractId);
+        return new GenericResponse<>(
+                Constants.STATUS_OK,
+                Constants.SUCCESS_MESSAGE,
+                null
+        );
+    }
+
+    @Override
+    public GenericResponse<Void> signatureDeliveryNote(Long id, DeliverySignatureRequest request) {
+        workContractService.signatureDeliveryNote(id, request);
+        return new GenericResponse<>(
+                Constants.STATUS_OK,
+                Constants.SUCCESS_MESSAGE,
+                null
+        );
+    }
 
 }

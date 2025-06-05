@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -36,7 +37,7 @@ public interface WorkContractService {
      * @param id      id del contrato a finalizar
      * @param request datos del contrato a finalizar
      */
-    void finalizeContract(Long id, ContractsFinalizeRequest request);
+    void finalizeContract(Long id, WorkContractUpdateRequest request);
 
     /**
      * Obtener un contrato laboral por su ID
@@ -53,5 +54,20 @@ public interface WorkContractService {
      * @return datos de la nota de entrega obtenida
      */
     DeliveryNoteResponse getDeliveryNoteById(Long contractId);
+
+    /**
+     * Iniciar un contrato laboral
+     *
+     * @param id      id del contrato a iniciar
+     */
+    void iniciateContract(Long id);
+
+    /**
+     * Firmar remito
+     * 
+     * @param id
+     * @param request
+     */
+    void signatureDeliveryNote(Long id, DeliverySignatureRequest request);
 
 }

@@ -2,9 +2,9 @@ package ar.edu.unlam.tpi.nexwork_api.client.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.client.error.ErrorHandler;
-import ar.edu.unlam.tpi.nexwork_api.dto.*;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.ContractsFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
@@ -85,7 +85,7 @@ public class WorkContractClientImpl implements WorkContractClient {
     }
     
     @Override
-    public void finalizeContract(Long id, ContractsFinalizeRequest request) {
+    public void updateContractState(Long id, WorkContractUpdateRequest request) {
         String url = host + "work-contract/" + id;
 
         webClient.put()
@@ -158,5 +158,24 @@ public class WorkContractClientImpl implements WorkContractClient {
                 .bodyToMono(new ParameterizedTypeReference<GenericResponse<DeliveryNoteResponse>>() {})
                 .block()
                 .getData();
-                }
+        }
+
+
+        @Override
+        public void signDeliveryNote(Long id, DeliverySignatureRequest request){
+                webClient.put()
+                .uri(host + "delivery-note/" + id)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .bodyValue(request)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle4xxError))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle5xxError))
+                .bodyToMono(Void.class)
+                .block();         
+        
+        }
+
+        
 }
