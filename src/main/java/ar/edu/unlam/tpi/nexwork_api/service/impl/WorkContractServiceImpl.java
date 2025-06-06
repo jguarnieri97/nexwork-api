@@ -48,7 +48,7 @@ public class WorkContractServiceImpl implements WorkContractService {
         log.info("Creando nuevo contrato de trabajo: {}", Converter.convertToString(request));
 
         WorkContractResponse response = workContractClient.createContract(request);
-        budgetsClient.finalizeBudgetRequestState(response.getBudgetId());
+        budgetsClient.finalizeBudgetRequestState(request.getBudgetId());
 
         log.info("Contrato creado con ID: {}", response.getId());
         return response;

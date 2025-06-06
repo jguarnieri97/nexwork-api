@@ -19,5 +19,4 @@ public class WorkContractResponse {
     private Long applicantId;
     private List<Long> workers;
     private List<String> files;
-    private String budgetId;
 }
