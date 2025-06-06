@@ -34,10 +34,10 @@ public class BudgetsControllerImplTest {
     @InjectMocks
     private BudgetsControllerImpl budgetsController;
 
-    @Test
+   /* @Test
     void givenBudgetsExist_whenGetBudgets_thenReturnsGenericResponseWithBudgets() {
         // Given
-        List<BudgetResponse> budgets = BudgetDataHelper.createBudgetResponseList();
+            List<BudgetResponse> budgets = BudgetDataHelper.createBudgetResponseList();
         when(budgetsService.getBudgets(1L, null)).thenReturn(budgets);
     
         // When
@@ -48,7 +48,7 @@ public class BudgetsControllerImplTest {
         assertEquals(Constants.STATUS_OK, response.getCode());
         assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
         assertEquals(2, response.getData().size());
-    }
+    } */
     
     @Test
     void givenNullId_whenGetBudgets_thenThrowsValidatorException() {

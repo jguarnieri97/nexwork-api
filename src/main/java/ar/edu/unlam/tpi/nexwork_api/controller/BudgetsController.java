@@ -30,7 +30,7 @@ public interface BudgetsController {
      */
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<List<BudgetResponse>> getBudgets(@RequestParam(required = false) Long applicantId, @RequestParam(required = false) Long supplierId);
+    GenericResponse<List<?>> getBudgets(@RequestParam(required = false) Long applicantId, @RequestParam(required = false) Long supplierId);
 
     /**
      * Recurso para obtener un presupuesto específico

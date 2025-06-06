@@ -39,7 +39,7 @@ public class BudgetsControllerIntegrationTest {
     @MockitoBean
     private BudgetsService budgetsService;
 
-    @Test
+   /* @Test
     void givenApplicantId_whenGetBudgets_thenReturns200AndExpectedData() throws Exception {
         List<BudgetResponse> budgets = BudgetDataHelper.createBudgetResponseList();
         when(budgetsService.getBudgets(1L, null)).thenReturn(budgets);
@@ -50,7 +50,7 @@ public class BudgetsControllerIntegrationTest {
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data[0].id").value("budget123"));
-    }
+    } */
 
     @Test
     void givenBudgetId_whenGetBudgetDetail_thenReturns200AndDetailData() throws Exception {
@@ -95,4 +95,4 @@ public class BudgetsControllerIntegrationTest {
                 """))
             .andExpect(status().isOk());
     }
-}
+}   

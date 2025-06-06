@@ -10,7 +10,6 @@ import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
-import ar.edu.unlam.tpi.nexwork_api.utils.BudgetFinalizeBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,11 +25,10 @@ public class BudgetsServiceImpl implements BudgetsService {
 
     private final BudgetsClient budgetsClient;
     private final AccountsClient accountsClient;
-    private final BudgetFinalizeBuilder budgetFinalizeBuilder;
 
     @Override
-    public List<BudgetResponse> getBudgets(Long applicantId, Long supplierId) {
-        List<BudgetResponse> budgets;
+    public List<?> getBudgets(Long applicantId, Long supplierId) {
+        List<?> budgets;
 
         if(Objects.nonNull(applicantId)){
             log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);

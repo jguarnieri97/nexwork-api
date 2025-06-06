@@ -5,8 +5,9 @@
     import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
     import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
     import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
 
-    import java.util.List;
+import java.util.List;
 
     /**
      * Cliente para conectar con el servicio Budgets API
@@ -29,7 +30,7 @@
          * @param applicantId id del solicitante
          * @return la lista de presupuestos
          */
-        List<BudgetResponse> getSupplierBudgets(Long applicantId);
+        List<BudgetSupplierResponse> getSupplierBudgets(Long supplierId);
 
         /**
          * Método para obtener el detalle de un presupuesto por su id
