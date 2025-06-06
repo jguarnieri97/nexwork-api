@@ -2,8 +2,9 @@ package ar.edu.unlam.tpi.nexwork_api.controller.integration;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
 
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -39,22 +41,42 @@ public class BudgetsControllerIntegrationTest {
     @MockitoBean
     private BudgetsService budgetsService;
 
+
     @Test
     void givenApplicantId_whenGetBudgets_thenReturns200AndExpectedData() throws Exception {
         List<BudgetResponse> budgets = BudgetDataHelper.createBudgetResponseList();
-        when(budgetsService.getBudgets(1L, null)).thenReturn(budgets);
-
+    
+        when(budgetsService.getBudgets(1L, null)).thenReturn(new ArrayList<>(budgets));
+    
         mockMvc.perform(get("/nexwork-api/v1/budgets")
                 .param("applicantId", "1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.data").isArray())
-                .andExpect(jsonPath("$.data[0].id").value("budget123"));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value(200))
+            .andExpect(jsonPath("$.data").isArray())
+            .andExpect(jsonPath("$.data[0].id").value("budget123"))
+            .andExpect(jsonPath("$.data[0].applicantName").value("Solicitante Test"));
     }
-
+    
     @Test
+void givenSupplierId_whenGetBudgets_thenReturns200AndExpectedSupplierData() throws Exception {
+    List<BudgetSupplierResponse> budgets = BudgetDataHelper.createBudgetSupplierResponseList();
+
+    when(budgetsService.getBudgets(null, 2L)).thenReturn(new ArrayList<>(budgets));
+
+    mockMvc.perform(get("/nexwork-api/v1/budgets")
+            .param("supplierId", "2"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.code").value(200))
+        .andExpect(jsonPath("$.data").isArray())
+        .andExpect(jsonPath("$.data[0].id").value("budget123"))
+        .andExpect(jsonPath("$.data[0].budgetState").value("ACCEPTED"))
+        .andExpect(jsonPath("$.data[0].budgetRequestState").value("INITIATED"));
+}
+
+
+@Test
     void givenBudgetId_whenGetBudgetDetail_thenReturns200AndDetailData() throws Exception {
-        BudgetDetailResponse detail = BudgetDataHelper.createBudgetDetailResponse("budget123");
+        BudgetResponseDetail detail = BudgetDataHelper.createBudgetDetailResponse("budget123");
         when(budgetsService.getBudget("budget123")).thenReturn(detail);
 
         mockMvc.perform(get("/nexwork-api/v1/budgets/budget123"))
@@ -63,7 +85,7 @@ public class BudgetsControllerIntegrationTest {
                 .andExpect(jsonPath("$.data.id").value("budget123"))
                 .andExpect(jsonPath("$.data.detail.workResume").value("Instalación de red"))
                 .andExpect(jsonPath("$.data.budgets[0].supplierName").value("Proveedor Uno"));
-    }
+    } 
 
     @Test
     void givenValidRequest_whenFinalizeBudget_thenReturns200AndSuccessResponse() throws Exception {
@@ -95,4 +117,4 @@ public class BudgetsControllerIntegrationTest {
                 """))
             .andExpect(status().isOk());
     }
-}
+}   

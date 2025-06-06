@@ -15,5 +15,6 @@ public class BudgetResponse {
     private String category;
     private String state;
     private String date;
+    
 
 }

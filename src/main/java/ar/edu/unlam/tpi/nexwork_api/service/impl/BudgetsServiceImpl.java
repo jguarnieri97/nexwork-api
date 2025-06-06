@@ -10,11 +10,11 @@ import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
-import ar.edu.unlam.tpi.nexwork_api.utils.BudgetFinalizeBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -26,27 +26,23 @@ public class BudgetsServiceImpl implements BudgetsService {
 
     private final BudgetsClient budgetsClient;
     private final AccountsClient accountsClient;
-    private final BudgetFinalizeBuilder budgetFinalizeBuilder;
 
     @Override
-    public List<BudgetResponse> getBudgets(Long applicantId, Long supplierId) {
-        List<BudgetResponse> budgets;
-
-        if(Objects.nonNull(applicantId)){
-            log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);
-            budgets = budgetsClient.getApplicantBudgets(applicantId);
-        } else {
-            log.info("Obteniendo presupuestos para el proveedor: {}", supplierId);
-            budgets = budgetsClient.getSupplierBudgets(supplierId);
-        }
-
-        log.info("Cantidad de presupuestos obtenidos: {}", budgets.size());
-
-        return budgets;
+public List<Object> getBudgets(Long applicantId, Long supplierId) {
+    if (Objects.nonNull(applicantId)) {
+        log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);
+        return new ArrayList<>(budgetsClient.getApplicantBudgets(applicantId));
+    } else if (Objects.nonNull(supplierId)) {
+        log.info("Obteniendo presupuestos para el proveedor: {}", supplierId);
+        return new ArrayList<>(budgetsClient.getSupplierBudgets(supplierId));
+    } else {
+        throw new IllegalArgumentException("Debe proporcionar applicantId o supplierId");
     }
+}
+
 
     @Override
-    public BudgetDetailResponse getBudget(String id) {
+    public BudgetResponseDetail getBudget(String id) {
         log.info("Obteniendo presupuesto con id: {}", id);
 
         BudgetResponseDetail budget = budgetsClient.getBudgetDetail(id);
@@ -62,7 +58,7 @@ public class BudgetsServiceImpl implements BudgetsService {
 
         log.info("Presupuesto obtenido: {}", Converter.convertToString(budget));
 
-        return Converter.toBudgetDetailResponse(budget, accountDetail.getApplicants());
+            return Converter.toBudgetResponseDetail(budget, accountDetail.getApplicants());
     }
 
     @Override
@@ -80,10 +76,9 @@ public class BudgetsServiceImpl implements BudgetsService {
     public void finalizeBudget(String id, BudgetFinalizeRequest request) {
         log.info("Finalizando presupuesto con id {} - detalle: {}", id, request.getSupplierHired());
 
-        BudgetFinalizeRequest finalRequest = budgetFinalizeBuilder.buildFinalizeRequest(request);
 
         try {
-            budgetsClient.finalizeBudget(id, finalRequest);
+            budgetsClient.finalizeBudget(id, request);
             log.info("Presupuesto finalizado con éxito");
         } catch (Exception ex) {
             log.error("Error al finalizar presupuesto    con id {}: {}", id, ex.getMessage(), ex);

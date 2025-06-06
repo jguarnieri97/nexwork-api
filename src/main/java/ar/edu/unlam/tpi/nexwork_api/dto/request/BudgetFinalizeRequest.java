@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class BudgetFinalizeRequest {
-    @NotNull
-    private String state;
 
     @NotNull
     private Long supplierHired;

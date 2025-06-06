@@ -3,8 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.service;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public interface BudgetsService {
      * @param applicantId: id del solicitante
      * @return la lista de presupuestos
      */
-    List<BudgetResponse> getBudgets(Long applicantId, Long supplierId);
+    List<Object> getBudgets(Long applicantId, Long supplierId);
 
     /**
      * Método para obtener el detalle de un presupuesto por su id
@@ -28,7 +27,7 @@ public interface BudgetsService {
      * @param id: id del presupuesto
      * @return el presupuesto detallado
      */
-    BudgetDetailResponse getBudget(String id);
+    BudgetResponseDetail getBudget(String id);
 
     /**
      * Método para crear un nuevo presupuesto

@@ -5,15 +5,14 @@ import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
-import ar.edu.unlam.tpi.nexwork_api.utils.BudgetFinalizeBuilder;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetUpdateDataRequestHelper;
 
 import org.junit.jupiter.api.Test;
@@ -36,39 +35,41 @@ public class BudgetsServiceImplTest {
     @Mock
     private AccountsClient accountsClient;
 
-    @Mock
-    private BudgetFinalizeBuilder budgetFinalizeBuilder;
-
     @InjectMocks
     private BudgetsServiceImpl budgetsService;
 
 
     @Test
-    void givenApplicantIdWhenGetBudgetsThenReturnBudgetsList() {
+    void givenApplicantId_whenGetBudgets_thenReturnsApplicantBudgets() {
         Long applicantId = 1L;
         List<BudgetResponse> mockBudgets = BudgetDataHelper.createBudgetResponseList();
-
+    
         when(budgetsClient.getApplicantBudgets(applicantId)).thenReturn(mockBudgets);
-
-        List<BudgetResponse> result = budgetsService.getBudgets(applicantId, null);
-
+    
+        List<?> result = budgetsService.getBudgets(applicantId, null);
+    
         assertNotNull(result);
-        assertEquals(2, result.size());
+        assertEquals(mockBudgets.size(), result.size());
         verify(budgetsClient).getApplicantBudgets(applicantId);
+        verify(budgetsClient, never()).getSupplierBudgets(any());
     }
-
+    
     @Test
-    void givenNoBudgetsWhenGetBudgetsThenReturnEmptyList() {
-        Long applicantId = 1L;
-
-        when(budgetsClient.getApplicantBudgets(applicantId)).thenReturn(List.of());
-
-        List<BudgetResponse> result = budgetsService.getBudgets(applicantId, null);
-
+    void givenSupplierId_whenGetBudgets_thenReturnsSupplierBudgets() {
+        Long supplierId = 2L;
+        List<BudgetSupplierResponse> mockBudgets = BudgetDataHelper.createBudgetSupplierResponseList();
+    
+        when(budgetsClient.getSupplierBudgets(supplierId)).thenReturn(mockBudgets);
+    
+        List<?> result = budgetsService.getBudgets(null, supplierId);
+    
         assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(budgetsClient).getApplicantBudgets(applicantId);
+        assertEquals(mockBudgets.size(), result.size());
+        verify(budgetsClient).getSupplierBudgets(supplierId);
+        verify(budgetsClient, never()).getApplicantBudgets(any());
     }
+    
+    
 
     @Test
     void givenValidIdWhenGetBudgetThenReturnBudgetDetailResponse() {
@@ -81,7 +82,7 @@ public class BudgetsServiceImplTest {
         when(accountsClient.getAccountById(anyList())).thenReturn(mockUserResponse);
 
         // When
-        BudgetDetailResponse result = budgetsService.getBudget(budgetId);
+        BudgetResponseDetail result = budgetsService.getBudget(budgetId);
 
         // Then
         assertNotNull(result);
@@ -96,27 +97,6 @@ public class BudgetsServiceImplTest {
         budgetsService.createBudget(budgetRequest);
 
         verify(budgetsClient).createBudget(budgetRequest);
-    }
-
-    @Test
-    void givenValidRequest_whenFinalizeBudget_thenShouldCallClientWithFinalizedState() {
-        // Arrange
-        String budgetId = "123";
-        BudgetFinalizeRequest originalRequest = BudgetDataHelper.createBudgetFinalizeRequest(); // supplierHired = 1
-
-        BudgetFinalizeRequest expectedRequest = BudgetFinalizeRequest.builder()
-                .state("FINALIZED")
-                .supplierHired(1L)
-                .build();
-
-        when(budgetFinalizeBuilder.buildFinalizeRequest(originalRequest)).thenReturn(expectedRequest);
-
-        // Act
-        budgetsService.finalizeBudget(budgetId, originalRequest);
-
-        // Assert
-        verify(budgetFinalizeBuilder).buildFinalizeRequest(originalRequest);
-        verify(budgetsClient).finalizeBudget(budgetId, expectedRequest);
     }
 
     void givenValidRequest_whenUpdateBudget_thenSucceeds() {
