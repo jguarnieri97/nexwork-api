@@ -69,5 +69,11 @@ import java.util.List;
     
     void updateBudget(String budgetId, Long supplierId, BudgetUpdateDataRequestDto budgetRequest);
 
-
+        /**
+         * Método para finalizar el estado de una solicitud de presupuesto
+         * desde el servicio Budgets API
+         *
+         * @param budgetId id del presupuesto
+         */
+        void finalizeBudgetRequestState(String budgetId);
 }

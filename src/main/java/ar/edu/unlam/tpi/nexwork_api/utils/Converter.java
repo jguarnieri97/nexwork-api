@@ -25,15 +25,18 @@ public class Converter {
         }
     }
 
-    public static BudgetDetailResponse toBudgetDetailResponse(BudgetResponseDetail budgetResponseDetail, List<AccountDetailResponse> accountDetailResponse) {
-        return BudgetDetailResponse.builder()
+        
+
+    public static BudgetResponseDetail toBudgetResponseDetail(BudgetResponseDetail budgetResponseDetail, List<AccountDetailResponse> accountDetailResponse) {
+        return BudgetResponseDetail.builder()
                 .id(budgetResponseDetail.getId())
                 .budgetNumber(budgetResponseDetail.getBudgetNumber())
                 .isRead(budgetResponseDetail.getIsRead())
-                .applicants(accountDetailResponse)
-                .createdAt(budgetResponseDetail.getCreatedAt())
+                .applicantId(accountDetailResponse.get(0).getId())
+                .applicantName(accountDetailResponse.get(0).getName())
                 .category(budgetResponseDetail.getCategory())
                 .state(budgetResponseDetail.getState())
+                .createdAt(budgetResponseDetail.getCreatedAt())
                 .files(budgetResponseDetail.getFiles())
                 .detail(budgetResponseDetail.getDetail())
                 .budgets(budgetResponseDetail.getBudgets())

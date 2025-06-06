@@ -42,7 +42,7 @@ public List<Object> getBudgets(Long applicantId, Long supplierId) {
 
 
     @Override
-    public BudgetDetailResponse getBudget(String id) {
+    public BudgetResponseDetail getBudget(String id) {
         log.info("Obteniendo presupuesto con id: {}", id);
 
         BudgetResponseDetail budget = budgetsClient.getBudgetDetail(id);
@@ -58,7 +58,7 @@ public List<Object> getBudgets(Long applicantId, Long supplierId) {
 
         log.info("Presupuesto obtenido: {}", Converter.convertToString(budget));
 
-        return Converter.toBudgetDetailResponse(budget, accountDetail.getApplicants());
+            return Converter.toBudgetResponseDetail(budget, accountDetail.getApplicants());
     }
 
     @Override

@@ -4,7 +4,7 @@ import ar.edu.unlam.tpi.nexwork_api.controller.BudgetsController;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Constants;
@@ -32,8 +32,8 @@ public class BudgetsControllerImpl implements BudgetsController {
     }
 
     @Override
-    public GenericResponse<BudgetDetailResponse> getBudgetDetail(String id) {
-        BudgetDetailResponse budget = budgetsService.getBudget(id);
+    public GenericResponse<BudgetResponseDetail> getBudgetDetail(String id) {
+        BudgetResponseDetail budget = budgetsService.getBudget(id);
         return new GenericResponse<>(
                 Constants.STATUS_OK,
                 Constants.SUCCESS_MESSAGE,

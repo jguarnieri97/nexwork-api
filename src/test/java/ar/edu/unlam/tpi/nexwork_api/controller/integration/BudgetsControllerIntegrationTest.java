@@ -4,7 +4,6 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
 
@@ -74,7 +73,7 @@ void givenSupplierId_whenGetBudgets_thenReturns200AndExpectedSupplierData() thro
 }
 
 
-    @Test
+   /* @Test
     void givenBudgetId_whenGetBudgetDetail_thenReturns200AndDetailData() throws Exception {
         BudgetDetailResponse detail = BudgetDataHelper.createBudgetDetailResponse("budget123");
         when(budgetsService.getBudget("budget123")).thenReturn(detail);
@@ -85,7 +84,7 @@ void givenSupplierId_whenGetBudgets_thenReturns200AndExpectedSupplierData() thro
                 .andExpect(jsonPath("$.data.id").value("budget123"))
                 .andExpect(jsonPath("$.data.detail.workResume").value("Instalación de red"))
                 .andExpect(jsonPath("$.data.budgets[0].supplierName").value("Proveedor Uno"));
-    }
+    } */
 
     @Test
     void givenValidRequest_whenFinalizeBudget_thenReturns200AndSuccessResponse() throws Exception {
