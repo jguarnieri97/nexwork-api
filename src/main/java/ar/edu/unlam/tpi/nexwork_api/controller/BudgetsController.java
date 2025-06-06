@@ -3,8 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.controller;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -40,7 +39,7 @@ public interface BudgetsController {
      */
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<BudgetDetailResponse> getBudgetDetail(@PathVariable String id);
+    GenericResponse<BudgetResponseDetail> getBudgetDetail(@PathVariable String id);
 
     /**
      * Recurso para crear un nuevo presupuesto
@@ -53,7 +52,7 @@ public interface BudgetsController {
     GenericResponse<Void> createBudget(@RequestBody BudgetRequest budgetRequest);
 
     /**
-     * Recurso para finalizar un presupuesto y contratar un proveedor
+     * Recurso para aceptar un presupuesto y contratar un proveedor
      *
      * @param id: id del presupuesto
      * @param budgetFinalizeRequest: el presupuesto a finalizar

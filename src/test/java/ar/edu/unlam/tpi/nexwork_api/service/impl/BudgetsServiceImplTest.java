@@ -5,7 +5,6 @@ import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
@@ -83,7 +82,7 @@ public class BudgetsServiceImplTest {
         when(accountsClient.getAccountById(anyList())).thenReturn(mockUserResponse);
 
         // When
-        BudgetDetailResponse result = budgetsService.getBudget(budgetId);
+        BudgetResponseDetail result = budgetsService.getBudget(budgetId);
 
         // Then
         assertNotNull(result);

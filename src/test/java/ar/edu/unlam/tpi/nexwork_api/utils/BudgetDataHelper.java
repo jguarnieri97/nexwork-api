@@ -5,8 +5,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.BudgetDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetDataRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+        import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
 
@@ -44,12 +43,13 @@ public class BudgetDataHelper {
                 .build();
     }
 
-    public static BudgetDetailResponse createBudgetDetailResponse(String id) {
-        return BudgetDetailResponse.builder()
+    public static BudgetResponseDetail createBudgetDetailResponse(String id) {
+        return BudgetResponseDetail.builder()
                 .id(id)
                 .budgetNumber("BUDGET-" + id)
                 .isRead(false)
-                .applicants(AccountDataHelper.createUserResponse().getApplicants())
+                .applicantId(AccountDataHelper.createUserResponse().getApplicants().get(0).getId())
+                .applicantName(AccountDataHelper.createUserResponse().getApplicants().get(0).getName())
                 .createdAt("2025-05-04T11:00:00Z")
                 .category("Instalación")
                 .state("ACTIVE")

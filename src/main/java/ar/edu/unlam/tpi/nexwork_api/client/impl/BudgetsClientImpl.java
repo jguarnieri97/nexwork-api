@@ -143,4 +143,20 @@ public class BudgetsClientImpl implements BudgetsClient {
                                 .bodyToMono(Void.class)
                                 .block();
         }
+
+        @Override
+        public void finalizeBudgetRequestState(String budgetId) {
+                webClient.put()
+                    .uri(host + "budget/" + budgetId + "/finalize-request")
+                    .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError,
+                            clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                    .flatMap(errorHandler::handle4xxError))
+                    .onStatus(HttpStatusCode::is5xxServerError,
+                            clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                    .flatMap(errorHandler::handle5xxError))
+                    .toBodilessEntity()
+                    .block();
+            }
 }

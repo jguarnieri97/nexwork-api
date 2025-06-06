@@ -3,8 +3,8 @@ package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,21 +35,28 @@ public class BudgetsControllerImplTest {
     @InjectMocks
     private BudgetsControllerImpl budgetsController;
 
-   /* @Test
-    void givenBudgetsExist_whenGetBudgets_thenReturnsGenericResponseWithBudgets() {
-        // Given
-            List<BudgetResponse> budgets = BudgetDataHelper.createBudgetResponseList();
-        when(budgetsService.getBudgets(1L, null)).thenReturn(budgets);
-    
-        // When
-        GenericResponse<List<BudgetResponse>> response = budgetsController.getBudgets(1L, null);
-    
-        // Then
-        assertNotNull(response);
-        assertEquals(Constants.STATUS_OK, response.getCode());
-        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
-        assertEquals(2, response.getData().size());
-    } */
+    @Test
+void givenBudgetsExist_whenGetBudgets_thenReturnsGenericResponseWithBudgets() {
+    // Given
+    List<BudgetResponse> budgets = BudgetDataHelper.createBudgetResponseList();
+    when(budgetsService.getBudgets(1L, null)).thenReturn(new ArrayList<>(budgets));
+
+    // When
+    GenericResponse<List<Object>> response = budgetsController.getBudgets(1L, null);
+
+    // Then
+    assertNotNull(response);
+    assertEquals(Constants.STATUS_OK, response.getCode());
+    assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
+
+    List<BudgetResponse> typed = response.getData().stream()
+        .map(BudgetResponse.class::cast)
+        .toList();
+
+    assertEquals(2, typed.size());
+    assertEquals("budget123", typed.get(0).getId());
+}
+
     
     @Test
     void givenNullId_whenGetBudgets_thenThrowsValidatorException() {
@@ -72,11 +80,11 @@ public class BudgetsControllerImplTest {
     @Test
     void givenValidId_whenGetBudgetDetailById_thenReturnsGenericResponse() {
         // Given
-        BudgetDetailResponse budgetDetail = BudgetDataHelper.createBudgetDetailResponse("budget123");
+        BudgetResponseDetail budgetDetail = BudgetDataHelper.createBudgetDetailResponse("budget123");
         when(budgetsService.getBudget("budget123")).thenReturn(budgetDetail);
     
         // When
-        GenericResponse<BudgetDetailResponse> response = budgetsController.getBudgetDetail("budget123");
+        GenericResponse<BudgetResponseDetail> response = budgetsController.getBudgetDetail("budget123");
     
         // Then
         assertNotNull(response);
@@ -87,10 +95,11 @@ public class BudgetsControllerImplTest {
         assertEquals("Instalación", response.getData().getCategory());
         assertEquals("ACTIVE", response.getData().getState());
         assertFalse(response.getData().getIsRead());
-        assertNotNull(response.getData().getApplicants());
+        assertNotNull(response.getData().getApplicantId());
+        assertNotNull(response.getData().getApplicantName());
         assertNotNull(response.getData().getDetail());
         assertNotNull(response.getData().getBudgets());
-    }
+    } 
     
     @Test
     void givenServiceThrowsException_whenGetBudgetDetailById_thenThrowsBudgetsClientException() {

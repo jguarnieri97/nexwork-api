@@ -31,4 +31,6 @@ public class WorkContractCreateRequest {
     @NotNull
     @Size(min = 1)
     private List<Long> workers;
+
+    private String budgetId;
 }
