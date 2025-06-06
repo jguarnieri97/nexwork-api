@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -27,21 +28,18 @@ public class BudgetsServiceImpl implements BudgetsService {
     private final AccountsClient accountsClient;
 
     @Override
-    public List<?> getBudgets(Long applicantId, Long supplierId) {
-        List<?> budgets;
-
-        if(Objects.nonNull(applicantId)){
-            log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);
-            budgets = budgetsClient.getApplicantBudgets(applicantId);
-        } else {
-            log.info("Obteniendo presupuestos para el proveedor: {}", supplierId);
-            budgets = budgetsClient.getSupplierBudgets(supplierId);
-        }
-
-        log.info("Cantidad de presupuestos obtenidos: {}", budgets.size());
-
-        return budgets;
+public List<Object> getBudgets(Long applicantId, Long supplierId) {
+    if (Objects.nonNull(applicantId)) {
+        log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);
+        return new ArrayList<>(budgetsClient.getApplicantBudgets(applicantId));
+    } else if (Objects.nonNull(supplierId)) {
+        log.info("Obteniendo presupuestos para el proveedor: {}", supplierId);
+        return new ArrayList<>(budgetsClient.getSupplierBudgets(supplierId));
+    } else {
+        throw new IllegalArgumentException("Debe proporcionar applicantId o supplierId");
     }
+}
+
 
     @Override
     public BudgetDetailResponse getBudget(String id) {

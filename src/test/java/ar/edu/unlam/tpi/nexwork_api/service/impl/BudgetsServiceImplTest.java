@@ -8,6 +8,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
@@ -39,32 +40,37 @@ public class BudgetsServiceImplTest {
     private BudgetsServiceImpl budgetsService;
 
 
-    /*@Test
-    void givenApplicantIdWhenGetBudgetsThenReturnBudgetsList() {
+    @Test
+    void givenApplicantId_whenGetBudgets_thenReturnsApplicantBudgets() {
         Long applicantId = 1L;
         List<BudgetResponse> mockBudgets = BudgetDataHelper.createBudgetResponseList();
-
+    
         when(budgetsClient.getApplicantBudgets(applicantId)).thenReturn(mockBudgets);
-
-        List<BudgetResponse> result = budgetsService.getBudgets(applicantId, null);
-
+    
+        List<?> result = budgetsService.getBudgets(applicantId, null);
+    
         assertNotNull(result);
-        assertEquals(2, result.size());
+        assertEquals(mockBudgets.size(), result.size());
         verify(budgetsClient).getApplicantBudgets(applicantId);
+        verify(budgetsClient, never()).getSupplierBudgets(any());
     }
-
-   /*	 @Test
-    void givenNoBudgetsWhenGetBudgetsThenReturnEmptyList() {
-        Long applicantId = 1L;
-
-        when(budgetsClient.getApplicantBudgets(applicantId)).thenReturn(List.of());
-
-        List<BudgetResponse> result = budgetsService.getBudgets(applicantId, null);
-
+    
+    @Test
+    void givenSupplierId_whenGetBudgets_thenReturnsSupplierBudgets() {
+        Long supplierId = 2L;
+        List<BudgetSupplierResponse> mockBudgets = BudgetDataHelper.createBudgetSupplierResponseList();
+    
+        when(budgetsClient.getSupplierBudgets(supplierId)).thenReturn(mockBudgets);
+    
+        List<?> result = budgetsService.getBudgets(null, supplierId);
+    
         assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(budgetsClient).getApplicantBudgets(applicantId);
-    } */
+        assertEquals(mockBudgets.size(), result.size());
+        verify(budgetsClient).getSupplierBudgets(supplierId);
+        verify(budgetsClient, never()).getApplicantBudgets(any());
+    }
+    
+    
 
     @Test
     void givenValidIdWhenGetBudgetThenReturnBudgetDetailResponse() {

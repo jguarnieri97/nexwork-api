@@ -8,6 +8,8 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
+
 import java.util.List;
 
 public class BudgetDataHelper {
@@ -99,5 +101,27 @@ public class BudgetDataHelper {
         return BudgetFinalizeRequest.builder()
                 .supplierHired(1L)
                 .build();
+    }
+
+    public static BudgetSupplierResponse createBudgetSupplierResponse(String id) {
+        return BudgetSupplierResponse.builder()
+                .id(id)
+                .budgetNumber("BUDGET-" + id)
+                .isRead(false)
+                .applicantId(1L)
+                .applicantName("Solicitante X")
+                .category("Categoría X")
+                .budgetState("ACCEPTED")
+                .budgetRequestState("INITIATED")
+                .isHired(true)
+                .date("2025-05-04T11:00:00Z")
+                .build();
+    }
+
+    public static List<BudgetSupplierResponse> createBudgetSupplierResponseList() {
+        return List.of(
+                createBudgetSupplierResponse("budget123"),
+                createBudgetSupplierResponse("budget456")
+        );
     }
 }

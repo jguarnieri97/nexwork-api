@@ -21,7 +21,7 @@ public class BudgetsControllerImpl implements BudgetsController {
     private final BudgetsService budgetsService;
 
     @Override
-    public GenericResponse<List<?>> getBudgets(Long applicantId, Long supplierId) {
+    public GenericResponse<List<Object>> getBudgets(Long applicantId, Long supplierId) {
         Validator.validateBudgetsUserIdNotNull(applicantId, supplierId);
         var budgets = budgetsService.getBudgets(applicantId, supplierId);
         return new GenericResponse<>(
