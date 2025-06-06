@@ -40,50 +40,31 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
         UserResponse accounts = accountsClient.getAccountById(accountRequests);
         log.info("Proveedor encontrado: {}", Converter.convertToString(accounts.getSuppliers()));
 
-        DeliveryNoteRequest request = this.buildDeliveryNote(contract, accounts.getSuppliers(), accounts.getApplicants());
+        DeliveryNoteRequest request = this.buildDeliveryNote(contract, accounts.getSuppliers().get(0), accounts.getApplicants().get(0));
 
         log.info("Enviando remito a crear en el servicio Contracts");
         workContractClient.createDeliveryNote(request);
         log.info("Remito creado con éxito!");
     }
 
-    private DeliveryNoteRequest buildDeliveryNote(WorkContractResponse contract, List<AccountDetailResponse> supplier, List<AccountDetailResponse> applicant) {
+    private DeliveryNoteRequest buildDeliveryNote(WorkContractResponse contract, AccountDetailResponse s, AccountDetailResponse a) {
 
-        List<CompanyData> suppliersData = supplier.stream()
-                .map(s -> CompanyData.builder()
+        return DeliveryNoteRequest.builder()
+                .contractId(contract.getId())
+                .suppliersData(CompanyData.builder()
                         .companyName(s.getName())
                         .email(s.getEmail())
                         .phone(s.getPhone())
                         .address(s.getAddress())
                         .cuit(s.getCuit())
                         .build())
-                .toList();
-
-        List<CompanyData> applicantsData = applicant.stream()
-                .map(a -> CompanyData.builder()
+                .applicantsData(CompanyData.builder()
                         .companyName(a.getName())
                         .email(a.getEmail())
                         .phone(a.getPhone())
                         .address(a.getAddress())
                         .cuit(a.getCuit())
                         .build())
-                .toList();
-
-
-        DescriptionObject item = DescriptionObject.builder()
-                .detail(contract.getDetail())
-                .price(contract.getPrice())
-                .build();
-
-        BodyData body = BodyData.builder()
-                .noteNumber("00001")
-                .descriptionData(List.of(item))
-                .build();
-
-        return DeliveryNoteRequest.builder()
-                .contractId(contract.getId())
-                .suppliersData(suppliersData)
-                .applicantsData(applicantsData)
                 .build();
     }
 }
