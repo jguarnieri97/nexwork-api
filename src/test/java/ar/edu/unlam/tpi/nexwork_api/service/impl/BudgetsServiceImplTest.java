@@ -98,27 +98,6 @@ public class BudgetsServiceImplTest {
         verify(budgetsClient).createBudget(budgetRequest);
     }
 
-    @Test
-    void givenValidRequest_whenFinalizeBudget_thenShouldCallClientWithFinalizedState() {
-        // Arrange
-        String budgetId = "123";
-        BudgetFinalizeRequest originalRequest = BudgetDataHelper.createBudgetFinalizeRequest(); // supplierHired = 1
-
-        BudgetFinalizeRequest expectedRequest = BudgetFinalizeRequest.builder()
-                .state("FINALIZED")
-                .supplierHired(1L)
-                .build();
-
-        when(budgetFinalizeBuilder.buildFinalizeRequest(originalRequest)).thenReturn(expectedRequest);
-
-        // Act
-        budgetsService.finalizeBudget(budgetId, originalRequest);
-
-        // Assert
-        verify(budgetFinalizeBuilder).buildFinalizeRequest(originalRequest);
-        verify(budgetsClient).finalizeBudget(budgetId, expectedRequest);
-    }
-
     void givenValidRequest_whenUpdateBudget_thenSucceeds() {
         BudgetUpdateDataRequestDto validRequest = BudgetUpdateDataRequestHelper.buildBudgetDataRequestDto();
 

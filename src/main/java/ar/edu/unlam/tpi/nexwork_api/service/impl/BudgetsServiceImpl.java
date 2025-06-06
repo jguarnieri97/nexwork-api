@@ -80,10 +80,9 @@ public class BudgetsServiceImpl implements BudgetsService {
     public void finalizeBudget(String id, BudgetFinalizeRequest request) {
         log.info("Finalizando presupuesto con id {} - detalle: {}", id, request.getSupplierHired());
 
-        BudgetFinalizeRequest finalRequest = budgetFinalizeBuilder.buildFinalizeRequest(request);
 
         try {
-            budgetsClient.finalizeBudget(id, finalRequest);
+            budgetsClient.finalizeBudget(id, request);
             log.info("Presupuesto finalizado con éxito");
         } catch (Exception ex) {
             log.error("Error al finalizar presupuesto    con id {}: {}", id, ex.getMessage(), ex);
