@@ -1,6 +1,5 @@
-package ar.edu.unlam.tpi.nexwork_api.controller.integration;
+package ar.edu.unlam.tpi.nexwork_api.integration;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
@@ -21,9 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -58,20 +54,20 @@ public class BudgetsControllerIntegrationTest {
     }
     
     @Test
-void givenSupplierId_whenGetBudgets_thenReturns200AndExpectedSupplierData() throws Exception {
-    List<BudgetSupplierResponse> budgets = BudgetDataHelper.createBudgetSupplierResponseList();
+    void givenSupplierId_whenGetBudgets_thenReturns200AndExpectedSupplierData() throws Exception {
+        List<BudgetSupplierResponse> budgets = BudgetDataHelper.createBudgetSupplierResponseList();
 
-    when(budgetsService.getBudgets(null, 2L)).thenReturn(new ArrayList<>(budgets));
+        when(budgetsService.getBudgets(null, 2L)).thenReturn(new ArrayList<>(budgets));
 
-    mockMvc.perform(get("/nexwork-api/v1/budgets")
-            .param("supplierId", "2"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.code").value(200))
-        .andExpect(jsonPath("$.data").isArray())
-        .andExpect(jsonPath("$.data[0].id").value("budget123"))
-        .andExpect(jsonPath("$.data[0].budgetState").value("ACCEPTED"))
-        .andExpect(jsonPath("$.data[0].budgetRequestState").value("INITIATED"));
-}
+        mockMvc.perform(get("/nexwork-api/v1/budgets")
+                .param("supplierId", "2"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value(200))
+            .andExpect(jsonPath("$.data").isArray())
+            .andExpect(jsonPath("$.data[0].id").value("budget123"))
+            .andExpect(jsonPath("$.data[0].budgetState").value("ACCEPTED"))
+            .andExpect(jsonPath("$.data[0].budgetRequestState").value("INITIATED"));
+    }
 
 
 @Test

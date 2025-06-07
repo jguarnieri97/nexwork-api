@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.service.impl;
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
+import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
@@ -34,6 +35,9 @@ public class WorkContractServiceImplTest {
     @Mock
     private AccountsClient accountsClient;
 
+    @Mock
+    private BudgetsClient budgetsClient;
+
     @InjectMocks
     private WorkContractServiceImpl workContractService;
 
@@ -64,6 +68,7 @@ public class WorkContractServiceImplTest {
         WorkContractCreateRequest request = WorkContractDataHelper.createWorkContractCreateRequest();
         WorkContractResponse expectedResponse = WorkContractDataHelper.createWorkContractResponse(99L);
         when(workContractClient.createContract(request)).thenReturn(expectedResponse);
+        doNothing().when(budgetsClient).finalizeBudgetRequestState(request.getBudgetId());
 
         // When
         WorkContractResponse result = workContractService.createContract(request);
@@ -73,6 +78,7 @@ public class WorkContractServiceImplTest {
         assertEquals(expectedResponse.getId(), result.getId());
         assertEquals(expectedResponse.getPrice(), result.getPrice());
         verify(workContractClient, times(1)).createContract(request);
+        verify(budgetsClient, times(1)).finalizeBudgetRequestState(request.getBudgetId());
     }
 
     @Test

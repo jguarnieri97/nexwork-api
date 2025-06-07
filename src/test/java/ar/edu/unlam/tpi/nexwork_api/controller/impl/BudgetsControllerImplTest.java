@@ -36,26 +36,26 @@ public class BudgetsControllerImplTest {
     private BudgetsControllerImpl budgetsController;
 
     @Test
-void givenBudgetsExist_whenGetBudgets_thenReturnsGenericResponseWithBudgets() {
-    // Given
-    List<BudgetResponse> budgets = BudgetDataHelper.createBudgetResponseList();
-    when(budgetsService.getBudgets(1L, null)).thenReturn(new ArrayList<>(budgets));
+    void givenBudgetsExist_whenGetBudgets_thenReturnsGenericResponseWithBudgets() {
+        // Given
+        List<BudgetResponse> budgets = BudgetDataHelper.createBudgetResponseList();
+        when(budgetsService.getBudgets(1L, null)).thenReturn(new ArrayList<>(budgets));
 
-    // When
-    GenericResponse<List<Object>> response = budgetsController.getBudgets(1L, null);
+        // When
+        GenericResponse<List<Object>> response = budgetsController.getBudgets(1L, null);
 
-    // Then
-    assertNotNull(response);
-    assertEquals(Constants.STATUS_OK, response.getCode());
-    assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
+        // Then
+        assertNotNull(response);
+        assertEquals(Constants.STATUS_OK, response.getCode());
+        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
 
-    List<BudgetResponse> typed = response.getData().stream()
-        .map(BudgetResponse.class::cast)
-        .toList();
+        List<BudgetResponse> typed = response.getData().stream()
+            .map(BudgetResponse.class::cast)
+            .toList();
 
-    assertEquals(2, typed.size());
-    assertEquals("budget123", typed.get(0).getId());
-}
+        assertEquals(2, typed.size());
+        assertEquals("budget123", typed.get(0).getId());
+    }
 
     
     @Test
