@@ -71,7 +71,7 @@ public interface WorkContractController {
      * @param contractId id del contrato asociado a la nota de entrega
      * @return datos de la nota de entrega
      */
-    @GetMapping("/delivery-note/{contractId}")
+    @GetMapping("{contractId}/delivery-note")
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<DeliveryNoteResponse> getDeliveryNoteById(@PathVariable("contractId") Long contractId);
 
@@ -82,7 +82,7 @@ public interface WorkContractController {
          * @param request datos de la firma de la nota de entrega
          * @return respuesta genérica sin datos
         */
-        @PostMapping("/delivery-note/{contractId}")
+        @PostMapping("{contractId}/delivery-note")
         GenericResponse<Void> signatureDeliveryNote(
                 @PathVariable("contractId") Long id,
                 @RequestBody DeliverySignatureRequest request);
