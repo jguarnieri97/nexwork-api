@@ -1,4 +1,4 @@
-package ar.edu.unlam.tpi.nexwork_api.controller.integration;
+package ar.edu.unlam.tpi.nexwork_api.integration;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
@@ -45,6 +45,7 @@ public class WorkContractControllerIntegrationTest {
 
     @MockitoBean
     private DeliveryNoteService deliveryNoteService;
+    
     @Test
     void givenValidRequest_whenGetContracts_thenReturnsContractsList() throws Exception {
         // Given

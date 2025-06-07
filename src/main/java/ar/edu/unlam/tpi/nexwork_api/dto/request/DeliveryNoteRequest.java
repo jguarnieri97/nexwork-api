@@ -8,6 +8,6 @@ import lombok.Data;
 @Builder
 public class DeliveryNoteRequest {
     private Long contractId;
-    private CompanyData suppliersData;
-    private CompanyData applicantsData;
+    private CompanyData supplierData;
+    private CompanyData applicantData;
 }
