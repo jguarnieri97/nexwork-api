@@ -22,14 +22,14 @@ public class TestUtils {
                 .build();
     }
 
-    public static BudgetResponseDetail buildBudgetResponseDetail() {
+   /* public static BudgetResponseDetail buildBudgetResponseDetail() {
         return BudgetResponseDetail.builder()
                 .applicantId(APPLICANT_ID)
                 .id(BUDGET_ID)
                 .createdAt(DATE)
                 .budgets(List.of())
                 .build();
-    }
+    }*/
 
     public static BudgetRequest buildBudgetRequest() {
         return BudgetRequest.builder()

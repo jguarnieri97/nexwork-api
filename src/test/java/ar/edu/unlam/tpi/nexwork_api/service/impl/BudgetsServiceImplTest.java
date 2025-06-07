@@ -2,9 +2,9 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailFromBudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
@@ -75,20 +75,34 @@ public class BudgetsServiceImplTest {
     void givenValidIdWhenGetBudgetThenReturnBudgetDetailResponse() {
         // Given
         String budgetId = "123";
-        BudgetResponseDetail mockBudget = BudgetDataHelper.createBudgetResponseDetail(budgetId);
+    
+        // El presupuesto crudo que devuelve budgetsClient
+        BudgetDetailFromBudgetsClient mockRawBudget = BudgetDataHelper.createBudgetDetailFromBudgetsClient(budgetId);
+        
+        // El account que devuelve accountsClient
         UserResponse mockUserResponse = AccountDataHelper.createUserResponse();
-
-        when(budgetsClient.getBudgetDetail(budgetId)).thenReturn(mockBudget);
+    
+        // Lo que se espera después del merge
+        BudgetResponseDetail expected = BudgetDataHelper.createBudgetDetailResponse(budgetId);
+    
+        when(budgetsClient.getBudgetDetail(budgetId)).thenReturn(mockRawBudget);
         when(accountsClient.getAccountById(anyList())).thenReturn(mockUserResponse);
-
+    
         // When
         BudgetResponseDetail result = budgetsService.getBudget(budgetId);
-
+    
         // Then
         assertNotNull(result);
+        assertEquals(expected.getId(), result.getId());
+        assertEquals(expected.getApplicant().getId(), result.getApplicant().getId());
+        assertEquals(expected.getApplicant().getName(), result.getApplicant().getName());
+        assertEquals(expected.getDetail().getWorkResume(), result.getDetail().getWorkResume());
+        assertEquals(expected.getBudgets().size(), result.getBudgets().size());
+    
         verify(budgetsClient).getBudgetDetail(budgetId);
         verify(accountsClient).getAccountById(anyList());
     }
+    
 
     @Test
     void givenBudgetRequestWhenCreateBudgetThenCallClient() {
