@@ -5,8 +5,8 @@ import ar.edu.unlam.tpi.nexwork_api.client.error.ErrorHandler;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailFromBudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
@@ -74,7 +74,7 @@ public class BudgetsClientImpl implements BudgetsClient {
         }
 
         @Override
-        public BudgetResponseDetail getBudgetDetail(String id) {
+        public BudgetDetailFromBudgetsClient getBudgetDetail(String id) {
                 var response = webClient.get()
                                 .uri(host + "budget/" + id)
                                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -85,7 +85,7 @@ public class BudgetsClientImpl implements BudgetsClient {
                                 .onStatus(HttpStatusCode::is5xxServerError,
                                                 clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
                                                                 .flatMap(errorHandler::handle5xxError))
-                                .bodyToMono(new ParameterizedTypeReference<GenericResponse<BudgetResponseDetail>>() {
+                                .bodyToMono(new ParameterizedTypeReference<GenericResponse<BudgetDetailFromBudgetsClient>>() {
                                 })
                                 .block();
                 assert response != null;

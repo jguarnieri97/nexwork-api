@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
@@ -104,7 +105,7 @@ public class WorkContractServiceImplTest {
     void givenValidIdAndRequestWhenFinalizeContractThenSuccess() {
         // Given
         Long contractId = 1L;
-        WorkContractUpdateRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
+        WorkContractFinalizeRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
 
         doNothing().when(workContractClient).updateContractState(eq(contractId), any(WorkContractUpdateRequest.class));
         doNothing().when(deliveryNoteService).buildDeliveryNote(contractId);
@@ -121,7 +122,7 @@ public class WorkContractServiceImplTest {
     void givenErrorWhenFinalizeContractThenThrowException() {
         // Given
         Long contractId = 1L;
-        WorkContractUpdateRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
+        WorkContractFinalizeRequest request = WorkContractDataHelper.createContractsFinalizeRequest();
 
         doThrow(new RuntimeException("Error")).when(workContractClient).updateContractState(eq(contractId), any(WorkContractUpdateRequest.class));
 

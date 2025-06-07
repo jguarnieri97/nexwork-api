@@ -3,11 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
@@ -73,11 +69,16 @@ public class WorkContractServiceImpl implements WorkContractService {
     }
 
     @Override
-    public void finalizeContract(Long id, WorkContractUpdateRequest request) {
+    public void finalizeContract(Long id, WorkContractFinalizeRequest request) {
         log.info("Finalizando contrato con id {} - detalle: {}", id, request.getDetail());
         try {
-            request.setState(WorkStateEnum.FINALIZED.toString());
-            workContractClient.updateContractState(id, request);
+            WorkContractUpdateRequest updateRequest = WorkContractUpdateRequest.builder()
+                    .state(WorkStateEnum.FINALIZED.toString())
+                    .detail(request.getDetail())
+                    .files(request.getFiles())
+                    .build();
+
+            workContractClient.updateContractState(id, updateRequest);
             deliveryNoteService.buildDeliveryNote(id);
             log.info("Contrato finalizado y remito generado exitosamente.");
         } catch (Exception ex) {
