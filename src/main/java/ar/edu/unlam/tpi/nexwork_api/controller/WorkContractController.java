@@ -1,9 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.controller;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
@@ -52,7 +49,7 @@ public interface WorkContractController {
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<Void> finalizeContract(
             @PathVariable Long id,
-            @RequestBody WorkContractUpdateRequest request);
+            @RequestBody WorkContractFinalizeRequest request);
 
     /**
      * Recurso para obtener un contrato laboral por su ID
