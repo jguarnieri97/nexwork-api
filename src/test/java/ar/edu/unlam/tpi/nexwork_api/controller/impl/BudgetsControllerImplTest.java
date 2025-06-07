@@ -95,8 +95,7 @@ public class BudgetsControllerImplTest {
         assertEquals("Instalación", response.getData().getCategory());
         assertEquals("ACTIVE", response.getData().getState());
         assertFalse(response.getData().getIsRead());
-        assertNotNull(response.getData().getApplicantId());
-        assertNotNull(response.getData().getApplicantName());
+        assertNotNull(response.getData().getApplicant());
         assertNotNull(response.getData().getDetail());
         assertNotNull(response.getData().getBudgets());
     } 

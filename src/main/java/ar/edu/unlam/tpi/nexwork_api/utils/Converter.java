@@ -25,21 +25,20 @@ public class Converter {
         }
     }
 
-        
-
-    public static BudgetResponseDetail toBudgetResponseDetail(BudgetResponseDetail budgetResponseDetail, List<AccountDetailResponse> accountDetailResponse) {
+    public static BudgetResponseDetail toBudgetResponseDetail(
+            BudgetDetailFromBudgetsClient raw,
+            List<AccountDetailResponse> applicants) {
         return BudgetResponseDetail.builder()
-                .id(budgetResponseDetail.getId())
-                .budgetNumber(budgetResponseDetail.getBudgetNumber())
-                .isRead(budgetResponseDetail.getIsRead())
-                .applicantId(accountDetailResponse.get(0).getId())
-                .applicantName(accountDetailResponse.get(0).getName())
-                .category(budgetResponseDetail.getCategory())
-                .state(budgetResponseDetail.getState())
-                .createdAt(budgetResponseDetail.getCreatedAt())
-                .files(budgetResponseDetail.getFiles())
-                .detail(budgetResponseDetail.getDetail())
-                .budgets(budgetResponseDetail.getBudgets())
+                .id(raw.getId())
+                .budgetNumber(raw.getBudgetNumber())
+                .isRead(raw.getIsRead())
+                .applicant(applicants.get(0)) // porque solo hay 1
+                .category(raw.getCategory())
+                .state(raw.getState())
+                .createdAt(raw.getCreatedAt())
+                .files(raw.getFiles())
+                .detail(raw.getDetail())
+                .budgets(raw.getBudgets())
                 .build();
     }
 

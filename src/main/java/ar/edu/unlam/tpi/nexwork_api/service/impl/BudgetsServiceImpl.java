@@ -41,25 +41,28 @@ public List<Object> getBudgets(Long applicantId, Long supplierId) {
 }
 
 
-    @Override
-    public BudgetResponseDetail getBudget(String id) {
-        log.info("Obteniendo presupuesto con id: {}", id);
+@Override
+public BudgetResponseDetail getBudget(String id) {
+    log.info("Obteniendo presupuesto con id: {}", id);
 
-        BudgetResponseDetail budget = budgetsClient.getBudgetDetail(id);
+    BudgetDetailFromBudgetsClient budgetClient = budgetsClient.getBudgetDetail(id);
 
-        List<AccountDetailRequest> requests = Collections.singletonList(
-                AccountDetailRequest.builder()
-                        .userId(budget.getApplicantId())
-                        .type("applicant")
-                        .build()
-        );
+    List<AccountDetailRequest> requests = Collections.singletonList(
+            AccountDetailRequest.builder()
+                    .userId(budgetClient.getApplicantId())
+                    .type("applicant")
+                    .build()
+    );
 
-        UserResponse accountDetail = accountsClient.getAccountById(requests);
+    UserResponse accountDetail = accountsClient.getAccountById(requests);
 
-        log.info("Presupuesto obtenido: {}", Converter.convertToString(budget));
+    BudgetResponseDetail budget = Converter.toBudgetResponseDetail(budgetClient, accountDetail.getApplicants());
 
-            return Converter.toBudgetResponseDetail(budget, accountDetail.getApplicants());
-    }
+    log.info("Presupuesto obtenido: {}", Converter.convertToString(budget));
+
+    return budget;
+}
+
 
     @Override
     public void createBudget(BudgetRequest budgetRequest) {
