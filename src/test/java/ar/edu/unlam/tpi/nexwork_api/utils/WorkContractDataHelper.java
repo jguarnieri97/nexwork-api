@@ -49,8 +49,6 @@ public class WorkContractDataHelper {
                 .detail("Instalación eléctrica general")
                 .supplierId(1L)
                 .applicantId(2L)
-                .workers(List.of(3L, 4L))
-                .files(List.of("file1.pdf", "file2.pdf"))
                 .build();
     }
 
