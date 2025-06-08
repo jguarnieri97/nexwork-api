@@ -16,7 +16,7 @@ public class WorkContractResponse {
     private String state;
     private String detail;
     private Long supplierId;
+    private String supplierName;
     private Long applicantId;
-    private List<Long> workers;
-    private List<String> files;
+    private String applicantName;
 }
