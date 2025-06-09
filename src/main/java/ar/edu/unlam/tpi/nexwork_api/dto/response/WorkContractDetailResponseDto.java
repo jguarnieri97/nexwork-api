@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class WorkContractDetailResponse {
+public class WorkContractDetailResponseDto {
     private Long id;
     private String codeNumber;
     private Double price;
@@ -15,8 +15,8 @@ public class WorkContractDetailResponse {
     private String dateTo;
     private String state;
     private String detail;
-    private Long supplierId;
-    private Long applicantId;
-    private List<Long> workers;
+    private AccountDetailResponse supplier;
+    private AccountDetailResponse applicant;
+    private List<AccountDetailResponse> workers;
     private List<String> files;
 }

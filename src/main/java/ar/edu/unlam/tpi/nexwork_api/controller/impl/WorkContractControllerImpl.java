@@ -4,7 +4,7 @@ import ar.edu.unlam.tpi.nexwork_api.controller.WorkContractController;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponseDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Constants;
@@ -50,7 +50,7 @@ public class WorkContractControllerImpl implements WorkContractController {
     }
 
     @Override
-    public GenericResponse<WorkContractDetailResponse> getContractById(Long id) {
+    public GenericResponse<WorkContractDetailResponseDto> getContractById(Long id) {
         var contract = workContractService.getContractById(id);
         return new GenericResponse<>(
                 Constants.STATUS_OK,

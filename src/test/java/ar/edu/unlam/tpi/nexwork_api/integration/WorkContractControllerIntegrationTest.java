@@ -1,11 +1,10 @@
 package ar.edu.unlam.tpi.nexwork_api.integration;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponseDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
@@ -76,7 +75,7 @@ public class WorkContractControllerIntegrationTest {
     void givenValidId_whenGetContractById_thenReturnsContractDetail() throws Exception {
         // Given
         Long id = 1L;
-        WorkContractDetailResponse response = WorkContractDetailResponse.builder()
+        WorkContractDetailResponseDto response = WorkContractDetailResponseDto.builder()
                 .id(id)
                 .codeNumber("CONTRACT-1")
                 .price(150000.0)
@@ -84,9 +83,9 @@ public class WorkContractControllerIntegrationTest {
                 .dateTo("2024-03-27")
                 .state("ACTIVE")
                 .detail("Test contract")
-                .suppliers(AccountDataHelper.createUserResponse().getSuppliers())
-                .applicants(AccountDataHelper.createUserResponse().getApplicants())
-                .workers(List.of(1L, 2L))
+                .supplier(AccountDataHelper.createUserResponse().getSuppliers().get(0))
+                .applicant(AccountDataHelper.createUserResponse().getApplicants().get(0))
+                .workers(List.of(AccountDataHelper.createUserResponse().getApplicants().get(0)))
                 .files(List.of("file1.pdf"))
                 .build();
     
@@ -101,8 +100,8 @@ public class WorkContractControllerIntegrationTest {
                 .andExpect(jsonPath("$.data.codeNumber").value("CONTRACT-1"))
                 .andExpect(jsonPath("$.data.price").value(150000.0))
                 .andExpect(jsonPath("$.data.state").value("ACTIVE"))
-                .andExpect(jsonPath("$.data.suppliers").isArray())
-                .andExpect(jsonPath("$.data.applicants").isArray())
+                .andExpect(jsonPath("$.data.supplier").isNotEmpty())
+                .andExpect(jsonPath("$.data.applicant").isNotEmpty())
                 .andExpect(jsonPath("$.data.workers").isArray())
                 .andExpect(jsonPath("$.data.files").isArray());
     

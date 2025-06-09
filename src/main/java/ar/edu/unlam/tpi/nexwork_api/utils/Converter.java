@@ -1,7 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.utils;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.ConverterException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,12 +48,13 @@ public class Converter {
                 .build();
     }
 
-    public static WorkContractDetailResponse toWorkContractDetailResponse(
-            WorkContractResponse contract,
-            List<AccountDetailResponse> suppliers,
-            List<AccountDetailResponse> applicants) {
+    public static WorkContractDetailResponseDto toWorkContractDetailResponseDto(
+            WorkContractDetailResponse contract,
+            AccountDetailResponse supplier,
+            AccountDetailResponse applicant,
+            List<AccountDetailResponse> workers) {
 
-        return WorkContractDetailResponse.builder()
+        return WorkContractDetailResponseDto.builder()
                 .id(contract.getId())
                 .codeNumber(contract.getCodeNumber())
                 .price(contract.getPrice())
@@ -62,8 +62,9 @@ public class Converter {
                 .dateTo(contract.getDateTo())
                 .state(contract.getState())
                 .detail(contract.getDetail())
-                .suppliers(suppliers)
-                .applicants(applicants)
+                .supplier(supplier)
+                .applicant(applicant)
+                .workers(workers)
                 .build();
     }
 

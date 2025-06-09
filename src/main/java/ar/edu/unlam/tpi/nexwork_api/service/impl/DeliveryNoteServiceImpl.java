@@ -7,6 +7,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.AccountDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountTypeEnum;
@@ -28,7 +29,7 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
     @Override
     public void buildDeliveryNote(Long contractId) {
         log.info("Creando Remito - Buscando contrato con id {}", contractId);
-        WorkContractResponse contract = workContractClient.getContractById(contractId);
+        WorkContractDetailResponse contract = workContractClient.getContractById(contractId);
         log.info("Contrato encontrado: {}", Converter.convertToString(contract));
 
         List<AccountDetailRequest> accountRequests = List.of(
@@ -47,7 +48,7 @@ public class DeliveryNoteServiceImpl implements DeliveryNoteService {
         log.info("Remito creado con éxito!");
     }
 
-    private DeliveryNoteRequest buildDeliveryNote(WorkContractResponse contract, AccountDetailResponse s, AccountDetailResponse a) {
+    private DeliveryNoteRequest buildDeliveryNote(WorkContractDetailResponse contract, AccountDetailResponse s, AccountDetailResponse a) {
 
         return DeliveryNoteRequest.builder()
                 .contractId(contract.getId())

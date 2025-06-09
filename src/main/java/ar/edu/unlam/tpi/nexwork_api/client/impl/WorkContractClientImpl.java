@@ -7,10 +7,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,7 +103,7 @@ public class WorkContractClientImpl implements WorkContractClient {
 
 
     @Override
-    public WorkContractResponse getContractById(Long id) {
+    public WorkContractDetailResponse getContractById(Long id) {
         String url = host + "work-contract/" + id;
 
         var response = webClient.get()
@@ -119,7 +116,7 @@ public class WorkContractClientImpl implements WorkContractClient {
                 .onStatus(HttpStatusCode::is5xxServerError,
                         serverResponse -> serverResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(errorHandler::handle5xxError))
-                .bodyToMono(new ParameterizedTypeReference<GenericResponse<WorkContractResponse>>() {})
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<WorkContractDetailResponse>>() {})
                 .block();
 
                 assert response != null;

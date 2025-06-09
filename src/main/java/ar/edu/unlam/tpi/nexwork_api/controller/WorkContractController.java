@@ -3,7 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.controller;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponseDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 
 import org.springframework.http.HttpStatus;
@@ -59,7 +59,7 @@ public interface WorkContractController {
      */
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<WorkContractDetailResponse> getContractById(@PathVariable Long id);
+    GenericResponse<WorkContractDetailResponseDto> getContractById(@PathVariable Long id);
 
 
     /**

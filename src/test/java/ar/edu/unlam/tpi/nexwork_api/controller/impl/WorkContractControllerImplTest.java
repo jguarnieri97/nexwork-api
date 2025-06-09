@@ -1,12 +1,11 @@
 package ar.edu.unlam.tpi.nexwork_api.controller.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponseDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
@@ -89,7 +88,7 @@ public class WorkContractControllerImplTest {
     void givenValidId_whenGetContractById_thenReturnsContractDetail() {
         // Given
         Long id = 123L;
-        WorkContractDetailResponse expected = WorkContractDetailResponse.builder()
+        WorkContractDetailResponseDto expected = WorkContractDetailResponseDto.builder()
                 .id(id)
                 .codeNumber("CONTRACT-123")
                 .price(150000.0)
@@ -97,15 +96,15 @@ public class WorkContractControllerImplTest {
                 .dateTo("2024-03-27")
                 .state("ACTIVE")
                 .detail("Test contract")
-                .suppliers(AccountDataHelper.createUserResponse().getSuppliers())
-                .applicants(AccountDataHelper.createUserResponse().getApplicants())
-                .workers(List.of(1L, 2L))
+                .supplier(AccountDataHelper.createUserResponse().getSuppliers().get(0))
+                .applicant(AccountDataHelper.createUserResponse().getApplicants().get(0))
+                .workers(List.of(AccountDataHelper.createUserResponse().getWorkers().get(0)))
                 .files(List.of("file1.pdf"))
                 .build();
         when(workContractService.getContractById(id)).thenReturn(expected);
 
         // When
-        GenericResponse<WorkContractDetailResponse> response = workContractController.getContractById(id);
+        GenericResponse<WorkContractDetailResponseDto> response = workContractController.getContractById(id);
 
         // Then
         assertNotNull(response);

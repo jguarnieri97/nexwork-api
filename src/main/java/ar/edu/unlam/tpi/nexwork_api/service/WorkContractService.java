@@ -2,7 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.service;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponseDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public interface WorkContractService {
      * @param id id del contrato a obtener
      * @return datos del contrato obtenido
      */
-    WorkContractDetailResponse getContractById(Long id);
+    WorkContractDetailResponseDto getContractById(Long id);
 
     /**
      * Obtener una nota de entrega por su ID

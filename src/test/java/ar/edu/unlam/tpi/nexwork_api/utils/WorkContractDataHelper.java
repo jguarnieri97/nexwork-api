@@ -4,6 +4,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 
 import java.time.LocalDate;
@@ -57,5 +58,21 @@ public class WorkContractDataHelper {
                 createWorkContractResponse(1L),
                 createWorkContractResponse(2L)
         );
+    }
+
+    public static WorkContractDetailResponse createWorkContractDetailResponse(Long contractId) {
+        return WorkContractDetailResponse.builder()
+                .id(contractId)
+                .codeNumber("CONTRACT-" + contractId)
+                .price(150000.0)
+                .dateFrom(LocalDate.now().toString())
+                .dateTo(LocalDate.now().plusDays(7).toString())
+                .state("ACTIVE")
+                .detail("Instalación eléctrica general")
+                .supplierId(1L)
+                .applicantId(2L)
+                .workers(List.of(3L, 4L))
+                .files(List.of("base64file1", "base64file2"))
+                .build();
     }
 }

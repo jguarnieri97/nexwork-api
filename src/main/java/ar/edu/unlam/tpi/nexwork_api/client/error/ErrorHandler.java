@@ -20,7 +20,7 @@ public class ErrorHandler {
         return Mono.error(new AccountsClientException(error));
     }
 
-    public boolean onClientError(Throwable e) {
+    public Mono<Throwable> onClientError(Throwable e) {
         log.error("Error al ejecutar el request: {}", e.getMessage());
         throw new AccountsClientException(e.getMessage());
     }

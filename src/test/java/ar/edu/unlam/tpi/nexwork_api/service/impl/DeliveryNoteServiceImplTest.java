@@ -4,6 +4,7 @@ import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.WorkContractClient;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.DeliveryNoteDataHelper;
@@ -36,9 +37,8 @@ public class DeliveryNoteServiceImplTest {
     void givenValidContractIdWhenBuildDeliveryNoteThenSuccess() {
         // Given
         Long contractId = 1L;
-        WorkContractResponse mockContract = WorkContractDataHelper.createWorkContractResponse(contractId);
+        WorkContractDetailResponse mockContract = WorkContractDataHelper.createWorkContractDetailResponse(contractId);
         UserResponse mockUserResponse = AccountDataHelper.createUserResponse();
-        DeliveryNoteRequest expectedRequest = DeliveryNoteDataHelper.createDeliveryNoteRequest();
 
         when(workContractClient.getContractById(contractId)).thenReturn(mockContract);
         when(accountsClient.getAccountById(anyList())).thenReturn(mockUserResponse);

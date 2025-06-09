@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,21 +53,27 @@ public class WorkContractServiceImpl implements WorkContractService {
     }
 
     @Override
-    public WorkContractDetailResponse getContractById(Long id) {
+    public WorkContractDetailResponseDto getContractById(Long id) {
         log.info("Buscando contrato con id {}", id);
 
-        WorkContractResponse contract = workContractClient.getContractById(id);
+        WorkContractDetailResponse contract = workContractClient.getContractById(id);
 
-        List<AccountDetailRequest> accountRequests = List.of(
-                Converter.toAccountRequest(contract.getSupplierId(), AccountTypeEnum.SUPPLIER.getValue()),
-                Converter.toAccountRequest(contract.getApplicantId(), AccountTypeEnum.APPLICANT.getValue())
-        );
+        List<AccountDetailRequest> accountRequests = new ArrayList<>();
+        accountRequests.add(Converter.toAccountRequest(contract.getSupplierId(), AccountTypeEnum.SUPPLIER.getValue()));
+        accountRequests.add(Converter.toAccountRequest(contract.getApplicantId(), AccountTypeEnum.APPLICANT.getValue()));
+
+        contract.getWorkers().forEach(worker -> accountRequests.add(
+                Converter.toAccountRequest(worker, AccountTypeEnum.WORKER.getValue())));
 
         UserResponse accountDetails = accountsClient.getAccountById(accountRequests);
 
         log.info("Detalles de la cuenta obtenidos: {}", accountDetails);
 
-        return Converter.toWorkContractDetailResponse(contract, accountDetails.getSuppliers(), accountDetails.getApplicants());
+        return Converter.toWorkContractDetailResponseDto(
+                contract,
+                accountDetails.getSuppliers().get(0),
+                accountDetails.getApplicants().get(0),
+                accountDetails.getWorkers());
     }
 
     @Override

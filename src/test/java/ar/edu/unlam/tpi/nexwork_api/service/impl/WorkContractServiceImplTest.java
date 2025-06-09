@@ -6,10 +6,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractFinalizeRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
-import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountDataHelper;
@@ -86,14 +83,14 @@ public class WorkContractServiceImplTest {
     void givenValidIdWhenGetContractByIdThenReturnWorkContractDetailResponse() {
         // Given
         Long contractId = 1L;
-        WorkContractResponse mockContract = WorkContractDataHelper.createWorkContractResponse(contractId);
+        WorkContractDetailResponse mockContract = WorkContractDataHelper.createWorkContractDetailResponse(contractId);
         UserResponse mockUserResponse = AccountDataHelper.createUserResponse();
 
         when(workContractClient.getContractById(contractId)).thenReturn(mockContract);
         when(accountsClient.getAccountById(anyList())).thenReturn(mockUserResponse);
 
         // When
-        WorkContractDetailResponse result = workContractService.getContractById(contractId);
+        WorkContractDetailResponseDto result = workContractService.getContractById(contractId);
 
         // Then
         assertNotNull(result);
