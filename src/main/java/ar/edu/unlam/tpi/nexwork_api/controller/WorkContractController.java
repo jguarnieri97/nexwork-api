@@ -80,7 +80,7 @@ public interface WorkContractController {
          * @return respuesta genérica sin datos
         */
         @PostMapping("{contractId}/delivery-note")
-        GenericResponse<Void> signatureDeliveryNote(
+        GenericResponse<DeliveryNoteResponse> signatureDeliveryNote(
                 @PathVariable("contractId") Long id,
                 @RequestBody DeliverySignatureRequest request);
 

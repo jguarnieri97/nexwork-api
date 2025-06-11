@@ -66,6 +66,6 @@ public interface WorkContractClient {
     /*
      * Metodo para mandar la firma 
      */
-    void signDeliveryNote(Long id, DeliverySignatureRequest request);
+    DeliveryNoteResponse signDeliveryNote(Long id, DeliverySignatureRequest request);
 
 }

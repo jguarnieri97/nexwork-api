@@ -18,6 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -36,9 +37,9 @@ public class WorkContractClientImpl implements WorkContractClient {
     public List<WorkContractResponse> getContracts(WorkContractRequest request) {
         String accountType = request.getAccountType().toLowerCase();
         String url = UriComponentsBuilder.fromUriString(host + "accounts/" + accountType + "/" + request.getId())
-        .queryParam("limit", request.getLimit())
-        .build()
-        .toUriString();
+                .queryParam("limit", request.getLimit())
+                .build()
+                .toUriString();
 
         var response = webClient.get()
                 .uri(url)
@@ -54,15 +55,15 @@ public class WorkContractClientImpl implements WorkContractClient {
                 })
                 .block();
 
-                assert response != null;
-                return response.getData();
-               
+        assert response != null;
+        return response.getData();
+
     }
 
     @Override
     public WorkContractResponse createContract(WorkContractCreateRequest request) {
         String url = host + "work-contract";
-    
+
         var response = webClient.post()
                 .uri(url)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -74,13 +75,14 @@ public class WorkContractClientImpl implements WorkContractClient {
                 .onStatus(HttpStatusCode::is5xxServerError,
                         serverResponse -> serverResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(errorHandler::handle5xxError))
-                .bodyToMono(new ParameterizedTypeReference<GenericResponse<WorkContractResponse>>() {})
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<WorkContractResponse>>() {
+                })
                 .block();
-                  
-                assert response != null;
-                return response.getData();
+
+        assert response != null;
+        return response.getData();
     }
-    
+
     @Override
     public void updateContractState(Long id, WorkContractUpdateRequest request) {
         String url = host + "work-contract/" + id;
@@ -98,8 +100,7 @@ public class WorkContractClientImpl implements WorkContractClient {
                                 .flatMap(errorHandler::handle5xxError))
                 .bodyToMono(Void.class)
                 .block();
-        }
-
+    }
 
 
     @Override
@@ -116,11 +117,12 @@ public class WorkContractClientImpl implements WorkContractClient {
                 .onStatus(HttpStatusCode::is5xxServerError,
                         serverResponse -> serverResponse.bodyToMono(ErrorResponse.class)
                                 .flatMap(errorHandler::handle5xxError))
-                .bodyToMono(new ParameterizedTypeReference<GenericResponse<WorkContractDetailResponse>>() {})
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<WorkContractDetailResponse>>() {
+                })
                 .block();
 
-                assert response != null;
-                return response.getData();
+        assert response != null;
+        return response.getData();
     }
 
 
@@ -137,7 +139,7 @@ public class WorkContractClientImpl implements WorkContractClient {
                         r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle5xxError))
                 .bodyToMono(Void.class)
                 .block();
-        }
+    }
 
 
     @Override
@@ -152,15 +154,16 @@ public class WorkContractClientImpl implements WorkContractClient {
                         r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle5xxError))
-                .bodyToMono(new ParameterizedTypeReference<GenericResponse<DeliveryNoteResponse>>() {})
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<DeliveryNoteResponse>>() {
+                })
                 .block()
                 .getData();
-        }
+    }
 
 
-        @Override
-        public void signDeliveryNote(Long id, DeliverySignatureRequest request){
-                webClient.put()
+    @Override
+    public DeliveryNoteResponse signDeliveryNote(Long id, DeliverySignatureRequest request) {
+        var response = webClient.put()
                 .uri(host + "delivery-note/" + id)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .bodyValue(request)
@@ -169,10 +172,13 @@ public class WorkContractClientImpl implements WorkContractClient {
                         r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle4xxError))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         r -> r.bodyToMono(ErrorResponse.class).flatMap(errorHandler::handle5xxError))
-                .bodyToMono(Void.class)
-                .block();         
-        
-        }
+                .bodyToMono(new ParameterizedTypeReference<GenericResponse<DeliveryNoteResponse>>() {
+                })
+                .block();
 
-        
+        assert response != null;
+        return response.getData();
+    }
+
+
 }

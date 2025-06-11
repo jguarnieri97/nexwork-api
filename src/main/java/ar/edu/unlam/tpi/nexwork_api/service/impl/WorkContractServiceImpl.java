@@ -140,9 +140,9 @@ public class WorkContractServiceImpl implements WorkContractService {
     }
 
     @Override
-    public void signatureDeliveryNote(Long id, DeliverySignatureRequest request) {
+    public DeliveryNoteResponse signatureDeliveryNote(Long id, DeliverySignatureRequest request) {
         try{
-            workContractClient.signDeliveryNote(id,request);
+            return workContractClient.signDeliveryNote(id,request);
         }catch(Exception ex){
             log.error("Error al firmar remito con id {}: {}", id, ex.getMessage(), ex);
             throw new WorkContractClientException(
