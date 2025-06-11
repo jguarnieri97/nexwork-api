@@ -80,12 +80,12 @@ public class WorkContractControllerImpl implements WorkContractController {
     }
 
     @Override
-    public GenericResponse<Void> signatureDeliveryNote(Long id, DeliverySignatureRequest request) {
-        workContractService.signatureDeliveryNote(id, request);
+    public GenericResponse<DeliveryNoteResponse> signatureDeliveryNote(Long id, DeliverySignatureRequest request) {
+        DeliveryNoteResponse response = workContractService.signatureDeliveryNote(id, request);
         return new GenericResponse<>(
                 Constants.STATUS_OK,
                 Constants.SUCCESS_MESSAGE,
-                null
+                response
         );
     }
 

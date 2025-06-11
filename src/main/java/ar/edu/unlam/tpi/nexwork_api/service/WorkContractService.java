@@ -65,6 +65,6 @@ public interface WorkContractService {
      * @param id
      * @param request
      */
-    void signatureDeliveryNote(Long id, DeliverySignatureRequest request);
+    DeliveryNoteResponse signatureDeliveryNote(Long id, DeliverySignatureRequest request);
 
 }
