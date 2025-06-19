@@ -7,4 +7,5 @@ import lombok.Data;
 @Builder
 public class DeliverySignatureRequest {
     private String signature;
+    private String clarification;
 }
