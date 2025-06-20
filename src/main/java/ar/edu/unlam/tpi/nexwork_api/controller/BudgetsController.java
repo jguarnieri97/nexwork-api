@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.controller;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRejectedRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
@@ -67,4 +68,8 @@ public interface BudgetsController {
     @Operation(summary = "Update budget request")
     GenericResponse<Void> updateBudget(@PathVariable String budgetId, @PathVariable Long supplierId,
             @Valid @RequestBody BudgetUpdateDataRequestDto request);
+
+    @PostMapping("{budgetId}/reject")
+    @ResponseStatus(HttpStatus.OK)
+    GenericResponse<Void> rejectBudget(@PathVariable("budgetId") Long budgetId, @RequestBody BudgetRejectedRequest budgetRejectedRequest);
 }
