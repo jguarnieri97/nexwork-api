@@ -95,4 +95,16 @@ public interface WorkContractController {
     GenericResponse<Void> iniciateContract(
             @PathVariable("contractId") Long contractId);
 
+    /**
+     * Recurso para agregar items a un contrato laboral
+     *
+     * @param contractId id del contrato a actualizar
+     * @param request items del contrato
+     */
+    @PostMapping("{contractId}/items")
+    @ResponseStatus(HttpStatus.OK)
+    GenericResponse<Void> updateTasks(
+            @PathVariable("contractId") Long contractId,
+            @RequestBody UpdateItemsRequest request);
+
 }
