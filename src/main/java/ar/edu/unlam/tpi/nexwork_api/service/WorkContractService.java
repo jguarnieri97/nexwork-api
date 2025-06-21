@@ -67,4 +67,12 @@ public interface WorkContractService {
      */
     DeliveryNoteResponse signatureDeliveryNote(Long id, DeliverySignatureRequest request);
 
+    /**
+     * Agregar items a un contrato laboral
+     *
+     * @param id      id del contrato
+     * @param request items del contrato
+     */
+    void updateTasks(Long id, UpdateItemsRequest request);
+
 }
