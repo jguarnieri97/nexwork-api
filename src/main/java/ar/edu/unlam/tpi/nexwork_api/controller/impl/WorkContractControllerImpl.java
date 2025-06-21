@@ -80,6 +80,16 @@ public class WorkContractControllerImpl implements WorkContractController {
     }
 
     @Override
+    public GenericResponse<Void> updateTasks(Long contractId, UpdateItemsRequest request) {
+        workContractService.updateTasks(contractId, request);
+        return new GenericResponse<>(
+                Constants.STATUS_OK,
+                Constants.SUCCESS_MESSAGE,
+                null
+        );
+    }
+
+    @Override
     public GenericResponse<DeliveryNoteResponse> signatureDeliveryNote(Long id, DeliverySignatureRequest request) {
         DeliveryNoteResponse response = workContractService.signatureDeliveryNote(id, request);
         return new GenericResponse<>(

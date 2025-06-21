@@ -1,10 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.client;
 
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractUpdateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliveryNoteRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.DeliverySignatureRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractCreateRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.DeliveryNoteResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
@@ -67,5 +63,14 @@ public interface WorkContractClient {
      * Metodo para mandar la firma 
      */
     DeliveryNoteResponse signDeliveryNote(Long id, DeliverySignatureRequest request);
+
+    /**
+     * Método para actualizar los items de un contrato laboral
+     *
+     * @param id      id del contrato a actualizar
+     * @param request datos del contrato a actualizar
+     * @return datos del contrato actualizado
+     */
+    void updateTasks(Long id, UpdateItemsRequest request);
 
 }

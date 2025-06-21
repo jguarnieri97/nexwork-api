@@ -155,4 +155,22 @@ public class WorkContractServiceImpl implements WorkContractService {
         }
     }
 
+    @Override
+    public void updateTasks(Long id, UpdateItemsRequest request) {
+        try {
+            log.info("Actualizando tareas del contrato con id {}", id);
+            workContractClient.updateTasks(id, request);
+            log.info("Tareas actualizadas correctamente para el contrato con id {}", id);
+        } catch (Exception ex) {
+            log.error("Error al actualizar tareas del contrato con id {}: {}", id, ex.getMessage(), ex);
+            throw new WorkContractClientException(
+                    ErrorResponse.builder()
+                            .code(500)
+                            .message("UPDATE_TASKS_ERROR")
+                            .detail("Error al actualizar tareas para el contrato con ID: " + id)
+                            .build()
+            );
+        }
+    }
+
 }
