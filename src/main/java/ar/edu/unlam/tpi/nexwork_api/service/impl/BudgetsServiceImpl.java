@@ -2,10 +2,7 @@ package ar.edu.unlam.tpi.nexwork_api.service.impl;
 
 import ar.edu.unlam.tpi.nexwork_api.client.AccountsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
-import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
@@ -102,5 +99,23 @@ public BudgetResponseDetail getBudget(String id) {
 
         log.info("Presupuesto actualizado con éxito");
     }
-    
+
+    @Override
+    public void rejectBudget(Long id, BudgetRejectedRequest request) {
+        log.info("Rechazando presupuesto con id {} - detalle: {}", id, request.getSupplierId());
+        try {
+            budgetsClient.rejectBudget(id, request);
+            log.info("Presupuesto rechazado con éxito");
+        } catch (Exception ex) {
+            log.error("Error al rechazar presupuesto    con id {}: {}", id, ex.getMessage(), ex);
+            throw new BudgetsClientException(
+                    ErrorResponse.builder()
+                            .code(500)
+                            .message("BUDGET_REJECTED_ERROR")
+                            .detail("Error al rechazar presupuesto con ID: " + id)
+                            .build()
+            );
+        }
+    }
+
 }

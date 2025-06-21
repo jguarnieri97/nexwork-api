@@ -3,6 +3,7 @@ package ar.edu.unlam.tpi.nexwork_api.client.impl;
 import ar.edu.unlam.tpi.nexwork_api.client.BudgetsClient;
 import ar.edu.unlam.tpi.nexwork_api.client.error.ErrorHandler;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRejectedRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetDetailFromBudgetsClient;
@@ -159,4 +160,21 @@ public class BudgetsClientImpl implements BudgetsClient {
                     .toBodilessEntity()
                     .block();
             }
+
+    @Override
+    public void rejectBudget(Long id, BudgetRejectedRequest budgetRejectedRequest) {
+        webClient.put()
+                .uri(host + "budget/" + id + "/user/" + budgetRejectedRequest.getSupplierId() + "/reject")
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .body(Mono.just(budgetRejectedRequest), BudgetRejectedRequest.class)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(errorHandler::handle4xxError))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(errorHandler::handle5xxError))
+                .toBodilessEntity()
+                .block();
+    }
 }

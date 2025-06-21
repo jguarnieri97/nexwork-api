@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetFinalizeRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRejectedRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetUpdateDataRequestDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetResponseDetail;
@@ -52,4 +53,13 @@ public interface BudgetsService {
      * @param budgetRequest: los datos a actualizar en el presupuesto
      */
     void updateBudget(String budgetId, Long supplierId, BudgetUpdateDataRequestDto budgetRequest);
+
+    /**
+     * Método para rechazar un presupuesto y contratar un proveedor
+     *
+     * @param id: id del presupuesto
+     * @param budgetRejectedRequest: el id del supplier elegido para contratar
+     */
+    void rejectBudget(Long id, BudgetRejectedRequest budgetRejectedRequest);
+
 }
