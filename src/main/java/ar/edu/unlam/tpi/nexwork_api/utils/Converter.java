@@ -66,6 +66,7 @@ public class Converter {
                 .applicant(applicant)
                 .workers(workers)
                 .files(contract.getFiles())
+                .tasks(contract.getTasks())
                 .build();
     }
 

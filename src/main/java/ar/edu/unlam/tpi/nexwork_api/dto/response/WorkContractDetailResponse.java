@@ -19,4 +19,5 @@ public class WorkContractDetailResponse {
     private Long applicantId;
     private List<Long> workers;
     private List<String> files;
+    private List<TaskDto> tasks;
 }

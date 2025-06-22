@@ -19,4 +19,5 @@ public class WorkContractDetailResponseDto {
     private AccountDetailResponse applicant;
     private List<AccountDetailResponse> workers;
     private List<String> files;
+    private List<TaskDto> tasks;
 }
