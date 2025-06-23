@@ -1,6 +1,7 @@
 package ar.edu.unlam.tpi.nexwork_api.service;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 
 public interface NotificationService {
 
@@ -10,4 +11,11 @@ public interface NotificationService {
      * @param budgetRequest la solicitud de presupuesto que se va a notificar
      */
     void notifySuppliersOfBudgetRequest(BudgetRequest budgetRequest);
+
+    /**
+     * Notifica al proveedor sobre un contrato de trabajo creado.
+     *
+     * @param response la respuesta del contrato de trabajo que se va a notificar
+     */
+    void notifyApplicantOfContract(WorkContractResponse response);
 }

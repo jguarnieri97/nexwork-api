@@ -7,6 +7,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
+import ar.edu.unlam.tpi.nexwork_api.service.NotificationService;
 import ar.edu.unlam.tpi.nexwork_api.service.WorkContractService;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountTypeEnum;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
@@ -30,6 +31,7 @@ public class WorkContractServiceImpl implements WorkContractService {
     private final AccountsClient accountsClient;
     private final DeliveryNoteService deliveryNoteService;
     private final BudgetsClient budgetsClient;
+    private final NotificationService notificationService;
 
     @Override
     public List<WorkContractResponse> getContracts(WorkContractRequest request) {
@@ -49,6 +51,8 @@ public class WorkContractServiceImpl implements WorkContractService {
         budgetsClient.finalizeBudgetRequestState(request.getBudgetId());
 
         log.info("Contrato creado con ID: {}", response.getId());
+
+        notificationService.notifyApplicantOfContract(response);
         return response;
     }
 
