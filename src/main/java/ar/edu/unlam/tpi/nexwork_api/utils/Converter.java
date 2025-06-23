@@ -1,6 +1,8 @@
 package ar.edu.unlam.tpi.nexwork_api.utils;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.EmailCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.NotificationCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.ConverterException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,7 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @UtilityClass
@@ -68,6 +72,73 @@ public class Converter {
                 .files(contract.getFiles())
                 .tasks(contract.getTasks())
                 .build();
+    }
+
+    public NotificationCreateRequest buildNotification(
+            Long userId,
+            String userType,
+            boolean inMail,
+            String content,
+            NotificationType type,
+            String subject,
+            Map<String, String> templateVariables
+    ) {
+        EmailCreateRequest email = EmailCreateRequest.builder()
+                .type(type.name())
+                .subject(subject)
+                .templateVariables(templateVariables)
+                .build();
+
+        return NotificationCreateRequest.builder()
+                .userId(userId)
+                .userType(userType)
+                .inMail(inMail)
+                .content(content)
+                .emailCreateRequest(email)
+                .build();
+    }
+
+    public static Map<String, String> buildTemplateVariables(
+            NotificationType type,
+            String supplierName,
+            String applicantName,
+            String resume,
+            String detail,
+            String precio,
+            String inicio,
+            String finalizacion,
+            String url
+    ) {
+        Map<String, String> vars = new HashMap<>();
+        switch (type) {
+            case BUDGET:
+                vars.put("supplierName", supplierName);
+                vars.put("applicantName", applicantName);
+                vars.put("resume", resume);
+                vars.put("detail", detail);
+                vars.put("url", url);
+                break;
+            case CONTRACT_EMAIL:
+                vars.put("supplierName", supplierName);
+                vars.put("applicantName", applicantName);
+                vars.put("precio", precio);
+                vars.put("inicio", inicio);
+                vars.put("finalizacion", finalizacion);
+                vars.put("url", url);
+                break;
+            case CONTRACT_FINALIZED_APPLICANT:
+                vars.put("applicantName", applicantName);
+                vars.put("supplierName", supplierName);
+                vars.put("detail", detail);
+                vars.put("url", url);
+                break;
+            case CONTRACT_FINALIZED_SUPPLIER:
+                vars.put("supplierName", supplierName);
+                vars.put("detail", detail);
+                vars.put("url", url);
+                break;
+        }
+        return vars;
     }
 
 }
