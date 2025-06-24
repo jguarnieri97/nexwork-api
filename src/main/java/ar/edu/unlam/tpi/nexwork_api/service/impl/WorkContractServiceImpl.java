@@ -92,6 +92,9 @@ public class WorkContractServiceImpl implements WorkContractService {
 
             workContractClient.updateContractState(id, updateRequest);
             deliveryNoteService.buildDeliveryNote(id);
+
+            notificationService.notifyContractFinalized(workContractClient.getContractById(id));
+
             log.info("Contrato finalizado y remito generado exitosamente.");
         } catch (Exception ex) {
             log.error("Error al finalizar contrato con id {}: {}", id, ex.getMessage(), ex);

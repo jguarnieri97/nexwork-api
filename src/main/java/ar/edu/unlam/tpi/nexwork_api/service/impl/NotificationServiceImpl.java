@@ -5,6 +5,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetDataRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.BudgetRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.EmailCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.request.NotificationCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 import ar.edu.unlam.tpi.nexwork_api.service.NotificationService;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountTypeEnum;
@@ -46,9 +47,27 @@ public class NotificationServiceImpl implements NotificationService {
             Map<String, String> templateVars = buildTemplateVarsContract(response);
             NotificationCreateRequest notification = buildNotificationContract(response, templateVars);
             notificationsClient.createNotification(notification);
-            log.info("Notificación de contrato enviada al proveedor con id {}", response.getSupplierId());
+            log.info("Notificación de contrato enviada al solicitante con id {}", response.getApplicantId());
         } catch (Exception e) {
-            log.error("Error al enviar notificación de contrato al proveedor con id {}: {}", response.getSupplierId(), e.getMessage());
+            log.error("Error al enviar notificación de contrato al solicitante con id {}: {}", response.getApplicantId(), e.getMessage());
+        }
+    }
+
+    @Override
+    public void notifyContractFinalized(WorkContractDetailResponse response) {
+        try {
+            log.info("Enviando notificación de contrato finalizado al solicitante con id {}", response.getApplicantId());
+            Map<String, String> templateVars = buildTemplateVarsContractFinalized(response);
+            NotificationCreateRequest notificationApplicant = buildNotificationContractFinalizedApplicant(response, templateVars);
+            notificationsClient.createNotification(notificationApplicant);
+            log.info("Notificación de contrato finalizado enviada al solicitante con id {}", response.getApplicantId());
+
+            log.info("Enviando notificación de contrato finalizado al proveedor con id {}", response.getSupplierId());
+            NotificationCreateRequest notificationSupplier = buildNotificationContractFinalizedSupplier(response, templateVars);
+            notificationsClient.createNotification(notificationSupplier);
+            log.info("Notificación de contrato finalizado enviada al proveedor con id {}", response.getSupplierId());
+        } catch (Exception e) {
+            log.error("Error al enviar notificación de contrato finalizado {}", e.getMessage());
         }
     }
 
@@ -70,7 +89,7 @@ public class NotificationServiceImpl implements NotificationService {
                 .content("Nueva solicitud de presupuesto recibida")
                 .emailCreateRequest(
                                 EmailCreateRequest.builder()
-                                .type("BUDGET")
+                                .type(NotificationType.BUDGET.toString())
                                 .subject("Nueva solicitud de presupuesto recibida")
                                 .templateVariables(templateVars)
                                 .build()
@@ -100,6 +119,47 @@ public class NotificationServiceImpl implements NotificationService {
                                 EmailCreateRequest.builder()
                                 .type(NotificationType.CONTRACT_EMAIL.toString())
                                 .subject("Nuevo trabajo confirmado")
+                                .templateVariables(templateVars)
+                                .build()
+                )
+                .build();
+    }
+
+    private Map<String, String> buildTemplateVarsContractFinalized(WorkContractDetailResponse response) {
+        Map<String, String> templateVars = new HashMap<>();
+//        templateVars.put("supplierName", response.getSupplierName());
+//        templateVars.put("applicantName", response.getApplicantName());
+        templateVars.put("detail", response.getDetail());
+        templateVars.put("url", notificationUrl);
+        return templateVars;
+    }
+
+    private NotificationCreateRequest buildNotificationContractFinalizedApplicant(WorkContractDetailResponse response, Map<String, String> templateVars) {
+        return NotificationCreateRequest.builder()
+                .userId(response.getApplicantId())
+                .userType(AccountTypeEnum.APPLICANT.getValue().toUpperCase())
+                .inMail(true)
+                .content("El trabajo contratado ha sido finalizado exitosamente.")
+                .emailCreateRequest(
+                        EmailCreateRequest.builder()
+                                .type(NotificationType.CONTRACT_APPLICANT.toString())
+                                .subject("Trabajo finalizado exitosamente")
+                                .templateVariables(templateVars)
+                                .build()
+                )
+                .build();
+    }
+
+    private NotificationCreateRequest buildNotificationContractFinalizedSupplier(WorkContractDetailResponse response, Map<String, String> templateVars) {
+        return NotificationCreateRequest.builder()
+                .userId(response.getSupplierId())
+                .userType(AccountTypeEnum.SUPPLIER.getValue().toUpperCase())
+                .inMail(true)
+                .content("El trabajo contratado ha sido finalizado exitosamente.")
+                .emailCreateRequest(
+                        EmailCreateRequest.builder()
+                                .type(NotificationType.CONTRACT_SUPPLIER.toString())
+                                .subject("Trabajo finalizado exitosamente")
                                 .templateVariables(templateVars)
                                 .build()
                 )
