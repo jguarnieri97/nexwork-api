@@ -52,6 +52,11 @@ public class WorkContractServiceImpl implements WorkContractService {
 
         log.info("Contrato creado con ID: {}", response.getId());
 
+        UserResponse accountDetails = getUsersInfo(response.getApplicantId(), response.getSupplierId(), List.of());
+
+        response.setApplicantName(accountDetails.getApplicants().get(0).getName());
+        response.setSupplierName(accountDetails.getSuppliers().get(0).getName());
+
         notificationService.notifyApplicantOfContract(response);
         return response;
     }
@@ -62,14 +67,7 @@ public class WorkContractServiceImpl implements WorkContractService {
 
         WorkContractDetailResponse contract = workContractClient.getContractById(id);
 
-        List<AccountDetailRequest> accountRequests = new ArrayList<>();
-        accountRequests.add(Converter.toAccountRequest(contract.getSupplierId(), AccountTypeEnum.SUPPLIER.getValue()));
-        accountRequests.add(Converter.toAccountRequest(contract.getApplicantId(), AccountTypeEnum.APPLICANT.getValue()));
-
-        contract.getWorkers().forEach(worker -> accountRequests.add(
-                Converter.toAccountRequest(worker, AccountTypeEnum.WORKER.getValue())));
-
-        UserResponse accountDetails = accountsClient.getAccountById(accountRequests);
+        UserResponse accountDetails = getUsersInfo(contract.getApplicantId(), contract.getSupplierId(), contract.getWorkers());
 
         log.info("Detalles de la cuenta obtenidos: {}", accountDetails);
 
@@ -78,6 +76,17 @@ public class WorkContractServiceImpl implements WorkContractService {
                 accountDetails.getSuppliers().get(0),
                 accountDetails.getApplicants().get(0),
                 accountDetails.getWorkers());
+    }
+
+    private UserResponse getUsersInfo(Long applicantId, Long supplierId, List<Long> workers) {
+        List<AccountDetailRequest> accountRequests = new ArrayList<>();
+        accountRequests.add(Converter.toAccountRequest(supplierId, AccountTypeEnum.SUPPLIER.getValue()));
+        accountRequests.add(Converter.toAccountRequest(applicantId, AccountTypeEnum.APPLICANT.getValue()));
+
+        workers.forEach(worker -> accountRequests.add(
+                Converter.toAccountRequest(worker, AccountTypeEnum.WORKER.getValue())));
+
+        return accountsClient.getAccountById(accountRequests);
     }
 
     @Override
