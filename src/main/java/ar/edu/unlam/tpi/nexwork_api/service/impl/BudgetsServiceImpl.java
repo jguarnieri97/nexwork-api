@@ -6,15 +6,13 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.*;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.BudgetsService;
+import ar.edu.unlam.tpi.nexwork_api.service.NotificationService;
 import ar.edu.unlam.tpi.nexwork_api.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -23,9 +21,10 @@ public class BudgetsServiceImpl implements BudgetsService {
 
     private final BudgetsClient budgetsClient;
     private final AccountsClient accountsClient;
+    private final NotificationService notificationService;
 
     @Override
-public List<Object> getBudgets(Long applicantId, Long supplierId) {
+    public List<Object> getBudgets(Long applicantId, Long supplierId) {
     if (Objects.nonNull(applicantId)) {
         log.info("Obteniendo presupuestos para el solicitante: {}", applicantId);
         return new ArrayList<>(budgetsClient.getApplicantBudgets(applicantId));
@@ -68,15 +67,13 @@ public BudgetResponseDetail getBudget(String id) {
         budgetsClient.createBudget(budgetRequest);
 
         log.info("Presupuesto creado con éxito");
-    }
 
- 
+        notificationService.notifySuppliersOfBudgetRequest(budgetRequest);
+    }
 
     @Override
     public void finalizeBudget(String id, BudgetFinalizeRequest request) {
         log.info("Finalizando presupuesto con id {} - detalle: {}", id, request.getSupplierHired());
-
-
         try {
             budgetsClient.finalizeBudget(id, request);
             log.info("Presupuesto finalizado con éxito");

@@ -9,6 +9,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.request.WorkContractRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.WorkContractClientException;
 import ar.edu.unlam.tpi.nexwork_api.service.DeliveryNoteService;
+import ar.edu.unlam.tpi.nexwork_api.service.NotificationService;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.WorkContractDataHelper;
 
@@ -35,6 +36,9 @@ public class WorkContractServiceImplTest {
 
     @Mock
     private BudgetsClient budgetsClient;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     private WorkContractServiceImpl workContractService;
@@ -67,6 +71,7 @@ public class WorkContractServiceImplTest {
         WorkContractResponse expectedResponse = WorkContractDataHelper.createWorkContractResponse(99L);
         when(workContractClient.createContract(request)).thenReturn(expectedResponse);
         doNothing().when(budgetsClient).finalizeBudgetRequestState(request.getBudgetId());
+        when(accountsClient.getAccountById(anyList())).thenReturn(AccountDataHelper.createUserResponse());
 
         // When
         WorkContractResponse result = workContractService.createContract(request);
@@ -106,6 +111,7 @@ public class WorkContractServiceImplTest {
 
         doNothing().when(workContractClient).updateContractState(eq(contractId), any(WorkContractUpdateRequest.class));
         doNothing().when(deliveryNoteService).buildDeliveryNote(contractId);
+        doNothing().when(notificationService).notifyContractFinalized(any());
 
         // When
         assertDoesNotThrow(() -> workContractService.finalizeContract(contractId, request));

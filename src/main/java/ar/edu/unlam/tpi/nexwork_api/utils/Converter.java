@@ -1,6 +1,8 @@
 package ar.edu.unlam.tpi.nexwork_api.utils;
 
 import ar.edu.unlam.tpi.nexwork_api.dto.request.AccountDetailRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.EmailCreateRequest;
+import ar.edu.unlam.tpi.nexwork_api.dto.request.NotificationCreateRequest;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.*;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.ConverterException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,7 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @UtilityClass

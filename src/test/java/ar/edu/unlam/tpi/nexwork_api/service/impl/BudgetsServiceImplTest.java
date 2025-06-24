@@ -11,6 +11,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.response.BudgetSupplierResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.ErrorResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.UserResponse;
 import ar.edu.unlam.tpi.nexwork_api.exceptions.BudgetsClientException;
+import ar.edu.unlam.tpi.nexwork_api.service.NotificationService;
 import ar.edu.unlam.tpi.nexwork_api.utils.AccountDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetDataHelper;
 import ar.edu.unlam.tpi.nexwork_api.utils.BudgetUpdateDataRequestHelper;
@@ -34,6 +35,9 @@ public class BudgetsServiceImplTest {
 
     @Mock
     private AccountsClient accountsClient;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     private BudgetsServiceImpl budgetsService;
@@ -108,6 +112,7 @@ public class BudgetsServiceImplTest {
     void givenBudgetRequestWhenCreateBudgetThenCallClient() {
         BudgetRequest budgetRequest = BudgetDataHelper.createBudgetRequest();
 
+        doNothing().when(notificationService).notifySuppliersOfBudgetRequest(budgetRequest);
         budgetsService.createBudget(budgetRequest);
 
         verify(budgetsClient).createBudget(budgetRequest);
