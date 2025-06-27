@@ -6,6 +6,7 @@ import ar.edu.unlam.tpi.nexwork_api.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractDetailResponseDto;
 import ar.edu.unlam.tpi.nexwork_api.dto.response.WorkContractResponse;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public interface WorkContractController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<List<WorkContractResponse>> getContracts(@RequestBody WorkContractRequest request);
+    GenericResponse<List<WorkContractResponse>> getContracts(@RequestBody @Valid WorkContractRequest request);
 
     /**
      * Recurso para crear un nuevo contrato laboral
@@ -35,7 +36,7 @@ public interface WorkContractController {
      */
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    GenericResponse<WorkContractResponse> createContract(@RequestBody WorkContractCreateRequest request);
+    GenericResponse<WorkContractResponse> createContract(@RequestBody @Valid WorkContractCreateRequest request);
 
     /**
      * Recurso para finalizar un contrato laboral
@@ -82,7 +83,7 @@ public interface WorkContractController {
         @PostMapping("{contractId}/delivery-note")
         GenericResponse<DeliveryNoteResponse> signatureDeliveryNote(
                 @PathVariable("contractId") Long id,
-                @RequestBody DeliverySignatureRequest request);
+                @RequestBody @Valid DeliverySignatureRequest request);
 
     /**
      * Recurso para iniciar un contrato laboral

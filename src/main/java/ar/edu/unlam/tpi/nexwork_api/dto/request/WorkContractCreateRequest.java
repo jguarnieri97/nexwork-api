@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.nexwork_api.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -10,27 +11,29 @@ import java.util.List;
 @Builder
 public class WorkContractCreateRequest {
 
-    @NotNull
+    @NotNull(message = "Price cannot be null")
     private Double price;
 
-    @NotNull
+    @NotNull(message = "dateFrom cannot be null")
     private String dateFrom;
 
-    @NotNull
+    @NotNull(message = "dateTo cannot be null")
     private String dateTo;
 
-    @NotNull
+    @NotNull(message = "Detail cannot be null")
+    @NotBlank(message = "Detail cannot be blank")
     private String detail;
 
-    @NotNull
+    @NotNull(message = "Supplier ID cannot be null")
     private Long supplierId;
 
-    @NotNull
+    @NotNull(message = "Applicant ID cannot be null")
     private Long applicantId;
 
-    @NotNull
-    @Size(min = 1)
+    @NotNull(message = "Workers list cannot be null")
+    @Size(min = 1, message = "At least one worker must be assigned")
     private List<Long> workers;
 
+    @NotNull(message = "Budget ID cannot be null")
     private String budgetId;
 }
