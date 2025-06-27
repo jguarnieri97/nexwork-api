@@ -50,7 +50,7 @@ public interface BudgetsController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    GenericResponse<Void> createBudget(@RequestBody BudgetRequest budgetRequest);
+    GenericResponse<Void> createBudget(@RequestBody @Valid BudgetRequest budgetRequest);
 
     /**
      * Recurso para aceptar un presupuesto y contratar un proveedor
@@ -60,16 +60,30 @@ public interface BudgetsController {
      */
     @PostMapping("{id}/finalize")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<Void> finalizeBudget(@PathVariable String id, @RequestBody BudgetFinalizeRequest budgetFinalizeRequest);
+    GenericResponse<Void> finalizeBudget(@PathVariable String id, @RequestBody @Valid BudgetFinalizeRequest budgetFinalizeRequest);
     
 
+    /**
+     * Recurso para actualizar un presupuesto
+     *
+     * @param budgetId: id del presupuesto
+     * @param supplierId: id del proveedor
+     * @param request: los datos a actualizar
+     * @return el presupuesto actualizado
+     */
     @PutMapping("/{budgetId}/user/{supplierId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update budget request")
     GenericResponse<Void> updateBudget(@PathVariable String budgetId, @PathVariable Long supplierId,
             @Valid @RequestBody BudgetUpdateDataRequestDto request);
 
+    /**
+     * Recurso para rechazar un presupuesto
+     *
+     * @param budgetId: id del presupuesto a rechazar
+     * @param budgetRejectedRequest: datos del rechazo
+     */
     @PostMapping("{budgetId}/reject")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<Void> rejectBudget(@PathVariable("budgetId") Long budgetId, @RequestBody BudgetRejectedRequest budgetRejectedRequest);
+    GenericResponse<Void> rejectBudget(@PathVariable("budgetId") Long budgetId, @RequestBody @Valid BudgetRejectedRequest budgetRejectedRequest);
 }

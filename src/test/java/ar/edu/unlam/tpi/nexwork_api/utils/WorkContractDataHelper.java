@@ -29,6 +29,7 @@ public class WorkContractDataHelper {
                 .supplierId(1L)
                 .applicantId(2L)
                 .workers(List.of(3L, 4L))
+                .budgetId("BUDGET-12345")
                 .build();
     }
 
