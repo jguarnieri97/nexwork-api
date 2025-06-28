@@ -8,6 +8,6 @@ import lombok.Data;
 @Builder
 public class BudgetFinalizeRequest {
 
-    @NotNull
+    @NotNull(message = "Supplier ID cannot be null")
     private Long supplierHired;
 }

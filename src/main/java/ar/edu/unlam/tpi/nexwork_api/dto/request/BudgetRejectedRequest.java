@@ -8,6 +8,6 @@ import lombok.Data;
 @Builder
 public class BudgetRejectedRequest {
 
-    @NotNull
+    @NotNull(message = "supplierId cannot be null")
     private Long supplierId;
 }

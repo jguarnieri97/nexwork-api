@@ -127,8 +127,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     private Map<String, String> buildTemplateVarsContractFinalized(WorkContractDetailResponse response) {
         Map<String, String> templateVars = new HashMap<>();
-//        templateVars.put("supplierName", response.getSupplierName());
-//        templateVars.put("applicantName", response.getApplicantName());
+        templateVars.put("supplierName", response.getSupplierName());
+        templateVars.put("applicantName", response.getApplicantName());
         templateVars.put("detail", response.getDetail());
         templateVars.put("url", notificationUrl);
         return templateVars;
