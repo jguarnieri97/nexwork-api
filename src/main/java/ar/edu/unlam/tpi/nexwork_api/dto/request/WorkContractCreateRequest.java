@@ -1,6 +1,5 @@
 package ar.edu.unlam.tpi.nexwork_api.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -20,8 +19,6 @@ public class WorkContractCreateRequest {
     @NotNull(message = "dateTo cannot be null")
     private String dateTo;
 
-    @NotNull(message = "Detail cannot be null")
-    @NotBlank(message = "Detail cannot be blank")
     private String detail;
 
     @NotNull(message = "Supplier ID cannot be null")
